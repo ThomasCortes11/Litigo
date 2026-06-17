@@ -1,5 +1,12 @@
+import NextAuth from 'next-auth';
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { authConfig } from '@/lib/auth.config';
+
+/**
+ * Instancia ligera de Auth.js solo para middleware (Edge Runtime).
+ * No importa Prisma/bcrypt - solo verifica el JWT de sesion ya emitido.
+ */
+const { auth } = NextAuth(authConfig);
 
 /**
  * Protege todo el arbol /admin excepto /admin/login.

@@ -2,11 +2,17 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { authConfig } from '@/lib/auth.config';
 
+/**
+ * Configuracion completa de Auth.js (runtime de Node). Usada por:
+ *  - app/api/auth/[...nextauth]/route.ts
+ *  - Server Actions (lib/actions/*)
+ *  - Server Components / Route Handlers que necesiten la sesion
+ * NUNCA importar este archivo desde middleware.ts (usar lib/auth.config.ts).
+ */
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: 'jwt', maxAge: 60 * 60 * 8 }, // 8 horas
-  pages: { signIn: '/admin/login' },
-  trustHost: true,
+  ...authConfig,
   providers: [
     Credentials({
       name: 'credentials',
@@ -36,20 +42,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = (user as { role?: string }).role;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
-      }
-      return session;
-    },
-  },
 });

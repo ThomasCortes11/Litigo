@@ -25,7 +25,9 @@ export async function submitAffiliation(
   _prevState: AffiliationActionState,
   formData: FormData,
 ): Promise<AffiliationActionState> {
-  const ip = headers().get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  // Next.js 15: headers() es asincrono.
+  const headersList = await headers();
+  const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
 
   const limited = rateLimit(`affiliation:${ip}`, 5, 10 * 60 * 1000);
   if (!limited.success) {
