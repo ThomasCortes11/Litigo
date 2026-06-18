@@ -1,47 +1,49 @@
-import { FadeIn } from '@/components/marketing/fade-in';
-
 const steps = [
   {
     number: '01',
-    title: 'Conoce la membresia',
-    description: 'Revisa beneficios, terminos, contrato y politica de datos antes de afiliarte.',
+    title: 'Revisa la informacion',
+    description: 'Conoce los beneficios, lee el contrato y los documentos legales en el sitio.',
   },
   {
     number: '02',
-    title: 'Completa el formulario',
-    description: 'Ingresa tus datos y acepta los documentos legales requeridos.',
+    title: 'Completa el registro',
+    description: 'Ingresa tus datos, acepta los documentos legales y envia el formulario.',
   },
   {
     number: '03',
     title: 'Realiza el pago',
-    description: 'Paga de forma segura a traves de la pasarela Wompi.',
+    description: 'Paga de forma segura a traves de Wompi, plataforma de pagos certificada.',
   },
   {
     number: '04',
-    title: 'Activacion automatica',
-    description: 'Tu membresia se activa al instante y recibes tu codigo de afiliado por correo.',
+    title: 'Tu membresia inicia',
+    description: 'Activacion automatica al confirmar el pago. Recibes tu codigo por correo.',
   },
 ];
 
 export function HowItWorksSection() {
   return (
-    <section id="como-funciona" className="bg-white py-24">
+    <section id="como-funciona" className="bg-white py-28">
       <div className="container">
-        <FadeIn className="mx-auto max-w-2xl text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">Proceso de afiliacion</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
-            Listo en menos de tres minutos
+        <div className="mb-14">
+          <span className="section-rule" />
+          <h2 className="font-display text-display-md font-semibold text-ink">
+            El proceso, paso a paso.
           </h2>
-        </FadeIn>
+        </div>
 
-        <div className="relative mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="absolute left-0 right-0 top-[22px] hidden h-px bg-border lg:block" aria-hidden="true" />
+        <div className="relative grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Linea conectora desktop */}
+          <div className="absolute left-0 right-0 top-[10px] hidden h-px bg-border lg:block" aria-hidden="true" />
 
           {steps.map((step) => (
-            <div key={step.number} className="relative bg-white">
-              <span className="font-mono text-4xl font-medium text-gold/45">{step.number}</span>
-              <h3 className="mt-3 font-display text-lg font-semibold text-ink">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate">{step.description}</p>
+            <div key={step.number} className="relative">
+              {/* Numero con fondo que cubre la linea horizontal */}
+              <span className="relative z-10 inline-block bg-white pr-4 font-mono text-[0.7rem] tracking-[0.12em] text-gold">
+                {step.number}
+              </span>
+              <h3 className="mt-4 font-display text-xl font-semibold text-ink">{step.title}</h3>
+              <p className="mt-2 text-[0.875rem] leading-relaxed text-slate">{step.description}</p>
             </div>
           ))}
         </div>

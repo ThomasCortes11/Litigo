@@ -1,45 +1,67 @@
 import Link from 'next/link';
-import { ShieldCheck } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { AffiliationForm } from '@/components/afiliacion/affiliation-form';
 import { TrustSidebar } from '@/components/afiliacion/trust-sidebar';
 
-export const metadata = { title: 'Afiliarme | Litigo' };
+export const metadata = { title: 'Afiliarme — Litigo' };
 
 export default function AfiliacionPage() {
   return (
     <div className="min-h-screen bg-paper">
-      <header className="border-b border-border bg-ink">
-        <div className="container flex h-20 items-center justify-between">
-          <Link href="/" className="font-display text-2xl font-semibold text-paper">
+      {/* Header minimalista */}
+      <header className="border-b border-border bg-white">
+        <div className="container flex h-[72px] items-center justify-between">
+          <Link href="/" className="font-display text-[1.35rem] font-semibold text-ink">
             LITIGO
           </Link>
-          <Link href="/" className="text-sm text-paper/70 hover:text-paper">
-            Volver al inicio
-          </Link>
+          <span className="flex items-center gap-1.5 text-xs text-slate">
+            <Lock className="h-3 w-3 text-gold" />
+            Pago procesado por Wompi
+          </span>
         </div>
       </header>
 
-      <main className="container max-w-5xl py-16">
-        <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:text-left">
-          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            Paso 1 de 2 - tus datos
-          </p>
-          <h1 className="mt-2 font-display text-3xl font-semibold text-ink">Completa tu afiliacion</h1>
-          <p className="mt-3 text-sm text-slate">
-            Este proceso toma menos de tres minutos. Al finalizar seras redirigido a la pasarela de pagos Wompi.
+      <main className="container max-w-5xl py-14">
+        {/* Titulo de seccion */}
+        <div className="mb-10">
+          <span className="section-rule" />
+          <h1 className="font-display text-display-sm font-semibold text-ink">
+            Formulario de afiliacion
+          </h1>
+          <p className="mt-2 text-[0.875rem] text-slate">
+            Completa tus datos y acepta los documentos. Luego te redirigiremos a Wompi para el pago seguro.
           </p>
         </div>
 
-        <div className="mx-auto mt-4 h-1.5 max-w-2xl overflow-hidden rounded-full bg-border lg:mx-0">
-          <div className="h-full w-1/2 rounded-full bg-gold" />
+        {/* Indicador de progreso */}
+        <div className="mb-10 flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink font-mono text-[10px] text-paper">
+              1
+            </span>
+            <span className="text-[0.8125rem] font-medium text-ink">Tus datos</span>
+          </div>
+          <div className="h-px flex-1 bg-border" />
+          <div className="flex items-center gap-2 opacity-40">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border font-mono text-[10px] text-slate">
+              2
+            </span>
+            <span className="text-[0.8125rem] font-medium text-slate">Pago</span>
+          </div>
+          <div className="h-px flex-1 bg-border" />
+          <div className="flex items-center gap-2 opacity-40">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border font-mono text-[10px] text-slate">
+              3
+            </span>
+            <span className="text-[0.8125rem] font-medium text-slate">Activacion</span>
+          </div>
         </div>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr,320px]">
-          <div className="rounded-lg border border-border bg-white p-7 shadow-card sm:p-9">
+        {/* Formulario + sidebar */}
+        <div className="grid gap-8 lg:grid-cols-[1fr,300px]">
+          <div className="rounded border border-border bg-white p-8">
             <AffiliationForm />
           </div>
-
           <TrustSidebar />
         </div>
       </main>

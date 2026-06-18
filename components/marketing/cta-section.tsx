@@ -1,22 +1,26 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { FadeIn } from '@/components/marketing/fade-in';
 
 export function CtaSection() {
   return (
-    <section className="grain-overlay bg-ink py-20">
-      <FadeIn className="container flex flex-col items-center gap-6 text-center">
-        <h2 className="max-w-2xl font-display text-3xl font-semibold text-paper sm:text-4xl">
-          Tu respaldo legal puede estar activo hoy mismo
+    <section className="grain-overlay bg-ink py-28">
+      <div className="container max-w-2xl">
+        <span className="section-rule" />
+        <h2 className="font-display text-display-md font-semibold text-paper">
+          Tu respaldo legal puede estar activo hoy mismo.
         </h2>
-        <p className="max-w-xl text-paper/70">
-          Completa tu afiliacion en linea, sin filas ni papeleo presencial.
+        <p className="mt-5 text-[0.9375rem] leading-relaxed text-paper/55">
+          Completa tu afiliacion en linea. Sin filas, sin papeleo presencial, sin permanencia forzosa.
         </p>
-        <Button asChild variant="gold" size="lg" className="shadow-gold-glow">
-          <Link href="/afiliacion">Afiliarme ahora</Link>
-        </Button>
-        <p className="text-xs text-paper/45">Sin permanencia forzosa - cancela cuando quieras</p>
-      </FadeIn>
+        <div className="mt-10 flex flex-wrap items-center gap-5">
+          <Button asChild variant="gold" size="lg" className="shadow-gold-glow">
+            <Link href="/afiliacion">Afiliarme ahora</Link>
+          </Button>
+          <a href="mailto:soporte@litigo.com.co" className="text-sm text-paper/45 underline underline-offset-4 hover:text-paper/70">
+            Tengo preguntas
+          </a>
+        </div>
+      </div>
     </section>
   );
 }

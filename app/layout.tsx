@@ -1,18 +1,25 @@
 import type { Metadata } from 'next';
-import { Fraunces, Inter, IBM_Plex_Mono } from 'next/font/google';
+import { Cormorant_Garamond, DM_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 
-const fraunces = Fraunces({
+/**
+ * Cormorant Garamond: tipografía con historia editorial y legal —
+ * transmite autoridad sin caer en lo corporativo genérico.
+ * DM Sans: sin serifas humanista, muy legible en cuerpo de texto.
+ * IBM Plex Mono: referencias numéricas, códigos y etiquetas.
+ */
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   variable: '--font-display',
-  weight: ['500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
   display: 'swap',
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600'],
   display: 'swap',
 });
 
@@ -24,15 +31,23 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Litigo | Membresia juridica mensual',
+  title: 'Litigo — Membresia juridica mensual',
   description:
-    'Litigo es una membresia juridica mensual que te da acceso a asesoria legal permanente. Afiliate en menos de 3 minutos.',
+    'Acceso permanente a asesoria legal para personas y empresas. Afiliate en linea en menos de tres minutos.',
+  openGraph: {
+    title: 'Litigo — Membresia juridica mensual',
+    description: 'Acceso permanente a asesoria legal para personas y empresas.',
+    locale: 'es_CO',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${fraunces.variable} ${inter.variable} ${plexMono.variable}`}>
-      <body className="font-sans text-charcoal antialiased">{children}</body>
+    <html lang="es" className={`${cormorant.variable} ${dmSans.variable} ${plexMono.variable}`}>
+      <body className="font-sans text-charcoal antialiased selection:bg-gold/20 selection:text-ink">
+        {children}
+      </body>
     </html>
   );
 }

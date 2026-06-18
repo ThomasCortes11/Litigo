@@ -1,71 +1,83 @@
 import { Scale, ShieldCheck, Clock3, FileText, Users, MessageCircle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { FadeIn } from '@/components/marketing/fade-in';
 
 const benefits = [
   {
     icon: Scale,
     title: 'Asesoria legal continua',
-    description: 'Acceso permanente a un equipo de abogados para consultas sobre tu situacion particular.',
+    description:
+      'Acceso permanente a un equipo de abogados para consultas sobre tu situacion particular, sin costo adicional por llamada.',
   },
   {
     icon: ShieldCheck,
     title: 'Respaldo en procesos',
-    description: 'Acompanamiento en tramites y procesos legales sin tarifas sorpresa por cada consulta.',
+    description:
+      'Acompanamiento en tramites y procesos legales sin tarifas sorpresa ni cobros ocultos por consulta.',
   },
   {
     icon: Clock3,
     title: 'Tiempos de respuesta claros',
-    description: 'Canales directos de atencion con tiempos de respuesta definidos para cada caso.',
+    description:
+      'Canales directos de atencion con tiempos de respuesta definidos y comprometidos para cada tipo de caso.',
   },
   {
     icon: FileText,
     title: 'Revision de documentos',
-    description: 'Revision profesional de contratos y documentos antes de que los firmes.',
+    description:
+      'Revision profesional de contratos, acuerdos y documentos antes de que los firmes o aceptes.',
   },
   {
     icon: Users,
     title: 'Cobertura familiar',
-    description: 'Extiende beneficios seleccionados de tu membresia a miembros de tu nucleo familiar.',
+    description:
+      'Extiende los beneficios seleccionados de tu membresia a los miembros de tu nucleo familiar.',
   },
   {
     icon: MessageCircle,
     title: 'Comunicacion directa',
-    description: 'Habla con tu abogado asignado, no con un sistema automatizado de tickets.',
+    description:
+      'Habla con tu abogado asignado, no con un intermediario automatizado ni un sistema de tickets.',
   },
 ];
 
 export function BenefitsSection() {
   return (
-    <section id="beneficios" className="bg-paper py-24">
+    <section id="beneficios" className="bg-paper py-28">
       <div className="container">
-        <FadeIn className="mx-auto max-w-2xl text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">Beneficios de la membresia</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
-            Una sola membresia, respaldo legal completo
+        <div className="mb-14">
+          <span className="section-rule" />
+          <h2 className="font-display text-display-md font-semibold text-ink">
+            Una sola membresia,<br />respaldo legal completo.
           </h2>
-        </FadeIn>
+        </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {benefits.map((benefit) => {
+        {/* Grid de 6 beneficios en disposicion 3×2 */}
+        <div className="grid gap-0 divide-y divide-border sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-3">
+          {benefits.map((benefit, idx) => {
             const Icon = benefit.icon;
+            const isRightBorder = idx % 3 !== 2;
+            const isBottomRow = idx >= 3;
             return (
-              <Card
+              <div
                 key={benefit.title}
-                className="group transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated"
+                className={cn(
+                  'group px-0 py-8 sm:px-8',
+                  isRightBorder && 'lg:border-r lg:border-border',
+                  !isBottomRow && 'lg:border-b lg:border-border',
+                  idx % 2 === 0 && 'sm:border-r sm:border-border',
+                )}
               >
-                <CardContent className="pt-7">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10 transition-colors group-hover:border-gold/50 group-hover:bg-gold/15">
-                    <Icon className="h-5 w-5 text-gold-dark" strokeWidth={1.5} />
-                  </div>
-                  <h3 className="mt-5 font-display text-lg font-semibold text-ink">{benefit.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate">{benefit.description}</p>
-                </CardContent>
-              </Card>
+                <Icon className="mb-4 h-5 w-5 text-gold" strokeWidth={1.25} />
+                <h3 className="font-display text-xl font-semibold text-ink">{benefit.title}</h3>
+                <p className="mt-2 text-[0.875rem] leading-relaxed text-slate">{benefit.description}</p>
+              </div>
             );
           })}
         </div>
       </div>
     </section>
   );
+}
+
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
 }
