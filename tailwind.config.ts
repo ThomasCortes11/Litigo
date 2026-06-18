@@ -49,6 +49,7 @@ const config: Config = {
       boxShadow: {
         card: '0 1px 2px rgba(14,26,43,0.06), 0 4px 16px rgba(14,26,43,0.06)',
         elevated: '0 8px 30px rgba(14,26,43,0.12)',
+        'gold-glow': '0 0 0 1px rgba(169,132,76,0.18), 0 24px 60px -12px rgba(169,132,76,0.35)',
       },
       maxWidth: {
         prose: '68ch',

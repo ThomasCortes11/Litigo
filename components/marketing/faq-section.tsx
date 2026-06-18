@@ -1,3 +1,6 @@
+import { Plus } from 'lucide-react';
+import { FadeIn } from '@/components/marketing/fade-in';
+
 const faqs = [
   {
     question: 'Que incluye exactamente la membresia mensual?',
@@ -30,19 +33,19 @@ export function FaqSection() {
   return (
     <section id="preguntas-frecuentes" className="bg-paper py-24">
       <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">Preguntas frecuentes</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
             Lo que necesitas saber antes de afiliarte
           </h2>
-        </div>
+        </FadeIn>
 
-        <div className="mx-auto mt-12 max-w-2xl divide-y divide-border">
+        <div className="mx-auto mt-12 max-w-2xl divide-y divide-border rounded-lg border border-border bg-white px-6">
           {faqs.map((faq) => (
             <details key={faq.question} className="group py-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-display text-base font-medium text-ink">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-base font-medium text-ink [&::-webkit-details-marker]:hidden">
                 {faq.question}
-                <span className="ml-4 text-gold-dark transition-transform group-open:rotate-45">+</span>
+                <Plus className="h-4 w-4 shrink-0 text-gold-dark transition-transform duration-300 group-open:rotate-45" />
               </summary>
               <p className="mt-3 text-sm leading-relaxed text-slate">{faq.answer}</p>
             </details>

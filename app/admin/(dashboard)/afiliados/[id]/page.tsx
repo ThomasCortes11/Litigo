@@ -16,12 +16,14 @@ const statusVariant: Record<string, 'success' | 'warning' | 'default' | 'danger'
 };
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function AffiliateDetailPage({ params }: PageProps) {
+  const { id } = await params;
+
   const affiliate = await prisma.affiliate.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       payments: { orderBy: { createdAt: 'desc' } },
       memberships: { orderBy: { createdAt: 'desc' } },

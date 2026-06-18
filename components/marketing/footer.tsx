@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import { ShieldCheck, Lock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export function MarketingFooter() {
   return (
-    <footer className="bg-ink text-paper/70">
+    <footer className="grain-overlay bg-ink text-paper/70">
       <div className="container grid gap-10 py-16 lg:grid-cols-4">
         <div>
           <span className="font-display text-xl font-semibold text-paper">LITIGO</span>
@@ -41,9 +42,18 @@ export function MarketingFooter() {
 
       <Separator className="bg-white/10" />
 
-      <div className="container flex flex-col items-center justify-between gap-2 py-6 text-xs text-paper/50 sm:flex-row">
+      <div className="container flex flex-col items-center gap-4 py-6 text-xs text-paper/45 sm:flex-row sm:justify-between">
         <p>&copy; {new Date().getFullYear()} Litigo. Todos los derechos reservados.</p>
-        <p>Plataforma de afiliacion juridica</p>
+        <div className="flex items-center gap-5">
+          <span className="inline-flex items-center gap-1.5">
+            <Lock className="h-3.5 w-3.5 text-gold-light/80" />
+            Pagos procesados por Wompi
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck className="h-3.5 w-3.5 text-gold-light/80" />
+            Tratamiento de datos Ley 1581
+          </span>
+        </div>
       </div>
     </footer>
   );

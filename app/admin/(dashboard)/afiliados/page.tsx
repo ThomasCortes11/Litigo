@@ -8,13 +8,14 @@ export const metadata = { title: 'Afiliados | Litigo' };
 const PAGE_SIZE = 20;
 
 interface PageProps {
-  searchParams: { q?: string; status?: string; page?: string };
+  searchParams: Promise<{ q?: string; status?: string; page?: string }>;
 }
 
 export default async function AfiliadosPage({ searchParams }: PageProps) {
-  const page = Math.max(1, parseInt(searchParams.page ?? '1', 10) || 1);
-  const q = searchParams.q?.trim();
-  const status = searchParams.status;
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? '1', 10) || 1);
+  const q = params.q?.trim();
+  const status = params.status;
 
   const where: Prisma.AffiliateWhereInput = { deletedAt: null };
 

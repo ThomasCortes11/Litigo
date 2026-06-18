@@ -1,5 +1,6 @@
 import { Scale, ShieldCheck, Clock3, FileText, Users, MessageCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { FadeIn } from '@/components/marketing/fade-in';
 
 const benefits = [
   {
@@ -38,21 +39,26 @@ export function BenefitsSection() {
   return (
     <section id="beneficios" className="bg-paper py-24">
       <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">Beneficios de la membresia</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
             Una sola membresia, respaldo legal completo
           </h2>
-        </div>
+        </FadeIn>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
-              <Card key={benefit.title} className="border-t-2 border-t-gold">
-                <CardContent className="pt-6">
-                  <Icon className="h-8 w-8 text-gold-dark" strokeWidth={1.5} />
-                  <h3 className="mt-4 font-display text-lg font-semibold text-ink">{benefit.title}</h3>
+              <Card
+                key={benefit.title}
+                className="group transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated"
+              >
+                <CardContent className="pt-7">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-gold/10 transition-colors group-hover:border-gold/50 group-hover:bg-gold/15">
+                    <Icon className="h-5 w-5 text-gold-dark" strokeWidth={1.5} />
+                  </div>
+                  <h3 className="mt-5 font-display text-lg font-semibold text-ink">{benefit.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-slate">{benefit.description}</p>
                 </CardContent>
               </Card>

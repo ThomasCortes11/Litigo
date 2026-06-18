@@ -1,3 +1,5 @@
+import { FadeIn } from '@/components/marketing/fade-in';
+
 const steps = [
   {
     number: '01',
@@ -25,22 +27,21 @@ export function HowItWorksSection() {
   return (
     <section id="como-funciona" className="bg-white py-24">
       <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">Proceso de afiliacion</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
             Listo en menos de tres minutos
           </h2>
-        </div>
+        </FadeIn>
 
-        <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((step, index) => (
-            <div key={step.number} className="relative">
-              <span className="font-mono text-4xl font-medium text-gold/40">{step.number}</span>
+        <div className="relative mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="absolute left-0 right-0 top-[22px] hidden h-px bg-border lg:block" aria-hidden="true" />
+
+          {steps.map((step) => (
+            <div key={step.number} className="relative bg-white">
+              <span className="font-mono text-4xl font-medium text-gold/45">{step.number}</span>
               <h3 className="mt-3 font-display text-lg font-semibold text-ink">{step.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate">{step.description}</p>
-              {index < steps.length - 1 && (
-                <div className="mt-6 hidden h-px w-full bg-border lg:block" aria-hidden="true" />
-              )}
             </div>
           ))}
         </div>

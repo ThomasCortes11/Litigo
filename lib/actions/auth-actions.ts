@@ -1,17 +1,20 @@
 'use server';
 
+import { headers } from 'next/headers';
 import { AuthError } from 'next-auth';
 import { signIn, signOut } from '@/lib/auth';
 import { adminLoginSchema } from '@/lib/validations/affiliate';
 import { rateLimit } from '@/lib/rate-limit';
-import { headers } from 'next/headers';
 
 export interface LoginActionState {
   error?: string;
 }
 
 export async function loginAction(_prevState: LoginActionState, formData: FormData): Promise<LoginActionState> {
-  const ip = headers().get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  // Next.js 15: headers() es asincrono.
+  const headersList = await headers();
+  const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+
   const limited = rateLimit(`login:${ip}`, 8, 10 * 60 * 1000);
   if (!limited.success) {
     return { error: 'Demasiados intentos de inicio de sesion. Intenta de nuevo en unos minutos.' };

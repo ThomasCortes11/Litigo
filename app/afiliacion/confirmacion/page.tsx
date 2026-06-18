@@ -4,11 +4,11 @@ import { ConfirmationStatus } from '@/components/afiliacion/confirmation-status'
 export const metadata = { title: 'Confirmacion de pago | Litigo' };
 
 interface PageProps {
-  searchParams: { ref?: string };
+  searchParams: Promise<{ ref?: string }>;
 }
 
-export default function ConfirmacionPage({ searchParams }: PageProps) {
-  const reference = searchParams.ref;
+export default async function ConfirmacionPage({ searchParams }: PageProps) {
+  const { ref: reference } = await searchParams;
 
   return (
     <div className="min-h-screen bg-paper">
