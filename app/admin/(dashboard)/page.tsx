@@ -5,7 +5,10 @@ import { StatsCard } from '@/components/admin/stats-card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrencyCOP, formatDate } from '@/lib/utils';
 
-export const metadata = { title: 'Panel | Litigo' };
+export const metadata = {
+  title: 'Panel',
+  robots: { index: false, follow: false },
+};
 
 async function getDashboardStats() {
   const thirtyDaysAgo = new Date();

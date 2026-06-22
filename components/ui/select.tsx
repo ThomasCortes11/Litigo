@@ -10,16 +10,22 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({ className, ch
       <select
         ref={ref}
         className={cn(
-          'flex h-11 w-full appearance-none rounded border border-border bg-white px-3.5 pr-9 text-sm text-charcoal',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-1',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'flex h-11 w-full appearance-none rounded border border-border bg-white',
+          'px-3.5 pr-9 text-[0.875rem] text-charcoal',
+          'transition-[border-color,box-shadow] duration-150',
+          'hover:border-slate/40',
+          'focus-visible:outline-none focus-visible:ring-[2.5px] focus-visible:ring-gold/30 focus-visible:border-gold/60',
+          'disabled:cursor-not-allowed disabled:bg-paper disabled:text-slate-light',
           className,
         )}
         {...props}
       >
         {children}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
+      <ChevronDown
+        className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-light"
+        strokeWidth={1.75}
+      />
     </div>
   );
 });

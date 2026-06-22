@@ -3,6 +3,8 @@ import { ChevronLeft } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
 
+export const metadata = { title: 'Terminos y Condiciones' };
+
 export default async function TerminosPage() {
   const doc = await prisma.legalDocument.findFirst({
     where: { type: 'TERMS', isActive: true },

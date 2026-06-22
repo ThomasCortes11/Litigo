@@ -3,7 +3,10 @@ import { AffiliateFilters } from '@/components/admin/affiliate-filters';
 import { AffiliatesTable } from '@/components/admin/affiliates-table';
 import { AffiliateStatus, type Prisma } from '@prisma/client';
 
-export const metadata = { title: 'Afiliados | Litigo' };
+export const metadata = {
+  title: 'Afiliados',
+  robots: { index: false, follow: false },
+};
 
 const PAGE_SIZE = 20;
 

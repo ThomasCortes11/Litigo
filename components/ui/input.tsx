@@ -5,15 +5,25 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   error?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, error, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, error, type, ...props }, ref) => {
   return (
     <input
+      type={type}
       ref={ref}
       className={cn(
-        'flex h-11 w-full rounded border bg-white px-3.5 text-sm text-charcoal placeholder:text-slate-light',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-1',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        error ? 'border-danger' : 'border-border',
+        // Base
+        'flex h-11 w-full rounded border bg-white px-3.5 text-[0.875rem] text-charcoal',
+        'placeholder:text-slate-light/70',
+        // Transicion suave al enfocar
+        'transition-[border-color,box-shadow] duration-150',
+        // Focus
+        'focus-visible:outline-none focus-visible:ring-[2.5px] focus-visible:ring-gold/30 focus-visible:border-gold/60',
+        // Disabled
+        'disabled:cursor-not-allowed disabled:bg-paper disabled:text-slate-light',
+        // Estado de error
+        error
+          ? 'border-danger/50 focus-visible:ring-danger/20 focus-visible:border-danger/60'
+          : 'border-border hover:border-slate/40',
         className,
       )}
       {...props}

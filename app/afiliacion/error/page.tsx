@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export const metadata = { title: 'Error en la afiliacion | Litigo' };
+export const metadata = { title: 'Error en la afiliacion' };
 
 export default function AfiliacionErrorPage() {
   return (

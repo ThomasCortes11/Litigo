@@ -3,7 +3,7 @@ import { Lock } from 'lucide-react';
 import { AffiliationForm } from '@/components/afiliacion/affiliation-form';
 import { TrustSidebar } from '@/components/afiliacion/trust-sidebar';
 
-export const metadata = { title: 'Afiliarme — Litigo' };
+export const metadata = { title: 'Afiliarme' };
 
 export default function AfiliacionPage() {
   return (

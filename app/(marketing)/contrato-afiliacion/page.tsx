@@ -3,6 +3,8 @@ import { ChevronLeft } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
 
+export const metadata = { title: 'Contrato de Afiliacion' };
+
 export default async function ContratoPage() {
   const doc = await prisma.legalDocument.findFirst({
     where: { type: 'CONTRACT', isActive: true },

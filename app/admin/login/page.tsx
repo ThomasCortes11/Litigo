@@ -1,7 +1,10 @@
 import { LoginForm } from '@/components/admin/login-form';
 import { ShieldCheck } from 'lucide-react';
 
-export const metadata = { title: 'Ingresar | Panel Litigo' };
+export const metadata = {
+  title: 'Ingresar al panel',
+  robots: { index: false, follow: false },
+};
 
 export default function AdminLoginPage() {
   return (

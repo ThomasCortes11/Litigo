@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ShieldCheck, Lock, Clock3, Phone, MessageCircle } from 'lucide-react';
+import { prisma } from '@/lib/prisma';
 
 /**
  * SealEmblem — emblema SVG del bufete.
@@ -79,12 +80,27 @@ function SealEmblem() {
 }
 
 /* ───────────────────────────────────────────────
-   Datos de contacto — un único lugar para cambiar
+   Datos de contacto
+   El telefono se lee de Setting.support_phone (configurable desde
+   /admin/configuracion). Si no existe el registro, se usa un fallback
+   para que el sitio nunca se rompa por falta de configuracion.
 ──────────────────────────────────────────────── */
-const PHONE_NUMBER   = '+573000000000';    // ← cambiar al numero real
-const WHATSAPP_MSG   = encodeURIComponent('Hola, quiero obtener información sobre la membresía jurídica de Litigo.');
-const WHATSAPP_HREF  = `https://wa.me/${PHONE_NUMBER}?text=${WHATSAPP_MSG}`;
-const PHONE_HREF     = `tel:${PHONE_NUMBER}`;
+const PHONE_FALLBACK = '+573000000000';
+
+function toWhatsappDigits(phone: string): string {
+  // wa.me requiere solo digitos (sin '+', espacios ni guiones).
+  return phone.replace(/[^\d]/g, '');
+}
+
+async function getSupportPhone(): Promise<string> {
+  try {
+    const setting = await prisma.setting.findUnique({ where: { key: 'support_phone' } });
+    return setting?.value?.trim() || PHONE_FALLBACK;
+  } catch {
+    // Si la base de datos no esta disponible en build/preview, no rompemos el hero.
+    return PHONE_FALLBACK;
+  }
+}
 
 /* ───────────────────────────────────────────────
    Señales de confianza (footer del hero)
@@ -96,9 +112,17 @@ const trustItems = [
 ] as const;
 
 /* ───────────────────────────────────────────────
-   Hero Section
+   Hero Section (Server Component async — SSR puro,
+   sin JS de cliente para resolver el telefono de contacto)
 ──────────────────────────────────────────────── */
-export function HeroSection() {
+export async function HeroSection() {
+  const phone = await getSupportPhone();
+  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
+  const whatsappMessage = encodeURIComponent(
+    'Hola, quiero obtener información sobre la membresía jurídica de Litigo.',
+  );
+  const whatsappHref = `https://wa.me/${toWhatsappDigits(phone)}?text=${whatsappMessage}`;
+
   return (
     /**
      * <section> con role implícito "region" y aria-labelledby apuntando
@@ -170,9 +194,9 @@ export function HeroSection() {
 
               {/* Llamar */}
               <a
-                href={PHONE_HREF}
-                aria-label="Llamar a Litigo"
-                title="Llamar a Litigo"
+                href={phoneHref}
+                aria-label={`Llamar a Litigo al ${phone}`}
+                title={`Llamar a Litigo: ${phone}`}
                 className={[
                   'inline-flex h-12 items-center justify-center gap-2',
                   'rounded border border-white/[0.14] px-5',
@@ -187,7 +211,7 @@ export function HeroSection() {
 
               {/* WhatsApp */}
               <a
-                href={WHATSAPP_HREF}
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Escribir a Litigo por WhatsApp"

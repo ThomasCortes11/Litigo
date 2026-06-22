@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ConfirmationStatus } from '@/components/afiliacion/confirmation-status';
 
-export const metadata = { title: 'Confirmacion de pago | Litigo' };
+export const metadata = { title: 'Confirmacion de pago' };
 
 interface PageProps {
   searchParams: Promise<{ ref?: string }>;

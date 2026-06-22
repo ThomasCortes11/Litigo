@@ -6,7 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { formatCurrencyCOP, formatDateTime } from '@/lib/utils';
 
-export const metadata = { title: 'Detalle de afiliado | Litigo' };
+export const metadata = {
+  title: 'Detalle de afiliado',
+  robots: { index: false, follow: false },
+};
 
 const statusVariant: Record<string, 'success' | 'warning' | 'default' | 'danger'> = {
   ACTIVE: 'success',

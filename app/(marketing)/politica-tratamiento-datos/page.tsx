@@ -3,6 +3,8 @@ import { ChevronLeft } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
 
+export const metadata = { title: 'Politica de Tratamiento de Datos' };
+
 export default async function PoliticaDatosPage() {
   const doc = await prisma.legalDocument.findFirst({
     where: { type: 'DATA_POLICY', isActive: true },

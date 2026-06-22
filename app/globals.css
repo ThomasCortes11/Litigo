@@ -7,34 +7,43 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
     background-color: #ffffff;
   }
 
-  /*
-    Cormorant Garamond necesita un line-height ligeramente mayor en
-    cuerpos pequeños para mantener legibilidad.
-  */
   p, li {
     line-height: 1.75;
   }
 
-  /*
-    Separador horizontal estandarizado: una linea fina con espaciado
-    generoso, sin margen vertical ni decoracion.
-  */
   hr {
     border: none;
     border-top: 1px solid #DEDAD2;
+  }
+
+  /* Scrollbar discreta para Chrome/Edge en el panel admin */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #DEDAD2;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8C94A0;
   }
 }
 
 @layer utilities {
   /*
     Textura de grano sutil para fondos oscuros (ink).
-    Aporta una sensacion de material impreso / papel de calidad.
+    Aporta sensacion de material impreso / papel de calidad.
   */
   .grain-overlay {
     position: relative;
@@ -58,22 +67,25 @@
   }
 
   /*
-    Linea decorativa dorada usada como separador de seccion.
-    Uso: <span className="section-rule" />
+    Linea decorativa dorada reutilizable como separador de seccion.
+    Uso: <span className="section-rule" aria-hidden="true" />
   */
   .section-rule {
     display: block;
-    width: 2.5rem;
+    width: 2.25rem;
     height: 1px;
     background-color: #9E7A3F;
     margin-bottom: 1.25rem;
   }
+
+  /* Seleccion de texto en tono dorado sutil */
+  ::selection {
+    background-color: rgba(158, 122, 63, 0.18);
+    color: #0B1520;
+  }
 }
 
-/*
-  Entrada suave al cargar la pagina — solo en el hero.
-  Usar con moderacion para no distraer del contenido.
-*/
+/* Entrada suave al cargar — solo para el hero */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
