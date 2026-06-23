@@ -45,15 +45,23 @@ export function buildCheckoutUrl(params: BuildCheckoutUrlParams): string {
     'currency': currency,
     'amount-in-cents': String(params.amountInCents),
     'reference': params.reference,
-    'signature:integrity': signature,
     'redirect-url': params.redirectUrl,
   });
+
+  // Wompi expects colon-containing parameter names like `signature:integrity`
+  // and `customer-data:email` in the raw query string.
+  query.set('signature:integrity', signature);
 
   if (params.customerEmail) {
     query.set('customer-data:email', params.customerEmail);
   }
 
-  return `https://checkout.wompi.co/p/?${query.toString()}`;
+  const queryString = query
+    .toString()
+    .replace(/signature%3Aintegrity=/g, 'signature:integrity=')
+    .replace(/customer-data%3Aemail=/g, 'customer-data:email=');
+
+  return `https://checkout.wompi.co/p/?${queryString}`;
 }
 
 /**
