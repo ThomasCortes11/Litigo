@@ -1,0 +1,26 @@
+
+> litigo-platform@1.0.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Ô£ö Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 172ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+   Ôû¦ Next.js 15.0.3
+   - Environments: .env
+
+   Creating an optimized production build ...
+ Ô£ô Compiled successfully
+   Linting and checking validity of types ...
+System.Management.Automation.RemoteException
+Failed to compile.
+System.Management.Automation.RemoteException
+./components/admin/affiliate-filters.tsx
+36:9  Error: Do not use an `<a>` element to navigate to `/admin/afiliados/export/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+System.Management.Automation.RemoteException
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/building-your-application/configuring/eslint#disabling-rules

@@ -28,8 +28,9 @@ export function FadeIn({ children, className, delayMs = 0 }: FadeInProps) {
     }
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
           setVisible(true);
           observer.unobserve(el);
         }

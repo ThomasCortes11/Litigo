@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -33,7 +34,7 @@ export function AffiliateFilters({ defaultQuery, defaultStatus }: AffiliateFilte
       </Button>
 
       <Button asChild variant="ghost">
-        <a href="/admin/afiliados/export">Exportar CSV</a>
+        <Link href="/admin/afiliados/export">Exportar CSV</Link>
       </Button>
     </form>
   );

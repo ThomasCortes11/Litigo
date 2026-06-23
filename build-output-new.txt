@@ -1,0 +1,43 @@
+﻿
+> litigo-platform@1.0.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Ô£ö Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 75ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+   Ôû▓ Next.js 15.0.3
+   - Environments: .env
+
+   Creating an optimized production build ...
+ Ô£ô Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+npm.cmd :  ÔÜá Using edge runtime on a page currently disables static 
+generation for that page
+En línea: 1 Carácter: 1
++ & "$env:ProgramFiles\nodejs\npm.cmd" run build *>&1 | Out-File -FileP ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( ÔÜá Using edge...n for that page 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   Generating static pages (0/20) ...
+Error occurred prerendering page "/icon". Read more: 
+https://nextjs.org/docs/messages/prerender-error
+TypeError: Invalid URL
+    at new URL (node:internal/url:840:25)
+    at fileURLToPath (node:internal/url:1625:12)
+    at file:///C:/Users/soporte/Desktop/Litigo/node_modules/next/dist/compiled/
+@vercel/og/index.node.js:18988:32
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:633:26
+    at async Object.start 
+(C:\Users\soporte\Desktop\Litigo\.next\server\app\icon\route.js:1:2349)
+Export encountered an error on /icon/route: /icon, exiting the build.
+ Ô¿» Static worker exited with code: 1 and signal: null
