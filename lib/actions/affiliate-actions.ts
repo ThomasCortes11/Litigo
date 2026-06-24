@@ -25,6 +25,7 @@ export async function submitAffiliation(
   _prevState: AffiliationActionState,
   formData: FormData,
 ): Promise<AffiliationActionState> {
+  try {
   // Next.js 15: headers() es asincrono.
   const headersList = await headers();
   const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
@@ -131,4 +132,9 @@ export async function submitAffiliation(
   });
 
   return { success: true, checkoutUrl };
+  } catch (error) {
+    // Log error for observability; avoid leaking internal details to users
+    console.error('[submitAffiliation] Error procesando afiliacion:', error);
+    return { success: false, error: 'Ocurrió un error al procesar tu afiliación. Por favor intenta de nuevo.' };
+  }
 }
