@@ -39,3 +39,5 @@ next-env.d.ts
 
 # accidental nested repo
 /Litigo/
+.vercel
+.env*
