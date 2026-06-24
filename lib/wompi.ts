@@ -19,6 +19,13 @@ const WOMPI_INTEGRITY_SECRET = process.env.WOMPI_INTEGRITY_SECRET ?? '';
 const WOMPI_EVENTS_SECRET = process.env.WOMPI_EVENTS_SECRET ?? '';
 const WOMPI_API_URL = process.env.WOMPI_API_URL ?? 'https://sandbox.wompi.co/v1';
 
+function assertWompiEnvVar(name: string, value: string) {
+  if (!value) {
+    throw new Error(`Wompi configuration error: env var ${name} is not defined`);
+  }
+  return value;
+}
+
 interface BuildCheckoutUrlParams {
   reference: string;
   amountInCents: number;
@@ -37,11 +44,12 @@ function buildIntegritySignature(reference: string, amountInCents: number, curre
 }
 
 export function buildCheckoutUrl(params: BuildCheckoutUrlParams): string {
+  const publicKey = assertWompiEnvVar('WOMPI_PUBLIC_KEY', WOMPI_PUBLIC_KEY);
   const currency = params.currency ?? 'COP';
   const signature = buildIntegritySignature(params.reference, params.amountInCents, currency);
 
   const query = new URLSearchParams({
-    'public-key': WOMPI_PUBLIC_KEY,
+    'public-key': publicKey,
     'currency': currency,
     'amount-in-cents': String(params.amountInCents),
     'reference': params.reference,
@@ -70,8 +78,9 @@ export function buildCheckoutUrl(params: BuildCheckoutUrlParams): string {
  * no llega o llega tarde).
  */
 export async function fetchWompiTransaction(transactionId: string) {
+  const privateKey = assertWompiEnvVar('WOMPI_PRIVATE_KEY', WOMPI_PRIVATE_KEY);
   const response = await fetch(`${WOMPI_API_URL}/transactions/${transactionId}`, {
-    headers: { Authorization: `Bearer ${WOMPI_PRIVATE_KEY}` },
+    headers: { Authorization: `Bearer ${privateKey}` },
     cache: 'no-store',
   });
 
@@ -117,6 +126,8 @@ function getByPath(obj: unknown, path: string): unknown {
  * Formula oficial: SHA256(valoresDeLasPropiedadesConcatenadas + timestamp + eventsSecret)
  */
 export function verifyWompiEventSignature(payload: WompiEventPayload): boolean {
+  assertWompiEnvVar('WOMPI_EVENTS_SECRET', WOMPI_EVENTS_SECRET);
+
   if (!payload?.signature?.properties || !payload.signature.checksum) return false;
 
   const concatenatedValues = payload.signature.properties

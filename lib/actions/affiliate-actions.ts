@@ -133,8 +133,13 @@ export async function submitAffiliation(
 
   return { success: true, checkoutUrl };
   } catch (error) {
-    // Log error for observability; avoid leaking internal details to users
-    console.error('[submitAffiliation] Error procesando afiliacion:', error);
-    return { success: false, error: 'Ocurrió un error al procesar tu afiliación. Por favor intenta de nuevo.' };
-  }
-}
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    console.error('[submitAffiliation] Error procesando afiliacion:', {
+      message: errorMessage,
+      stack: errorStack,
+      formData: {
+        email: String(formData.get('email') ?? ''),
+        documentNumber: String(formData.get('documentNumber') ?? ''),
+      },
+    });
