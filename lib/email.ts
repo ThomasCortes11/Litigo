@@ -1,7 +1,14 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.EMAIL_FROM ?? 'Litigo <afiliaciones@litigo.com.co>';
+
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return null;
+  }
+  return new Resend(apiKey);
+}
 
 interface SendWelcomeEmailParams {
   to: string;
@@ -37,6 +44,11 @@ function welcomeEmailHtml(params: SendWelcomeEmailParams): string {
 
 export async function sendAffiliateWelcomeEmail(params: SendWelcomeEmailParams) {
   try {
+    const resend = getResendClient();
+    if (!resend) {
+      console.warn('[email] RESEND_API_KEY no definido. Se omite el envío de correo de bienvenida.');
+      return;
+    }
     await resend.emails.send({
       from: FROM,
       to: params.to,
@@ -71,6 +83,11 @@ function paymentFailedEmailHtml(params: SendPaymentFailedEmailParams): string {
 
 export async function sendPaymentFailedEmail(params: SendPaymentFailedEmailParams) {
   try {
+    const resend = getResendClient();
+    if (!resend) {
+      console.warn('[email] RESEND_API_KEY no definido. Se omite el envío de correo de pago fallido.');
+      return;
+    }
     await resend.emails.send({
       from: FROM,
       to: params.to,
