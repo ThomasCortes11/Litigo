@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -52,6 +52,13 @@ export function MarketingHeader() {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
+          <a
+            href="mailto:soporte@litigo.com.co"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[0.8125rem] font-medium text-paper/90 transition hover:border-white/25 hover:bg-white/10"
+          >
+            <MessageCircle className="h-4 w-4 text-gold" />
+            Soporte
+          </a>
           <Button asChild variant="gold" className="h-9 px-5 text-[0.8125rem]">
             <Link href="/afiliacion">Afiliarme</Link>
           </Button>
@@ -66,6 +73,15 @@ export function MarketingHeader() {
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
+
+      {/* Botón flotante de soporte en desktop */}
+      <a
+        href="mailto:soporte@litigo.com.co"
+        className="fixed bottom-6 right-6 z-50 hidden items-center gap-2 rounded-full border border-white/15 bg-ink/95 px-4 py-3 text-sm text-paper shadow-[0_18px_48px_rgba(0,0,0,0.22)] transition hover:bg-ink lg:flex"
+      >
+        <MessageCircle className="h-4 w-4 text-gold" />
+        Soporte
+      </a>
 
       {/* Menu movil */}
       <div

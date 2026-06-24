@@ -143,3 +143,10 @@ export async function submitAffiliation(
         documentNumber: String(formData.get('documentNumber') ?? ''),
       },
     });
+
+    return {
+      success: false,
+      error: 'Ocurrió un error al procesar tu afiliación. Por favor intenta de nuevo.',
+    };
+  }
+}
