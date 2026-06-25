@@ -1,43 +1,37 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# ══════════════════════════════════════════════
+#  Litigo — .gitignore
+# ══════════════════════════════════════════════
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# env
+# ── Variables de entorno (NUNCA subir al repo) ──
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
 
-# prisma
-/prisma/migrations/dev.db
+# ── Next.js ──
+.next/
+out/
 
-# misc
-.DS_Store
-*.pem
+# ── Node ──
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# typescript
+# ── Build ──
+build/
+dist/
+
+# ── Prisma ──
+prisma/migrations/dev.db
+
+# ── TypeScript ──
 *.tsbuildinfo
 next-env.d.ts
 
-# vercel
+# ── Vercel ──
 .vercel
 
-# accidental nested repo
-/Litigo/
-.vercel
-.env*
+# ── Sistema operativo ──
+.DS_Store
+Thumbs.db
+*.pem

@@ -4,57 +4,68 @@ import { ShieldCheck, Lock } from 'lucide-react';
 export function MarketingFooter() {
   return (
     <footer className="border-t border-border bg-paper">
-      <div className="container grid gap-12 py-16 lg:grid-cols-[1.5fr,1fr,1fr,1fr]">
+      <div className="container grid gap-12 py-20 lg:grid-cols-[1.75fr,1fr,1fr,1fr]">
+
         <div>
           <span className="font-display text-xl font-semibold text-ink">LITIGO</span>
-          <p className="mt-3 max-w-xs text-[0.8125rem] leading-relaxed text-slate">
-            Membresia juridica mensual. Asesoria legal permanente para personas y empresas en Colombia.
+          <p className="mt-3 max-w-[28ch] text-[0.8125rem] font-light leading-relaxed text-slate">
+            Membresía jurídica mensual. Asesoría legal permanente para personas y empresas en Colombia.
           </p>
         </div>
 
-        <div>
-          <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-slate-light">Documentos</p>
-          <ul className="space-y-2.5 text-[0.8125rem] text-slate">
-            <li><Link href="/terminos-y-condiciones" className="hover:text-ink">Terminos y condiciones</Link></li>
-            <li><Link href="/contrato-afiliacion" className="hover:text-ink">Contrato de afiliacion</Link></li>
-            <li><Link href="/politica-tratamiento-datos" className="hover:text-ink">Politica de datos</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-slate-light">Membresia</p>
-          <ul className="space-y-2.5 text-[0.8125rem] text-slate">
-            <li><Link href="/#beneficios" className="hover:text-ink">Beneficios</Link></li>
-            <li><Link href="/#como-funciona" className="hover:text-ink">Como funciona</Link></li>
-            <li><Link href="/afiliacion" className="hover:text-ink">Afiliarme</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-slate-light">Contacto</p>
-          <ul className="space-y-2.5 text-[0.8125rem] text-slate">
-            <li>
-              <a href="mailto:soporte@litigo.com.co" className="hover:text-ink">
-                soporte@litigo.com.co
-              </a>
-            </li>
-            <li>+57 300 000 0000</li>
-          </ul>
-        </div>
+        {[
+          {
+            label: 'Documentos',
+            links: [
+              { href: '/terminos-y-condiciones',      label: 'Términos y condiciones' },
+              { href: '/contrato-afiliacion',          label: 'Contrato de afiliación' },
+              { href: '/politica-tratamiento-datos',   label: 'Política de datos' },
+            ],
+          },
+          {
+            label: 'Membresía',
+            links: [
+              { href: '/#beneficios',    label: 'Beneficios' },
+              { href: '/#como-funciona', label: 'Cómo funciona' },
+              { href: '/afiliacion',     label: 'Afiliarme' },
+            ],
+          },
+          {
+            label: 'Contacto',
+            links: [
+              { href: 'mailto:soporte@litigo.com.co', label: 'soporte@litigo.com.co' },
+            ],
+          },
+        ].map((col) => (
+          <div key={col.label}>
+            <p className="mb-4 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-slate-light">
+              {col.label}
+            </p>
+            <ul className="space-y-2.5">
+              {col.links.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-[0.8125rem] font-light text-slate transition-colors hover:text-ink">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <div className="border-t border-border">
         <div className="container flex flex-col items-start justify-between gap-3 py-5 sm:flex-row sm:items-center">
-          <p className="text-[0.75rem] text-slate-light">
+          <p className="text-[0.75rem] font-light text-slate-light">
             &copy; {new Date().getFullYear()} Litigo. Todos los derechos reservados.
           </p>
-          <div className="flex items-center gap-5 text-[0.75rem] text-slate-light">
+          <div className="flex items-center gap-5 text-[0.75rem] font-light text-slate-light">
             <span className="inline-flex items-center gap-1.5">
-              <Lock className="h-3 w-3" />
+              <Lock className="h-3 w-3" aria-hidden="true" />
               Pagos por Wompi
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-3 w-3" />
+              <ShieldCheck className="h-3 w-3" aria-hidden="true" />
               Ley 1581 de 2012
             </span>
           </div>

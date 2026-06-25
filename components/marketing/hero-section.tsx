@@ -1,260 +1,142 @@
 import Link from 'next/link';
-import { ShieldCheck, Lock, Clock3, Phone, MessageCircle } from 'lucide-react';
+import { Phone, MessageCircle } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
-/**
- * SealEmblem — emblema SVG del bufete.
- * Se renderiza en el servidor (no necesita JS en cliente).
- * La animación CSS de rotación vive dentro del propio SVG para evitar
- * dependencias de Framer Motion o JS de hidratación.
- */
+/* ─────────────────────────────────────────────
+   Sello SVG — renderizado en servidor (sin JS)
+───────────────────────────────────────────── */
 function SealEmblem() {
   const ticks = Array.from({ length: 48 }, (_, i) => i * 7.5);
   return (
     <div className="relative flex items-center justify-center" aria-hidden="true">
-      {/* Halo ambiental */}
-      <div className="absolute h-72 w-72 rounded-full bg-gold/10 blur-[72px]" />
-      <svg
-        viewBox="0 0 400 400"
-        className="relative w-full max-w-[320px]"
-        xmlns="http://www.w3.org/2000/svg"
-        role="img"
-        aria-label="Emblema de Litigo"
-      >
-        {/* Anillo exterior estático */}
-        <circle cx="200" cy="200" r="192"
-          fill="none" stroke="#9E7A3F" strokeOpacity="0.12" strokeWidth="1" />
-
-        {/* Anillo giratorio de ticks */}
-        <g style={{ transformOrigin: '200px 200px', animation: 'seal-spin 90s linear infinite' }}>
+      <div className="absolute h-72 w-72 rounded-full bg-gold/[0.08] blur-[80px]" />
+      <svg viewBox="0 0 400 400" className="relative w-full max-w-[300px]" role="img" aria-label="Emblema Litigo">
+        <circle cx="200" cy="200" r="192" fill="none" stroke="#9A7540" strokeOpacity="0.1" strokeWidth="1" />
+        <g style={{ transformOrigin: '200px 200px', animation: 'seal 90s linear infinite' }}>
           {ticks.map((angle) => {
             const rad = (angle * Math.PI) / 180;
-            const isMajor = angle % 30 === 0;
-            const r1 = isMajor ? 156 : 161;
+            const major = angle % 30 === 0;
+            const r1    = major ? 156 : 162;
             return (
-              <line
-                key={angle}
-                x1={200 + r1 * Math.cos(rad)}      y1={200 + r1 * Math.sin(rad)}
-                x2={200 + 172 * Math.cos(rad)}     y2={200 + 172 * Math.sin(rad)}
-                stroke="#9E7A3F"
-                strokeOpacity={isMajor ? 0.55 : 0.22}
-                strokeWidth={isMajor ? 1.5 : 0.75}
+              <line key={angle}
+                x1={200 + r1        * Math.cos(rad)} y1={200 + r1        * Math.sin(rad)}
+                x2={200 + 172       * Math.cos(rad)} y2={200 + 172       * Math.sin(rad)}
+                stroke="#9A7540"
+                strokeOpacity={major ? 0.5 : 0.18}
+                strokeWidth={major ? 1.5 : 0.75}
               />
             );
           })}
         </g>
-
-        {/* Anillos interiores */}
-        <circle cx="200" cy="200" r="148"
-          fill="none" stroke="#9E7A3F" strokeOpacity="0.32" strokeWidth="0.75" />
-        <circle cx="200" cy="200" r="130"
-          fill="none" stroke="#9E7A3F" strokeOpacity="0.12" strokeWidth="0.5" />
-
-        {/* Monograma */}
-        <text x="200" y="200" textAnchor="middle" dominantBaseline="middle"
-              fontSize="78" fontFamily="Cormorant Garamond, Georgia, serif"
-              fontWeight="600" fill="#F8F6F1">
-          L
-        </text>
-        <line x1="164" y1="228" x2="236" y2="228"
-              stroke="#BFA06A" strokeOpacity="0.45" strokeWidth="0.75" />
-        <text x="200" y="246" textAnchor="middle"
-              fontSize="9" letterSpacing="4.5"
-              fontFamily="IBM Plex Mono, monospace"
-              fill="#BFA06A" fillOpacity="0.7">
-          LITIGO
-        </text>
-
-        <style>{`
-          @keyframes seal-spin {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            g[style*="seal-spin"] { animation: none; }
-          }
-        `}</style>
+        <circle cx="200" cy="200" r="148" fill="none" stroke="#9A7540" strokeOpacity="0.28" strokeWidth="0.75" />
+        <circle cx="200" cy="200" r="130" fill="none" stroke="#9A7540" strokeOpacity="0.10" strokeWidth="0.5" />
+        <text x="200" y="207" textAnchor="middle" dominantBaseline="middle"
+              fontSize="80" fontFamily="Cormorant Garamond, Georgia, serif"
+              fontWeight="300" fill="#F5F3EE">L</text>
+        <line x1="166" y1="230" x2="234" y2="230" stroke="#B8956A" strokeOpacity="0.4" strokeWidth="0.75" />
+        <text x="200" y="248" textAnchor="middle" fontSize="9" letterSpacing="4.5"
+              fontFamily="IBM Plex Mono, monospace" fill="#B8956A" fillOpacity="0.65">LITIGO</text>
+        <style>{`@keyframes seal { to { transform: rotate(360deg); } }`}</style>
       </svg>
     </div>
   );
 }
 
-/* ───────────────────────────────────────────────
-   Datos de contacto
-   El telefono se lee de Setting.support_phone (configurable desde
-   /admin/configuracion). Si no existe el registro, se usa un fallback
-   para que el sitio nunca se rompa por falta de configuracion.
-──────────────────────────────────────────────── */
-const PHONE_FALLBACK = '+573000000000';
-
-function toWhatsappDigits(phone: string): string {
-  // wa.me requiere solo digitos (sin '+', espacios ni guiones).
-  return phone.replace(/[^\d]/g, '');
-}
+/* ─────────────────────────────────────────────
+   Teléfono desde base de datos (SSR)
+───────────────────────────────────────────── */
+const PHONE_FALLBACK = '+57 300 000 0000';
 
 async function getSupportPhone(): Promise<string> {
   try {
-    const setting = await prisma.setting.findUnique({ where: { key: 'support_phone' } });
-    return setting?.value?.trim() || PHONE_FALLBACK;
+    const s = await prisma.setting.findUnique({ where: { key: 'support_phone' } });
+    return s?.value?.trim() || PHONE_FALLBACK;
   } catch {
-    // Si la base de datos no esta disponible en build/preview, no rompemos el hero.
     return PHONE_FALLBACK;
   }
 }
 
-/* ───────────────────────────────────────────────
-   Señales de confianza (footer del hero)
-──────────────────────────────────────────────── */
-const trustItems = [
-  { icon: ShieldCheck, label: 'Pago seguro certificado' },
-  { icon: Lock,        label: 'Datos bajo Ley 1581' },
-  { icon: Clock3,      label: 'Activación inmediata' },
-] as const;
+function toWaDigits(phone: string) {
+  return phone.replace(/[^\d]/g, '');
+}
 
-/* ───────────────────────────────────────────────
-   Hero Section (Server Component async — SSR puro,
-   sin JS de cliente para resolver el telefono de contacto)
-──────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
+   Hero Section
+───────────────────────────────────────────── */
 export async function HeroSection() {
-  const phone = await getSupportPhone();
-  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
-  const whatsappMessage = encodeURIComponent(
-    'Hola, quiero obtener información sobre la membresía jurídica de Litigo.',
-  );
-  const whatsappHref = `https://wa.me/${toWhatsappDigits(phone)}?text=${whatsappMessage}`;
+  const phone        = await getSupportPhone();
+  const phoneHref    = `tel:${phone.replace(/\s/g, '')}`;
+  const waHref       = `https://wa.me/${toWaDigits(phone)}?text=${encodeURIComponent('Hola, quiero información sobre la membresía jurídica de Litigo.')}`;
 
   return (
-    /**
-     * <section> con role implícito "region" y aria-labelledby apuntando
-     * al H1 — mejora la navegación por landmarks para lectores de pantalla
-     * y ayuda a los crawlers a entender la jerarquía de la página.
-     */
-    <section
-      aria-labelledby="hero-heading"
-      className="grain-overlay overflow-hidden bg-ink"
-    >
-      <div className="container grid min-h-[86vh] items-center gap-20 py-24 lg:grid-cols-[1fr,380px] lg:py-0">
+    <section aria-labelledby="hero-heading" className="grain-overlay overflow-hidden bg-ink">
+      <div className="container grid min-h-[88vh] items-center gap-16 py-24 lg:grid-cols-[1fr,340px] lg:py-0">
 
-        {/* ── Columna de texto ── */}
-        <div style={{ animation: 'fadeUp 0.65s ease-out forwards' }}>
-
-          {/* Regla decorativa dorada — marcador editorial de sección */}
+        {/* ── Texto ───────────────────────────── */}
+        <div style={{ animation: 'fadeUp 0.7s ease-out forwards' }}>
           <span className="section-rule" aria-hidden="true" />
 
-          {/**
-           * H1 único en la página.
-           * "Asesoría legal permanente" como término de búsqueda primario.
-           * La coma y el salto de línea son intencionales: Cormorant Garamond
-           * con el adjetivo en itálica crea tensión tipográfica sin necesitar
-           * gráficos decorativos adicionales.
-           */}
-          <h1
-            id="hero-heading"
-            className="font-display text-5xl font-semibold leading-[1.06] tracking-tight text-paper sm:text-6xl lg:text-display-xl"
-          >
+          <h1 id="hero-heading" className="font-display text-hero text-paper">
             Asesoría legal<br />
             <em className="font-normal italic text-gold-light">permanente,</em><br />
             sin sorpresas.
           </h1>
 
-          {/* Párrafo descriptivo — candidato a meta description */}
-          <p className="mt-7 max-w-[42ch] text-[0.9375rem] leading-[1.8] text-paper/60">
-            Litigo es una membresía jurídica mensual que te da acceso continuo
-            a un equipo de abogados para ti o tu empresa, sin pagar por cada consulta.
+          <p className="mt-6 max-w-[40ch] text-[0.9375rem] font-light leading-[1.85] text-paper/55">
+            Litigo es una membresía jurídica mensual que te da acceso continuo a un equipo
+            de abogados para ti o tu empresa, sin pagar por cada consulta.
           </p>
 
-          {/* ── Grupo de CTAs ─────────────────────────────────────────── */}
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-
-            {/**
-             * CTA primario: afiliación (conversión principal).
-             * Fondo dorado sólido + glow suave para jerarquía máxima.
-             */}
+          {/* CTAs */}
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            {/* CTA primario */}
             <Link
               href="/afiliacion"
-              className={[
-                'inline-flex h-12 items-center justify-center gap-2',
-                'rounded px-7 text-[0.875rem] font-semibold tracking-wide text-white',
-                'bg-gold shadow-gold-glow',
-                'transition-colors duration-200 hover:bg-gold-dark',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
-              ].join(' ')}
+              className="inline-flex h-12 items-center justify-center rounded px-7 text-[0.875rem] font-medium tracking-wide text-white bg-gold shadow-gold-glow transition-colors duration-200 hover:bg-gold-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
               Afiliarme ahora
             </Link>
 
-            {/**
-             * CTAs secundarios: contacto directo.
-             * Misma altura (h-12) para alineación perfecta.
-             * Bordes finos (border/20 ≈ 5 % opacidad blanca) — casi invisibles
-             * en fondos oscuros pero palpables como elemento interactivo.
-             * Hover: fondo blanco al 5 % — sutil, sin competir con el CTA primario.
-             */}
-            <div className="flex items-center gap-3" role="group" aria-label="Contacto directo">
-
-              {/* Llamar */}
+            {/* CTAs secundarios de contacto */}
+            <div className="flex items-center gap-2.5" role="group" aria-label="Contacto directo">
               <a
                 href={phoneHref}
-                aria-label={`Llamar a Litigo al ${phone}`}
-                title={`Llamar a Litigo: ${phone}`}
-                className={[
-                  'inline-flex h-12 items-center justify-center gap-2',
-                  'rounded border border-white/[0.14] px-5',
-                  'text-[0.8125rem] font-medium text-paper/70',
-                  'transition-colors duration-200 hover:border-white/25 hover:bg-white/5 hover:text-paper',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
-                ].join(' ')}
+                aria-label={`Llamar a Litigo — ${phone}`}
+                title={`Llamar: ${phone}`}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded border border-white/[0.12] px-5 text-[0.8125rem] font-light text-paper/60 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-paper/85 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
               >
-                <Phone className="h-[0.9rem] w-[0.9rem] flex-shrink-0 text-gold-light/80" strokeWidth={1.5} />
-                <span>Llamar</span>
+                <Phone className="h-3.5 w-3.5 shrink-0 text-gold-light/70" strokeWidth={1.5} />
+                Llamar
               </a>
-
-              {/* WhatsApp */}
               <a
-                href={whatsappHref}
+                href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Escribir a Litigo por WhatsApp"
                 title="WhatsApp de Litigo"
-                className={[
-                  'inline-flex h-12 items-center justify-center gap-2',
-                  'rounded border border-white/[0.14] px-5',
-                  'text-[0.8125rem] font-medium text-paper/70',
-                  'transition-colors duration-200 hover:border-white/25 hover:bg-white/5 hover:text-paper',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
-                ].join(' ')}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded border border-white/[0.12] px-5 text-[0.8125rem] font-light text-paper/60 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-paper/85 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
               >
-                <MessageCircle className="h-[0.9rem] w-[0.9rem] flex-shrink-0 text-gold-light/80" strokeWidth={1.5} />
-                <span>WhatsApp</span>
+                <MessageCircle className="h-3.5 w-3.5 shrink-0 text-gold-light/70" strokeWidth={1.5} />
+                WhatsApp
               </a>
             </div>
           </div>
-          {/* ── Fin CTAs ────────────────────────────────────────────────── */}
 
-          {/**
-           * Señales de confianza — <ul> semántica.
-           * No son nav ni lista de beneficios: son microtextos de respaldo
-           * que reducen la fricción justo antes de la decisión de afiliación.
-           */}
+          {/* Señales de confianza */}
           <ul
             aria-label="Garantías de seguridad"
-            className="mt-11 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/[0.07] pt-8"
+            className="mt-12 flex flex-wrap gap-x-7 gap-y-2.5 border-t border-white/[0.06] pt-8"
           >
-            {trustItems.map(({ icon: Icon, label }) => (
-              <li key={label} className="inline-flex items-center gap-2 text-[0.75rem] text-paper/40">
-                <Icon className="h-3.5 w-3.5 flex-shrink-0 text-gold-light/60" strokeWidth={1.5} aria-hidden="true" />
+            {['Pago seguro con Wompi', 'Datos bajo Ley 1581', 'Activación inmediata'].map((label) => (
+              <li key={label} className="text-[0.75rem] font-light text-paper/35">
                 {label}
               </li>
             ))}
           </ul>
         </div>
-        {/* ── Fin columna texto ── */}
 
-        {/* ── Emblema decorativo — oculto en móvil ── */}
-        <div
-          className="hidden lg:flex lg:justify-center"
-          style={{ animation: 'fadeUp 0.85s 0.1s ease-out both' }}
-        >
+        {/* ── Sello ───────────────────────────── */}
+        <div className="hidden lg:flex lg:justify-center" style={{ animation: 'fadeUp 0.85s 0.12s ease-out both' }}>
           <SealEmblem />
         </div>
       </div>

@@ -2,56 +2,54 @@ import { Plus } from 'lucide-react';
 
 const faqs = [
   {
-    question: '¿Que incluye la membresia mensual?',
-    answer:
-      'Incluye asesoria legal continua, revision de documentos y acompanamiento en procesos, segun el alcance descrito en el contrato de afiliacion vigente.',
+    q: '¿Qué incluye la membresía mensual?',
+    a: 'Incluye asesoría legal continua, revisión de documentos y acompañamiento en procesos, según el alcance descrito en el contrato de afiliación vigente.',
   },
   {
-    question: '¿Puedo cancelar mi membresia en cualquier momento?',
-    answer:
-      'Si. Las condiciones de cancelacion y los plazos aplicables estan descritos en el contrato de afiliacion que aceptas al registrarte.',
+    q: '¿Puedo cancelar en cualquier momento?',
+    a: 'Sí. Las condiciones de cancelación y los plazos aplicables están descritos en el contrato de afiliación que aceptas al registrarte.',
   },
   {
-    question: '¿Que pasa si mi pago no es aprobado?',
-    answer:
-      'Tu afiliacion queda en estado pendiente y puedes reintentar el pago desde el mismo enlace. No se activa ningun cobro recurrente hasta que el pago sea aprobado.',
+    q: '¿Qué pasa si mi pago no es aprobado?',
+    a: 'Tu afiliación queda en estado pendiente y puedes reintentar el pago desde el mismo enlace. No se activa ningún cobro recurrente hasta que el pago sea aprobado.',
   },
   {
-    question: '¿Como se protegen mis datos personales?',
-    answer:
-      'Tus datos se tratan conforme a la politica de tratamiento de datos personales de Litigo, disponible para consulta antes de completar tu afiliacion, y en cumplimiento de la Ley 1581 de 2012.',
+    q: '¿Cómo se protegen mis datos personales?',
+    a: 'Tus datos se tratan conforme a la política de tratamiento de datos de Litigo y en cumplimiento de la Ley 1581 de 2012.',
   },
   {
-    question: '¿Recibo algun comprobante de mi afiliacion?',
-    answer:
-      'Si. Al activarse tu membresia recibes un correo de confirmacion con tu codigo unico de afiliado y la vigencia de la membresia.',
+    q: '¿Recibo algún comprobante de afiliación?',
+    a: 'Sí. Al activarse tu membresía recibes un correo de confirmación con tu código único de afiliado y la vigencia de la membresía.',
   },
 ];
 
 export function FaqSection() {
   return (
-    <section id="preguntas-frecuentes" className="bg-white py-28">
+    <section id="preguntas-frecuentes" className="bg-white py-32">
       <div className="container">
-        <div className="mb-14">
-          <span className="section-rule" />
-          <h2 className="font-display text-display-md font-semibold text-ink">
+
+        <div className="mb-20">
+          <span className="section-rule" aria-hidden="true" />
+          <h2 className="font-display text-section text-ink">
             Consultas frecuentes.
           </h2>
         </div>
 
+        {/* Lista limpia de acordeones — sin contenedor de card */}
         <div className="mx-auto max-w-2xl">
-          {faqs.map((faq, idx) => (
+          {faqs.map((faq, i) => (
             <details
-              key={faq.question}
-              className={`group border-t border-border py-5 ${idx === faqs.length - 1 ? 'border-b' : ''}`}
+              key={faq.q}
+              className={`group py-5 ${i === 0 ? 'border-t border-border' : ''} border-b border-border`}
             >
               <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-[0.9375rem] font-medium text-ink [&::-webkit-details-marker]:hidden">
-                <span>{faq.question}</span>
+                <span>{faq.q}</span>
                 <Plus
                   className="mt-0.5 h-4 w-4 shrink-0 text-gold transition-transform duration-300 group-open:rotate-45"
+                  aria-hidden="true"
                 />
               </summary>
-              <p className="mt-3 text-[0.875rem] leading-relaxed text-slate">{faq.answer}</p>
+              <p className="mt-3.5 text-[0.875rem] leading-relaxed text-slate">{faq.a}</p>
             </details>
           ))}
         </div>

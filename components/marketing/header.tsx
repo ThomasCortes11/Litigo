@@ -2,92 +2,81 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Menu, X, MessageCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
-  { href: '/#beneficios', label: 'Beneficios' },
-  { href: '/#como-funciona', label: 'Como funciona' },
-  { href: '/#preguntas-frecuentes', label: 'Consultas frecuentes' },
+  { href: '/#beneficios',            label: 'Beneficios' },
+  { href: '/#como-funciona',         label: 'Cómo funciona' },
+  { href: '/#preguntas-frecuentes',  label: 'Consultas frecuentes' },
 ];
 
 export function MarketingHeader() {
-  const [open, setOpen] = React.useState(false);
+  const [open,     setOpen]     = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const fn = () => setScrolled(window.scrollY > 6);
+    fn();
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 transition-[background,border-color,box-shadow] duration-300',
+        'sticky top-0 z-50 transition-[background,border-color,backdrop-filter] duration-300',
         scrolled
-          ? 'border-b border-white/10 bg-ink/95 shadow-[0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md'
+          ? 'border-b border-white/[0.07] bg-ink/92 backdrop-blur-lg'
           : 'bg-ink',
       )}
     >
-      <div className="container flex h-[72px] items-center justify-between">
-        <Link
-          href="/"
-          className="font-display text-[1.35rem] font-semibold tracking-wide text-paper"
-        >
+      <div className="container flex h-[68px] items-center justify-between">
+        <Link href="/" className="font-display text-[1.3rem] font-semibold tracking-wide text-paper">
           LITIGO
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex" aria-label="Navegacion principal">
+        {/* Navegacion desktop */}
+        <nav className="hidden items-center gap-9 lg:flex" aria-label="Navegación principal">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-[0.8125rem] font-medium text-paper/60 transition-colors duration-200 hover:text-paper"
+              className="text-[0.8125rem] font-light text-paper/55 transition-colors duration-200 hover:text-paper"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
-          <a
-            href="mailto:soporte@litigo.com.co"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[0.8125rem] font-medium text-paper/90 transition hover:border-white/25 hover:bg-white/10"
+        <div className="hidden lg:block">
+          <Link
+            href="/afiliacion"
+            className="inline-flex h-9 items-center justify-center rounded px-5 text-[0.8125rem] font-medium text-white bg-gold transition-colors duration-200 hover:bg-gold-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
           >
-            <MessageCircle className="h-4 w-4 text-gold" />
-            Soporte
-          </a>
-          <Button asChild variant="gold" className="h-9 px-5 text-[0.8125rem]">
-            <Link href="/afiliacion">Afiliarme</Link>
-          </Button>
+            Afiliarme
+          </Link>
         </div>
 
+        {/* Boton menu movil */}
         <button
-          aria-label={open ? 'Cerrar menu' : 'Abrir menu'}
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
+          aria-controls="mobile-nav"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center text-paper/70 hover:text-paper lg:hidden"
+          className="flex h-9 w-9 items-center justify-center text-paper/60 hover:text-paper lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {/* Botón flotante de soporte en desktop */}
-      <a
-        href="mailto:soporte@litigo.com.co"
-        className="fixed bottom-6 right-6 z-50 hidden items-center gap-2 rounded-full border border-white/15 bg-ink/95 px-4 py-3 text-sm text-paper shadow-[0_18px_48px_rgba(0,0,0,0.22)] transition hover:bg-ink lg:flex"
-      >
-        <MessageCircle className="h-4 w-4 text-gold" />
-        Soporte
-      </a>
-
       {/* Menu movil */}
       <div
+        id="mobile-nav"
+        aria-hidden={!open}
         className={cn(
-          'overflow-hidden border-t border-white/[0.07] bg-ink transition-[max-height] duration-300 lg:hidden',
-          open ? 'max-h-80' : 'max-h-0',
+          'overflow-hidden border-t border-white/[0.06] bg-ink transition-[max-height] duration-300 lg:hidden',
+          open ? 'max-h-72' : 'max-h-0',
         )}
       >
         <nav className="container flex flex-col gap-1 py-5">
@@ -96,14 +85,18 @@ export function MarketingHeader() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="rounded py-2.5 text-sm text-paper/70 hover:text-paper"
+              className="rounded py-2.5 text-[0.875rem] font-light text-paper/65 hover:text-paper"
             >
               {link.label}
             </a>
           ))}
-          <Button asChild variant="gold" className="mt-3 w-full">
-            <Link href="/afiliacion" onClick={() => setOpen(false)}>Afiliarme</Link>
-          </Button>
+          <Link
+            href="/afiliacion"
+            onClick={() => setOpen(false)}
+            className="mt-3 inline-flex h-11 items-center justify-center rounded bg-gold px-5 text-[0.875rem] font-medium text-white hover:bg-gold-dark"
+          >
+            Afiliarme
+          </Link>
         </nav>
       </div>
     </header>
