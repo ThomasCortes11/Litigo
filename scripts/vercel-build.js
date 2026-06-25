@@ -7,11 +7,14 @@ function run(cmd) {
 }
 
 try {
-  if (process.env.DATABASE_URL) {
-    console.log('DATABASE_URL found — running prisma migrations');
+  const databaseUrl = process.env.DATABASE_URL;
+  const isLocalhost = databaseUrl && /(?:^|:\/\/)(localhost|127\.0\.0\.1)(?::|$)/i.test(databaseUrl);
+
+  if (databaseUrl && !isLocalhost) {
+    console.log('DATABASE_URL found and not localhost — running prisma migrations');
     run('npm run db:migrate:deploy');
   } else {
-    console.log('DATABASE_URL not set — skipping prisma migrations');
+    console.log('Skipping prisma migrations because DATABASE_URL is absent or points to localhost');
   }
 
   console.log('Running Next.js build');
