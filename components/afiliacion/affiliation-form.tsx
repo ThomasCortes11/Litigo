@@ -35,6 +35,19 @@ export function AffiliationForm() {
 
   return (
     <form action={formAction} className="space-y-8">
+      {/* Resumen del plan (valores reales) */}
+      <div className="rounded-md border border-border bg-white/5 p-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="text-sm text-gray-100">Valor mensual: <span className="font-semibold text-teal-300">$80.000</span></div>
+          <div className="text-sm text-gray-100">Tipo: <span className="font-semibold">Individual</span></div>
+          <div className="text-sm text-gray-100">Formulario Nº: <span className="font-semibold">0194</span></div>
+        </div>
+      </div>
+
+      {/* Campos ocultos para enviar información del contrato */}
+      <input type="hidden" name="planPrice" value="80000" />
+      <input type="hidden" name="planType" value="INDIVIDUAL" />
+      <input type="hidden" name="formNumber" value="0194" />
       {state.error && (
         <p className="rounded border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">{state.error}</p>
       )}

@@ -5,18 +5,18 @@ import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
   [
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded text-sm font-medium tracking-wide',
-    'transition-colors duration-200',
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold tracking-wide',
+    'transition-transform duration-180',
     'disabled:pointer-events-none disabled:opacity-50',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
   ].join(' '),
   {
     variants: {
       variant: {
         default:
-          'bg-ink text-paper hover:bg-ink-light',
+          'bg-neutral-800 text-white hover:bg-neutral-700',
         gold:
-          'bg-gold text-white hover:bg-gold-dark',
+          'bg-gradient-to-r from-teal-400 to-teal-600 text-white shadow-md hover:from-teal-500 hover:to-teal-700 transform hover:scale-105',
         outline:
           'border border-border bg-transparent text-charcoal hover:bg-paper hover:border-slate/50',
         ghost:

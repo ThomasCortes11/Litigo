@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, DM_Sans, IBM_Plex_Mono } from 'next/font/google';
+import { Merriweather, DM_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 
 /**
@@ -8,10 +8,10 @@ import './globals.css';
  * DM Sans: sin serifas humanista, muy legible en cuerpo de texto.
  * IBM Plex Mono: referencias numéricas, códigos y etiquetas.
  */
-const cormorant = Cormorant_Garamond({
+const merriweather = Merriweather({
   subsets: ['latin'],
   variable: '--font-display',
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '700'],
   style: ['normal', 'italic'],
   display: 'swap',
 });
@@ -68,7 +68,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${cormorant.variable} ${dmSans.variable} ${plexMono.variable}`}>
+    <html lang="es" className={`${merriweather.variable} ${dmSans.variable} ${plexMono.variable}`}>
       <body className="font-sans text-charcoal antialiased selection:bg-gold/20 selection:text-ink">
         {children}
       </body>

@@ -69,7 +69,7 @@ export async function HeroSection() {
   const waHref       = `https://wa.me/${toWaDigits(phone)}?text=${encodeURIComponent('Hola, quiero información sobre la membresía jurídica de Litigo.')}`;
 
   return (
-    <section aria-labelledby="hero-heading" className="grain-overlay overflow-hidden bg-ink">
+    <section aria-labelledby="hero-heading" className="grain-overlay overflow-hidden bg-black">
       <div className="container grid min-h-[88vh] items-center gap-16 py-24 lg:grid-cols-[1fr,340px] lg:py-0">
 
         {/* ── Texto ───────────────────────────── */}
@@ -77,12 +77,11 @@ export async function HeroSection() {
           <span className="section-rule" aria-hidden="true" />
 
           <h1 id="hero-heading" className="font-display text-hero text-paper">
-            Asesoría legal<br />
-            <em className="font-normal italic text-gold-light">permanente,</em><br />
-            sin sorpresas.
+            Asesoría jurídica permanente y preventiva
           </h1>
+          <p className="mt-2 text-[1.05rem] font-semibold text-paper/80">Protección legal continua, representación experta y gestión efectiva de tus reclamaciones.</p>
 
-          <p className="mt-6 max-w-[40ch] text-[0.9375rem] font-light leading-[1.85] text-paper/55">
+          <p className="mt-6 max-w-[44ch] text-[0.975rem] font-light leading-[1.85] text-paper/70">
             Litigo es una membresía jurídica mensual que te da acceso continuo a un equipo
             de abogados para ti o tu empresa, sin pagar por cada consulta.
           </p>
@@ -92,7 +91,7 @@ export async function HeroSection() {
             {/* CTA primario */}
             <Link
               href="/afiliacion"
-              className="inline-flex h-12 items-center justify-center rounded px-7 text-[0.875rem] font-medium tracking-wide text-white bg-gold shadow-gold-glow transition-colors duration-200 hover:bg-gold-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              className="inline-flex h-12 items-center justify-center rounded-lg px-7 text-[0.925rem] font-semibold tracking-wide text-black bg-gradient-to-r from-gold to-gold-light shadow-gold-glow transition-transform duration-180 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               Afiliarme ahora
             </Link>
@@ -105,7 +104,7 @@ export async function HeroSection() {
                 title={`Llamar: ${phone}`}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded border border-white/[0.12] px-5 text-[0.8125rem] font-light text-paper/60 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-paper/85 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
               >
-                <Phone className="h-3.5 w-3.5 shrink-0 text-gold-light/70" strokeWidth={1.5} />
+                <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: '#B8956A' }} strokeWidth={1.5} />
                 Llamar
               </a>
               <a
@@ -116,7 +115,7 @@ export async function HeroSection() {
                 title="WhatsApp de Litigo"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded border border-white/[0.12] px-5 text-[0.8125rem] font-light text-paper/60 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-paper/85 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
               >
-                <MessageCircle className="h-3.5 w-3.5 shrink-0 text-gold-light/70" strokeWidth={1.5} />
+                <MessageCircle className="h-3.5 w-3.5 shrink-0" style={{ color: '#B8956A' }} strokeWidth={1.5} />
                 WhatsApp
               </a>
             </div>
@@ -125,14 +124,16 @@ export async function HeroSection() {
           {/* Señales de confianza */}
           <ul
             aria-label="Garantías de seguridad"
-            className="mt-12 flex flex-wrap gap-x-7 gap-y-2.5 border-t border-white/[0.06] pt-8"
+            className="mt-10 flex flex-wrap gap-x-7 gap-y-2.5"
           >
             {['Pago seguro con Wompi', 'Datos bajo Ley 1581', 'Activación inmediata'].map((label) => (
-              <li key={label} className="text-[0.75rem] font-light text-paper/35">
+              <li key={label} className="text-[0.78rem] font-light text-paper/50">
                 {label}
               </li>
             ))}
           </ul>
+
+          {/* Informational panel removed as requested */}
         </div>
 
         {/* ── Sello ───────────────────────────── */}

@@ -4,6 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { LitigoLogo } from '@/components/ui/logo';
 
 const navLinks = [
   { href: '/#beneficios',            label: 'Beneficios' },
@@ -13,27 +14,13 @@ const navLinks = [
 
 export function MarketingHeader() {
   const [open,     setOpen]     = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false);
-
-  React.useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 6);
-    fn();
-    window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
-  }, []);
+  
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 transition-[background,border-color,backdrop-filter] duration-300',
-        scrolled
-          ? 'border-b border-white/[0.07] bg-ink/92 backdrop-blur-lg'
-          : 'bg-ink',
-      )}
-    >
+    <header className="sticky top-0 z-50 bg-black border-b-2 border-white/90 shadow-sm">
       <div className="container flex h-[68px] items-center justify-between">
-        <Link href="/" className="font-display text-[1.3rem] font-semibold tracking-wide text-paper">
-          LITIGO
+        <Link href="/" className="inline-flex items-center">
+          <LitigoLogo variant="dark" size="sm" />
         </Link>
 
         {/* Navegacion desktop */}
@@ -75,7 +62,7 @@ export function MarketingHeader() {
         id="mobile-nav"
         aria-hidden={!open}
         className={cn(
-          'overflow-hidden border-t border-white/[0.06] bg-ink transition-[max-height] duration-300 lg:hidden',
+          'overflow-hidden border-t border-white/[0.06] bg-black transition-[max-height] duration-300 lg:hidden',
           open ? 'max-h-72' : 'max-h-0',
         )}
       >

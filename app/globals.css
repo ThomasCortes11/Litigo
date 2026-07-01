@@ -11,7 +11,8 @@
   }
 
   body {
-    background-color: #ffffff;
+    background-color: #070707;
+    color: #EDEBE8;
   }
 
   p, li { line-height: 1.75; }
@@ -43,16 +44,16 @@
   */
   .section-rule {
     display: block;
-    width: 2rem;
+    width: 2.5rem;
     height: 1px;
-    background-color: #9A7540;
-    margin-bottom: 1.5rem;
+    background-color: #B8956A;
+    margin-bottom: 1.25rem;
   }
 
   /* Seleccion de texto en tono dorado */
   ::selection {
-    background-color: rgba(154, 117, 64, 0.15);
-    color: #080F1A;
+    background-color: rgba(184, 149, 106, 0.14);
+    color: #070707;
   }
 }
 

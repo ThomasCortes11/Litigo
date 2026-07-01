@@ -2,20 +2,21 @@ import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { AffiliationForm } from '@/components/afiliacion/affiliation-form';
 import { TrustSidebar } from '@/components/afiliacion/trust-sidebar';
+import { LitigoLogo } from '@/components/ui/logo';
 
 export const metadata = { title: 'Afiliarme' };
 
 export default function AfiliacionPage() {
   return (
-    <div className="min-h-screen bg-paper">
+    <div className="min-h-screen bg-black text-white">
       {/* Header minimalista */}
-      <header className="border-b border-border bg-white">
+      <header className="border-b border-neutral-800 bg-black">
         <div className="container flex h-[72px] items-center justify-between">
-          <Link href="/" className="font-display text-[1.35rem] font-semibold text-ink">
-            LITIGO
+          <Link href="/" className="inline-flex items-center">
+            <LitigoLogo variant="dark" size="md" />
           </Link>
-          <span className="flex items-center gap-1.5 text-xs text-slate">
-            <Lock className="h-3 w-3 text-gold" />
+          <span className="flex items-center gap-1.5 text-xs text-white/70">
+            <Lock className="h-3 w-3 text-teal-400" />
             Pago procesado por Wompi
           </span>
         </div>
@@ -36,30 +37,30 @@ export default function AfiliacionPage() {
         {/* Indicador de progreso */}
         <div className="mb-10 flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink font-mono text-[10px] text-paper">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white font-mono text-[10px] text-black">
               1
             </span>
-            <span className="text-[0.8125rem] font-medium text-ink">Tus datos</span>
+            <span className="text-[0.8125rem] font-medium text-white">Tus datos</span>
           </div>
-          <div className="h-px flex-1 bg-border" />
+          <div className="h-px flex-1 bg-neutral-800" />
           <div className="flex items-center gap-2 opacity-40">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border font-mono text-[10px] text-slate">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-neutral-700 font-mono text-[10px] text-white/60">
               2
             </span>
-            <span className="text-[0.8125rem] font-medium text-slate">Pago</span>
+            <span className="text-[0.8125rem] font-medium text-white/60">Pago</span>
           </div>
-          <div className="h-px flex-1 bg-border" />
+          <div className="h-px flex-1 bg-neutral-800" />
           <div className="flex items-center gap-2 opacity-40">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border font-mono text-[10px] text-slate">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-neutral-700 font-mono text-[10px] text-white/60">
               3
             </span>
-            <span className="text-[0.8125rem] font-medium text-slate">Activacion</span>
+            <span className="text-[0.8125rem] font-medium text-white/60">Activacion</span>
           </div>
         </div>
 
         {/* Formulario + sidebar */}
         <div className="grid gap-8 lg:grid-cols-[1fr,300px]">
-          <div className="rounded border border-border bg-white p-8">
+          <div className="rounded-lg border border-neutral-800 bg-gradient-to-b from-neutral-900 to-neutral-800 p-8 shadow-sm">
             <AffiliationForm />
           </div>
           <TrustSidebar />

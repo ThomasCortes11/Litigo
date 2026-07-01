@@ -21,9 +21,9 @@ const config: Config = {
           50: '#F0F2F4',
         },
         gold: {
-          DEFAULT: '#9A7540',
-          light: '#B8956A',
-          dark: '#755626',
+          DEFAULT: '#B8956A',
+          light: '#C9A975',
+          dark: '#947548',
         },
         paper: '#F5F3EE',
         charcoal: '#1A1D21',
