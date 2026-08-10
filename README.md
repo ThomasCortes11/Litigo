@@ -8,16 +8,17 @@ Plataforma web para captacion de afiliados, cobro de membresia con Wompi, activa
 2. [Stack tecnologico](#stack-tecnologico)
 3. [Arquitectura funcional](#arquitectura-funcional)
 4. [Estructura del proyecto](#estructura-del-proyecto)
-5. [Requisitos previos](#requisitos-previos)
-6. [Instalacion e inicio local](#instalacion-e-inicio-local)
-7. [Variables de entorno](#variables-de-entorno)
-8. [Scripts disponibles](#scripts-disponibles)
-9. [Flujos principales](#flujos-principales)
-10. [Base de datos](#base-de-datos)
-11. [Despliegue](#despliegue)
-12. [Checklist preproduccion](#checklist-preproduccion)
-13. [Troubleshooting](#troubleshooting)
-14. [Convenciones del proyecto](#convenciones-del-proyecto)
+5. [Separacion Frontend y Backend](#separacion-frontend-y-backend)
+6. [Requisitos previos](#requisitos-previos)
+7. [Instalacion e inicio local](#instalacion-e-inicio-local)
+8. [Variables de entorno](#variables-de-entorno)
+9. [Scripts disponibles](#scripts-disponibles)
+10. [Flujos principales](#flujos-principales)
+11. [Base de datos](#base-de-datos)
+12. [Despliegue](#despliegue)
+13. [Checklist preproduccion](#checklist-preproduccion)
+14. [Troubleshooting](#troubleshooting)
+15. [Convenciones del proyecto](#convenciones-del-proyecto)
 
 ## Resumen
 
@@ -55,35 +56,52 @@ Puntos clave de negocio:
 
 ## Estructura del proyecto
 
-app/
-- (marketing)/: landing y paginas legales indexables
-- afiliacion/: formulario, confirmacion y error de pago
-- admin/: login y dashboard protegido
-- api/auth/[...nextauth]/: endpoints de autenticacion
-- api/webhooks/wompi/: recepcion y validacion de eventos Wompi
+Frontend (render/UI):
 
-components/
-- ui/: componentes base reutilizables
-- marketing/: bloques del sitio publico
-- afiliacion/: formulario y sidebar de confianza
-- admin/: tablas, filtros y formularios internos
+- app/(marketing)/: landing y paginas legales indexables
+- app/afiliacion/: formulario, confirmacion y error de pago
+- app/admin/: login y dashboard protegido
+- components/ui/: componentes base reutilizables
+- components/marketing/: bloques del sitio publico
+- components/afiliacion/: formulario y sidebar de confianza
+- components/admin/: tablas, filtros y formularios internos
 
-lib/
-- actions/: server actions
-- services/: logica de negocio
-- validations/: esquemas Zod
-- auth.ts y auth.config.ts: autenticacion en Node y Edge
-- wompi.ts: checkout + verificacion de firma
-- email.ts: envio de correos
-- audit.ts: bitacora de acciones
-- rate-limit.ts: limitador de intentos
+Backend (reglas/API/datos):
 
-prisma/
-- schema.prisma: modelos de datos
-- seed.ts: datos iniciales (roles, admin, settings, documentos)
+- app/api/auth/[...nextauth]/: endpoints de autenticacion
+- app/api/webhooks/wompi/: recepcion y validacion de eventos Wompi
+- lib/actions/: server actions (capa de entrada de mutaciones)
+- lib/services/: logica de negocio y orquestacion
+- lib/validations/: esquemas Zod y validaciones
+- lib/auth.ts y lib/auth.config.ts: autenticacion en Node y Edge
+- lib/wompi.ts: checkout + verificacion de firma
+- lib/email.ts: envio de correos
+- lib/audit.ts: bitacora de acciones
+- lib/rate-limit.ts: limitador de intentos
+- prisma/schema.prisma: modelos y relaciones de base de datos
+- prisma/seed.ts: datos iniciales (roles, admin, settings, documentos)
+- scripts/vercel-build.js: build para Vercel con migraciones condicionales
 
-scripts/
-- vercel-build.js: build para Vercel con migraciones condicionales
+## Separacion Frontend y Backend
+
+Regla base del proyecto:
+
+- Frontend presenta informacion y captura interacciones.
+- Backend valida, decide y persiste.
+
+Contrato tecnico entre capas:
+
+- Frontend no activa afiliaciones ni confirma pagos por su cuenta.
+- Backend solo activa membresias con webhook firmado de Wompi.
+- La UI consume server actions o endpoints y muestra estados resultantes.
+
+Guia rapida para nuevos cambios:
+
+- Cambio visual o UX: app/* y components/*.
+- Cambio de reglas de negocio: lib/services/*.
+- Cambio de validaciones: lib/validations/*.
+- Cambio de entrada/salida de datos: lib/actions/* o app/api/*.
+- Cambio de modelo de datos: prisma/schema.prisma + migracion.
 
 ## Requisitos previos
 

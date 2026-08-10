@@ -21,9 +21,9 @@ const config: Config = {
           50: '#F0F2F4',
         },
         gold: {
-          DEFAULT: '#B8956A',
-          light: '#C9A975',
-          dark: '#947548',
+          DEFAULT: '#2B67C9',
+          light: '#4F87E6',
+          dark: '#1D4FA3',
         },
         paper: '#F5F3EE',
         charcoal: '#1A1D21',
@@ -56,7 +56,7 @@ const config: Config = {
       boxShadow: {
         'card':      '0 1px 1px rgba(8,15,26,0.04), 0 4px 16px rgba(8,15,26,0.04)',
         'elevated':  '0 16px 48px rgba(8,15,26,0.10)',
-        'gold-glow': '0 0 0 1px rgba(154,117,64,0.15), 0 16px 40px -8px rgba(154,117,64,0.25)',
+        'gold-glow': '0 0 0 1px rgba(43,103,201,0.16), 0 16px 40px -8px rgba(43,103,201,0.28)',
       },
     },
   },
