@@ -3,12 +3,12 @@ import { ShieldCheck, Lock } from 'lucide-react';
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-border bg-paper">
-      <div className="container grid gap-12 py-20 lg:grid-cols-[1.75fr,1fr,1fr,1fr]">
+    <footer className="border-t border-border/90 bg-paper">
+      <div className="container grid gap-12 py-16 sm:py-18 lg:grid-cols-[1.75fr,1fr,1fr,1fr] lg:py-20">
 
         <div>
           <span className="font-display text-xl font-semibold text-ink">LITIGO</span>
-          <p className="mt-3 max-w-[28ch] text-[0.8125rem] font-light leading-relaxed text-slate">
+          <p className="mt-3 max-w-[28ch] text-[0.84rem] font-light leading-relaxed text-slate">
             Membresía jurídica mensual. Asesoría legal permanente para personas y empresas en Colombia.
           </p>
         </div>
@@ -44,7 +44,7 @@ export function MarketingFooter() {
             <ul className="space-y-2.5">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-[0.8125rem] font-light text-slate transition-colors hover:text-ink">
+                  <Link href={l.href} className="text-[0.84rem] font-light text-slate transition-colors duration-200 hover:text-ink focus-visible:text-ink">
                     {l.label}
                   </Link>
                 </li>
@@ -59,7 +59,7 @@ export function MarketingFooter() {
           <p className="text-[0.75rem] font-light text-slate-light">
             &copy; {new Date().getFullYear()} Litigo. Todos los derechos reservados.
           </p>
-          <div className="flex items-center gap-5 text-[0.75rem] font-light text-slate-light">
+          <div className="flex flex-wrap items-center gap-5 text-[0.75rem] font-light text-slate-light">
             <span className="inline-flex items-center gap-1.5">
               <Lock className="h-3 w-3" aria-hidden="true" />
               Pagos por Wompi

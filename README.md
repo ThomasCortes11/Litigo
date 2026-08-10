@@ -1,149 +1,265 @@
-# Litigo — Plataforma de Afiliacion Juridica
+# Litigo - Plataforma de Afiliacion Juridica
 
-Sistema completo de afiliacion, pagos y gestion de membresias.
-**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind · PostgreSQL/Prisma · Auth.js v5 · Zod · Wompi · Resend · Vercel Blob.
+Plataforma web para captacion de afiliados, cobro de membresia con Wompi, activacion automatica y gestion administrativa interna.
 
----
+## Tabla de contenido
 
-## Inicio rapido
+1. [Resumen](#resumen)
+2. [Stack tecnologico](#stack-tecnologico)
+3. [Arquitectura funcional](#arquitectura-funcional)
+4. [Estructura del proyecto](#estructura-del-proyecto)
+5. [Requisitos previos](#requisitos-previos)
+6. [Instalacion e inicio local](#instalacion-e-inicio-local)
+7. [Variables de entorno](#variables-de-entorno)
+8. [Scripts disponibles](#scripts-disponibles)
+9. [Flujos principales](#flujos-principales)
+10. [Base de datos](#base-de-datos)
+11. [Despliegue](#despliegue)
+12. [Checklist preproduccion](#checklist-preproduccion)
+13. [Troubleshooting](#troubleshooting)
+14. [Convenciones del proyecto](#convenciones-del-proyecto)
 
-```bash
-# 1. Instalar dependencias (genera el cliente Prisma automaticamente)
-npm install
+## Resumen
 
-# 2. Copiar variables de entorno y completarlas con tus credenciales
-cp .env.example .env
+Litigo ofrece dos experiencias principales:
 
-# 3. Generar secreto para Auth.js
-npx auth secret
+- Sitio publico comercial con contenido legal e informacion de la membresia.
+- Flujo de afiliacion con formulario, checkout en Wompi y confirmacion.
+- Panel administrativo protegido para gestionar afiliados y configuracion.
 
-# 4. Crear tablas en la base de datos
-npm run db:migrate
+Puntos clave de negocio:
 
-# 5. Sembrar datos iniciales (roles, admin, settings, documentos legales)
-npm run db:seed
+- La fuente de verdad del pago es el webhook firmado de Wompi.
+- La activacion de la membresia ocurre por backend, no por redirect del navegador.
+- Existe auditoria de acciones administrativas y validaciones de datos con Zod.
 
-# 6. Levantar en desarrollo
-npm run dev
-```
+## Stack tecnologico
 
-### URLs locales
-| Ruta | Descripcion |
-|---|---|
-| http://localhost:3000 | Landing comercial |
-| http://localhost:3000/afiliacion | Formulario publico |
-| http://localhost:3000/admin/login | Panel administrativo |
+- Next.js 16 (App Router)
+- React 18 + TypeScript
+- Tailwind CSS
+- Prisma ORM + PostgreSQL
+- Auth.js v5 (credenciales para panel admin)
+- Wompi (checkout y webhooks)
+- Resend (correo transaccional)
+- Vercel Blob (adjuntos/archivos)
 
-### Credenciales iniciales del admin
-- **Correo:** `admin@litigo.com.co`
-- **Contrasena:** `CambiarEstaClave123!`
-- **Cambiarla antes de ir a produccion** (actualizar directamente en la BD con un hash bcrypt nuevo)
+## Arquitectura funcional
 
----
+1. Usuario completa formulario en el sitio publico.
+2. Backend crea afiliado en estado PENDING y orden de pago.
+3. Usuario es redirigido al checkout de Wompi.
+4. Wompi envia webhook firmado a la API del sistema.
+5. Backend valida firma, actualiza pago y activa afiliacion/membresia.
+6. Admin consulta y gestiona todo desde el panel.
 
 ## Estructura del proyecto
 
-```
 app/
-  (marketing)/          Landing + paginas legales (SSR, indexables)
-  afiliacion/           Formulario publico + confirmacion de pago
-  admin/
-    login/              Login (sin sidebar, robots noindex)
-    (dashboard)/        Rutas protegidas: dashboard, afiliados, configuracion
-  api/
-    auth/[...nextauth]/ Route handler Auth.js
-    webhooks/wompi/     Webhook firmado de Wompi
-  globals.css
-  layout.tsx            Root layout con tipografias y metadata global
-  icon.tsx              Favicon dinamico (monograma L)
-  apple-icon.tsx        Apple touch icon
-  opengraph-image.tsx   Imagen OG para redes/WhatsApp (1200x630)
-  robots.ts             /robots.txt (bloquea /admin y /api)
-  sitemap.ts            /sitemap.xml
-  not-found.tsx         Pagina 404 con identidad de marca
-  global-error.tsx      Boundary de errores con pantalla de marca
+- (marketing)/: landing y paginas legales indexables
+- afiliacion/: formulario, confirmacion y error de pago
+- admin/: login y dashboard protegido
+- api/auth/[...nextauth]/: endpoints de autenticacion
+- api/webhooks/wompi/: recepcion y validacion de eventos Wompi
 
 components/
-  ui/                   Primitivos (Button, Input, Card, Table, Badge, ...)
-  marketing/            Secciones de la landing
-  afiliacion/           Formulario y estado de pago
-  admin/                Sidebar, tablas, formularios del panel
+- ui/: componentes base reutilizables
+- marketing/: bloques del sitio publico
+- afiliacion/: formulario y sidebar de confianza
+- admin/: tablas, filtros y formularios internos
 
 lib/
-  actions/              Server Actions (mutaciones)
-  services/             Logica de negocio (activacion automatica)
-  validations/          Esquemas Zod (fuente unica de verdad)
-  auth.ts               Auth.js completo (Node Runtime)
-  auth.config.ts        Auth.js edge-safe (para middleware)
-  wompi.ts              Checkout URL firmado + validacion de webhooks
-  email.ts              Plantillas y envio via Resend
-  rate-limit.ts         Rate limiter en memoria (reemplazable por Redis)
-  audit.ts              Helper de auditoria
+- actions/: server actions
+- services/: logica de negocio
+- validations/: esquemas Zod
+- auth.ts y auth.config.ts: autenticacion en Node y Edge
+- wompi.ts: checkout + verificacion de firma
+- email.ts: envio de correos
+- audit.ts: bitacora de acciones
+- rate-limit.ts: limitador de intentos
 
 prisma/
-  schema.prisma         Modelo completo (8 tablas, UUID, indices, soft delete)
-  seed.ts               Datos iniciales
-```
+- schema.prisma: modelos de datos
+- seed.ts: datos iniciales (roles, admin, settings, documentos)
+
+scripts/
+- vercel-build.js: build para Vercel con migraciones condicionales
+
+## Requisitos previos
+
+- Node.js 20 o superior
+- npm 10 o superior
+- PostgreSQL accesible desde la app
+
+## Instalacion e inicio local
+
+1. Instalar dependencias.
+
+  npm install
+
+2. Crear el archivo de entorno local.
+
+  copiar .env.example a .env
+
+3. Generar secreto de Auth.js.
+
+  npx auth secret
+
+4. Aplicar migraciones.
+
+  npm run db:migrate
+
+5. Cargar datos semilla.
+
+  npm run db:seed
+
+6. Ejecutar en desarrollo.
+
+  npm run dev
+
+Rutas locales habituales:
+
+- http://localhost:3000
+- http://localhost:3000/afiliacion
+- http://localhost:3000/admin/login
+
+Credenciales iniciales de admin creadas por seed:
+
+- Correo: admin@litigo.com.co
+- Contrasena: CambiarEstaClave123!
+
+Importante: cambiar esa contrasena antes de cualquier despliegue real.
+
+## Variables de entorno
+
+Referencia completa en .env.example.
+
+Obligatorias:
+
+- DATABASE_URL: conexion a PostgreSQL
+- AUTH_SECRET: secreto de sesion Auth.js
+- AUTH_URL: URL base para auth
+- WOMPI_PUBLIC_KEY
+- WOMPI_PRIVATE_KEY
+- WOMPI_EVENTS_SECRET
+- WOMPI_INTEGRITY_SECRET
+- WOMPI_API_URL
+- NEXT_PUBLIC_APP_URL
+
+Condicionales segun funcionalidades habilitadas:
+
+- RESEND_API_KEY (si se enviaran correos)
+- EMAIL_FROM (si se enviaran correos)
+- BLOB_READ_WRITE_TOKEN (si se usa Vercel Blob)
+
+Recomendaciones:
+
+- En desarrollo usar WOMPI_API_URL con sandbox.
+- En produccion usar WOMPI_API_URL de production.
+- No subir .env al repositorio.
+
+## Scripts disponibles
+
+- npm run dev: genera cliente Prisma y levanta Next.js en modo desarrollo
+- npm run build: genera cliente Prisma y compila para produccion
+- npm run start: inicia app ya compilada
+- npm run lint: valida codigo TS/TSX con ESLint
+- npm run db:migrate: crea/aplica migraciones en entorno local
+- npm run db:migrate:deploy: aplica migraciones en entornos desplegados
+- npm run db:seed: ejecuta semillas iniciales
+- npm run db:studio: abre Prisma Studio
+- npm run vercel-build: build para Vercel con migracion condicional
+
+## Flujos principales
+
+### Afiliacion publica
+
+- Entrada: formulario en /afiliacion
+- Validacion: Zod en server action
+- Persistencia: afiliado y pago en estado PENDING
+- Salida: URL firmada de checkout Wompi
+
+### Confirmacion de pago
+
+- El redirect mejora UX, pero no activa por si solo.
+- Activacion real: evento de webhook validado por firma.
+
+### Administracion
+
+- Middleware protege todo /admin excepto /admin/login
+- Auth.js usa credenciales en base de datos
+- Cambios relevantes quedan auditados
+
+## Base de datos
+
+El esquema incluye entidades para:
+
+- Seguridad interna: Role, User
+- Operacion comercial: Affiliate, Membership, Payment
+- Contenido legal y parametros: LegalDocument, Setting
+- Trazabilidad: AuditLog
+
+Convenciones importantes del modelo:
+
+- UUID como PK en todas las tablas
+- Soft delete en entidades administrativas/operativas
+- Indices para filtros de panel y consultas frecuentes
+
+## Despliegue
+
+Recomendado en Vercel:
+
+1. Importar repositorio en Vercel.
+2. Configurar variables de entorno segun .env.example.
+3. Conectar PostgreSQL administrado.
+4. Configurar endpoint webhook de Wompi:
+  https://tu-dominio.com/api/webhooks/wompi
+5. Desplegar usando script vercel-build.
+
+Nota: vercel-build.js aplica db:migrate:deploy solo cuando DATABASE_URL no apunta a localhost.
+
+## Checklist preproduccion
+
+- Cambiar credenciales iniciales de administrador
+- Completar numero real de soporte en configuracion
+- Reemplazar documentos legales seed por versiones finales
+- Confirmar webhook firmado activo y probando eventos reales
+- Configurar llaves Wompi de produccion
+- Verificar envio de correo (si aplica)
+- Validar NEXT_PUBLIC_APP_URL con dominio final
+- Revisar accesibilidad y responsive en vistas clave
+
+## Troubleshooting
+
+Error en migraciones:
+
+- Verificar DATABASE_URL
+- Confirmar conectividad y permisos sobre la BD
+
+No activa una afiliacion tras pagar:
+
+- Revisar logs de /api/webhooks/wompi
+- Validar llaves WOMPI_EVENTS_SECRET y WOMPI_PRIVATE_KEY
+- Confirmar URL del webhook en panel Wompi
+
+No funciona login admin:
+
+- Confirmar que existe usuario activo en tabla users
+- Confirmar hash bcrypt valido en passwordHash
+- Revisar AUTH_SECRET y AUTH_URL
+
+## Convenciones del proyecto
+
+- Mantener logica de negocio en lib/services y lib/actions
+- Mantener validaciones en lib/validations
+- Reusar componentes base desde components/ui
+- Evitar mezclar decisiones de UI con reglas de negocio
+- Auditar mutaciones administrativas relevantes
 
 ---
 
-## Configuracion de Wompi
+Si necesitas, el siguiente paso puede ser agregar una carpeta docs con:
 
-### Desarrollo (sandbox)
-1. Crear cuenta en https://comercios.wompi.co/sandbox
-2. Obtener las 4 llaves (public, private, events, integrity) y ponerlas en `.env`
-3. Usar un tunel publico para el webhook: `ngrok http 3000`
-4. Registrar `https://tu-tunel.ngrok.app/api/webhooks/wompi` en el panel de Wompi
-
-### Produccion
-1. Cambiar `WOMPI_API_URL` a `https://production.wompi.co/v1`
-2. Reemplazar las llaves `test_` por las llaves de produccion
-3. Registrar `https://tu-dominio.com/api/webhooks/wompi` en Wompi
-
----
-
-## Configuracion de Resend
-
-1. Crear cuenta en https://resend.com
-2. Verificar el dominio `litigo.com.co` (DNS TXT record)
-3. Obtener el API key y ponerlo en `RESEND_API_KEY`
-4. Actualizar `EMAIL_FROM` con el correo verificado
-
----
-
-## Despliegue en Vercel
-
-```bash
-# Migracion en produccion (correr una sola vez, o en cada deploy con cambios de schema)
-npm run db:migrate:deploy
-```
-
-1. Subir el repositorio a GitHub
-2. Importar en Vercel → configurar todas las variables de `.env.example`
-3. Conectar una base de datos PostgreSQL (Vercel Postgres, Neon o Supabase)
-4. Activar Vercel Blob desde el dashboard (genera `BLOB_READ_WRITE_TOKEN`)
-
----
-
-## Antes de abrir al publico (checklist)
-
-- [ ] Cambiar la contrasena del admin inicial
-- [ ] Cambiar `support_phone` en `/admin/configuracion` al numero real
-- [ ] Redactar y publicar los 3 documentos legales (terminos, contrato, politica de datos)
-- [ ] Verificar que el webhook de Wompi este registrado y funcionando (probar con sandbox)
-- [ ] Verificar el dominio en Resend y confirmar que los correos de bienvenida llegan
-- [ ] Cambiar las llaves de Wompi de sandbox a produccion
-- [ ] Confirmar que `NEXT_PUBLIC_APP_URL` apunta al dominio real
-
----
-
-## Decisiones tecnicas clave
-
-| Aspecto | Decision | Razon |
-|---|---|---|
-| Auth | Solo para el panel admin | Los afiliados no tienen cuenta; el flujo publico es sin login |
-| Webhook vs redirect | El webhook es la fuente de verdad | El redirect del navegador puede perderse o falsificarse |
-| Rate limiting | En memoria con fallback documentado | Simple de operar; escala a Redis sin cambiar la interfaz |
-| Titles de paginas | Template `'%s | Litigo'` en root layout | Evita duplicacion y centraliza la marca |
-| Favicon/OG | Generados en codigo (ImageResponse) | Sin assets binarios, siempre coherentes con la marca |
-| CSP | Permite checkout.wompi.co como frame | Necesario para el flujo de pago de Wompi |
+- Runbook operativo (incidentes y recuperacion)
+- Guia de onboarding tecnico
+- Checklist QA funcional por flujo

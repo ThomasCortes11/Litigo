@@ -69,19 +69,22 @@ export async function HeroSection() {
   const waHref       = `https://wa.me/${toWaDigits(phone)}?text=${encodeURIComponent('Hola, quiero información sobre la membresía jurídica de Litigo.')}`;
 
   return (
-    <section aria-labelledby="hero-heading" className="grain-overlay overflow-hidden bg-black">
-      <div className="container grid min-h-[88vh] items-center gap-16 py-24 lg:grid-cols-[1fr,340px] lg:py-0">
+    <section aria-labelledby="hero-heading" className="grain-overlay overflow-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(23,41,63,0.95)_0%,rgba(12,24,40,0.97)_45%,#06090d_100%)]">
+      <div className="container grid min-h-[90vh] items-center gap-16 rounded-[32px] border border-white/10 bg-black/15 px-6 py-16 shadow-[0_30px_80px_-35px_rgba(0,0,0,0.7)] backdrop-blur-sm sm:px-8 sm:py-20 lg:grid-cols-[1.02fr,340px] lg:px-10 lg:py-16">
 
         {/* ── Texto ───────────────────────────── */}
         <div style={{ animation: 'fadeUp 0.7s ease-out forwards' }}>
+          <div className="mb-5 inline-flex items-center rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-gold-light">
+            Membresía jurídica mensual
+          </div>
           <span className="section-rule" aria-hidden="true" />
 
-          <h1 id="hero-heading" className="font-display text-hero text-paper">
+          <h1 id="hero-heading" className="max-w-[11.5ch] font-display text-[clamp(2.7rem,5vw,4.15rem)] leading-[0.95] tracking-[-0.02em] text-paper">
             Asesoría jurídica permanente y preventiva
           </h1>
-          <p className="mt-2 text-[1.05rem] font-semibold text-paper/80">Protección legal continua, representación experta y gestión efectiva de tus reclamaciones.</p>
+          <p className="mt-4 max-w-[42ch] text-[1rem] font-semibold leading-relaxed text-paper/88">Protección legal continua, representación experta y gestión efectiva de tus reclamaciones.</p>
 
-          <p className="mt-6 max-w-[44ch] text-[0.975rem] font-light leading-[1.85] text-paper/70">
+          <p className="mt-5 max-w-[48ch] text-[0.95rem] font-light leading-[1.8] text-paper/76">
             Litigo es una membresía jurídica mensual que te da acceso continuo a un equipo
             de abogados para ti o tu empresa, sin pagar por cada consulta.
           </p>
@@ -91,7 +94,7 @@ export async function HeroSection() {
             {/* CTA primario */}
             <Link
               href="/afiliacion"
-              className="inline-flex h-12 items-center justify-center rounded-lg px-7 text-[0.925rem] font-semibold tracking-wide text-black bg-gradient-to-r from-gold to-gold-light shadow-gold-glow transition-transform duration-180 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="cta-pulse inline-flex h-12 items-center justify-center rounded-lg bg-gradient-to-r from-gold to-gold-light px-7 text-[0.93rem] font-semibold tracking-wide text-black shadow-gold-glow transition-all duration-200 hover:-translate-y-0.5 hover:from-gold-light hover:to-[#d8b887] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               Afiliarme ahora
             </Link>
@@ -102,7 +105,7 @@ export async function HeroSection() {
                 href={phoneHref}
                 aria-label={`Llamar a Litigo — ${phone}`}
                 title={`Llamar: ${phone}`}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded border border-white/[0.12] px-5 text-[0.8125rem] font-light text-paper/60 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-paper/85 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.02] px-5 text-[0.825rem] font-medium text-paper/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white/[0.06] hover:text-paper focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/35"
               >
                 <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: '#B8956A' }} strokeWidth={1.5} />
                 Llamar
@@ -113,7 +116,7 @@ export async function HeroSection() {
                 rel="noopener noreferrer"
                 aria-label="Escribir a Litigo por WhatsApp"
                 title="WhatsApp de Litigo"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded border border-white/[0.12] px-5 text-[0.8125rem] font-light text-paper/60 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-paper/85 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.02] px-5 text-[0.825rem] font-medium text-paper/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white/[0.06] hover:text-paper focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/35"
               >
                 <MessageCircle className="h-3.5 w-3.5 shrink-0" style={{ color: '#B8956A' }} strokeWidth={1.5} />
                 WhatsApp
@@ -127,7 +130,7 @@ export async function HeroSection() {
             className="mt-10 flex flex-wrap gap-x-7 gap-y-2.5"
           >
             {['Pago seguro con Wompi', 'Datos bajo Ley 1581', 'Activación inmediata'].map((label) => (
-              <li key={label} className="text-[0.78rem] font-light text-paper/50">
+              <li key={label} className="rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-[0.76rem] font-light text-paper/60">
                 {label}
               </li>
             ))}

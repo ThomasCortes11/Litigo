@@ -20,17 +20,17 @@ export function AdminSidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-64 flex-col bg-ink">
+    <aside className="sticky top-0 flex h-screen w-64 flex-col border-r border-white/10 bg-[linear-gradient(180deg,#0f1c2e_0%,#080f1a_100%)]">
       <div className="flex h-20 items-center border-b border-white/10 px-6">
         <Link href="/" className="font-display text-xl font-semibold tracking-wide text-paper">
           LITIGO
         </Link>
-        <span className="ml-2.5 rounded bg-gold/20 px-1.5 py-0.5 font-mono text-[10px] text-gold-light">
+        <span className="ml-2.5 rounded-md border border-gold/25 bg-gold/18 px-1.5 py-0.5 font-mono text-[10px] text-gold-light">
           Admin
         </span>
       </div>
 
-      <nav className="flex-1 space-y-0.5 px-3 pt-4">
+      <nav className="flex-1 space-y-1 px-3 pt-4">
         {links.map((link) => {
           const Icon = link.icon;
           const active = isActive(link.href, link.exact);
@@ -39,15 +39,15 @@ export function AdminSidebar() {
               key={link.href}
               href={link.href}
               className={cn(
-                'group flex items-center justify-between rounded px-3 py-2.5 text-sm font-medium transition-colors',
+                'group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 active
-                  ? 'bg-gold/15 text-paper'
-                  : 'text-paper/60 hover:bg-white/5 hover:text-paper/90',
+                  ? 'bg-gold/18 text-paper shadow-[inset_0_0_0_1px_rgba(184,149,106,0.28)]'
+                  : 'text-paper/62 hover:bg-white/5 hover:text-paper/92',
               )}
             >
               <span className="flex items-center gap-3">
                 <Icon
-                  className={cn('h-4 w-4 transition-colors', active ? 'text-gold-light' : 'text-paper/40 group-hover:text-paper/70')}
+                  className={cn('h-4 w-4 transition-colors', active ? 'text-gold-light' : 'text-paper/40 group-hover:text-paper/72')}
                 />
                 {link.label}
               </span>
@@ -61,7 +61,7 @@ export function AdminSidebar() {
         <form action={signOutAction}>
           <button
             type="submit"
-            className="flex w-full items-center gap-3 rounded px-3 py-2.5 text-sm font-medium text-paper/50 transition-colors hover:bg-white/5 hover:text-paper/80"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-paper/50 transition-colors duration-200 hover:bg-white/5 hover:text-paper/82"
           >
             <LogOut className="h-4 w-4" />
             Cerrar sesion

@@ -11,10 +11,10 @@ const benefits = [
 
 export function BenefitsSection() {
   return (
-    <section id="beneficios" className="bg-paper py-32">
+    <section id="beneficios" className="section-shell bg-paper py-20 sm:py-24 lg:py-28">
       <div className="container">
 
-        <div className="mb-20">
+        <div className="mb-14 sm:mb-16 lg:mb-20">
           <span className="section-rule" aria-hidden="true" />
           <h2 className="font-display text-section text-ink">
             Una membresía,<br />respaldo completo.
@@ -25,7 +25,7 @@ export function BenefitsSection() {
           Cuadrícula editorial con divisores finos — sin tarjetas,
           sin sombras. Limpio como una tabla de una revista de diseño.
         */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-border/90 bg-white sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((b, i) => {
             const Icon = b.icon;
             /* Bordes: derecho en cols 1 y 2 del desktop, inferior en fila superior */
@@ -36,15 +36,15 @@ export function BenefitsSection() {
             return (
               <div
                 key={b.title}
-                className={`group border-b border-border py-8 last:border-b-0 sm:px-8 sm:last:border-b-0 lg:py-10 ${borderR} ${borderB} ${borderSm} ${borderSmB}`}
+                className={`group border-b border-border/90 px-6 py-8 transition-colors duration-200 hover:bg-paper/35 last:border-b-0 sm:px-8 sm:last:border-b-0 lg:py-10 ${borderR} ${borderB} ${borderSm} ${borderSmB}`}
               >
                 <Icon
-                  className="mb-5 h-[1.1rem] w-[1.1rem] text-gold transition-opacity duration-200 group-hover:opacity-70"
+                  className="mb-5 h-[1.1rem] w-[1.1rem] text-gold transition-all duration-200 group-hover:scale-105 group-hover:opacity-80"
                   strokeWidth={1.25}
                   aria-hidden="true"
                 />
                 <h3 className="font-display text-title text-ink">{b.title}</h3>
-                <p className="mt-2 text-[0.8125rem] leading-relaxed text-slate">{b.desc}</p>
+                <p className="mt-2 text-[0.835rem] leading-relaxed text-slate">{b.desc}</p>
               </div>
             );
           })}

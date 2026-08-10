@@ -56,7 +56,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-ink">Panel general</h1>
+        <h1 className="font-display text-2xl font-semibold text-ink lg:text-[1.85rem]">Panel general</h1>
         <p className="mt-1 text-sm text-slate">Resumen en tiempo real de afiliaciones y pagos.</p>
       </div>
 
@@ -72,12 +72,12 @@ export default async function AdminDashboardPage() {
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-display text-lg font-semibold text-ink">Ultimas afiliaciones</h2>
-          <Link href="/admin/afiliados" className="text-sm text-gold-dark hover:underline">
+          <Link href="/admin/afiliados" className="text-sm font-medium text-gold-dark transition-colors duration-200 hover:text-gold">
             Ver todos
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-border bg-white">
+        <div className="overflow-hidden rounded-xl border border-border/90 bg-white shadow-card">
           {stats.latestAffiliates.length === 0 ? (
             <p className="py-12 text-center text-sm text-slate">Aun no hay afiliados registrados.</p>
           ) : (

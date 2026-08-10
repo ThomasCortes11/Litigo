@@ -17,8 +17,8 @@ export function MarketingHeader() {
   
 
   return (
-    <header className="sticky top-0 z-50 bg-black border-b-2 border-white/90 shadow-sm">
-      <div className="container flex h-[68px] items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#060b13]/95 shadow-[0_10px_28px_-18px_rgba(0,0,0,0.85)] backdrop-blur-md">
+      <div className="container flex h-[72px] items-center justify-between">
         <Link href="/" className="inline-flex items-center">
           <LitigoLogo variant="dark" size="sm" />
         </Link>
@@ -29,7 +29,7 @@ export function MarketingHeader() {
             <a
               key={link.href}
               href={link.href}
-              className="text-[0.8125rem] font-light text-paper/55 transition-colors duration-200 hover:text-paper"
+              className="text-[0.8125rem] font-semibold tracking-[0.02em] text-paper/90 transition-colors duration-200 hover:text-gold-light focus-visible:text-gold-light"
             >
               {link.label}
             </a>
@@ -39,7 +39,7 @@ export function MarketingHeader() {
         <div className="hidden lg:block">
           <Link
             href="/afiliacion"
-            className="inline-flex h-9 items-center justify-center rounded px-5 text-[0.8125rem] font-medium text-white bg-gold transition-colors duration-200 hover:bg-gold-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+            className="cta-pulse inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-gold to-gold-light px-5 text-[0.8125rem] font-semibold tracking-[0.02em] text-ink transition-all duration-200 hover:-translate-y-0.5 hover:from-gold-light hover:to-[#d8b887] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
           >
             Afiliarme
           </Link>
@@ -51,7 +51,7 @@ export function MarketingHeader() {
           aria-expanded={open}
           aria-controls="mobile-nav"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center text-paper/60 hover:text-paper lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-md text-paper/65 transition-colors duration-200 hover:bg-white/5 hover:text-paper lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -62,8 +62,8 @@ export function MarketingHeader() {
         id="mobile-nav"
         aria-hidden={!open}
         className={cn(
-          'overflow-hidden border-t border-white/[0.06] bg-black transition-[max-height] duration-300 lg:hidden',
-          open ? 'max-h-72' : 'max-h-0',
+          'overflow-hidden border-t border-white/[0.08] bg-black/95 transition-[max-height] duration-300 lg:hidden',
+          open ? 'max-h-80' : 'max-h-0',
         )}
       >
         <nav className="container flex flex-col gap-1 py-5">
@@ -72,7 +72,7 @@ export function MarketingHeader() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="rounded py-2.5 text-[0.875rem] font-light text-paper/65 hover:text-paper"
+              className="rounded-md px-2 py-2.5 text-[0.875rem] font-semibold text-paper/90 transition-colors duration-200 hover:bg-white/5 hover:text-gold-light"
             >
               {link.label}
             </a>
@@ -80,7 +80,7 @@ export function MarketingHeader() {
           <Link
             href="/afiliacion"
             onClick={() => setOpen(false)}
-            className="mt-3 inline-flex h-11 items-center justify-center rounded bg-gold px-5 text-[0.875rem] font-medium text-white hover:bg-gold-dark"
+            className="mt-3 inline-flex h-11 items-center justify-center rounded-lg bg-gradient-to-r from-gold to-gold-light px-5 text-[0.875rem] font-semibold text-ink transition-all duration-200 hover:from-gold-light hover:to-[#d8b887]"
           >
             Afiliarme
           </Link>

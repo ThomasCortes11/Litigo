@@ -11,8 +11,6 @@ export const settingsUpdateSchema = z.object({
   support_phone: z.string().trim().min(7).max(20),
 });
 
-export type SettingsUpdateValues = z.infer<typeof settingsUpdateSchema>;
-
 export const legalDocumentUpdateSchema = z.object({
   type: z.enum(['TERMS', 'CONTRACT', 'DATA_POLICY']),
   title: z.string().trim().min(3).max(160),

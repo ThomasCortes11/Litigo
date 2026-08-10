@@ -25,10 +25,10 @@ const faqs = [
 
 export function FaqSection() {
   return (
-    <section id="preguntas-frecuentes" className="bg-white py-32">
+    <section id="preguntas-frecuentes" className="section-shell bg-white py-20 sm:py-24 lg:py-28">
       <div className="container">
 
-        <div className="mb-20">
+        <div className="mb-14 sm:mb-16 lg:mb-20">
           <span className="section-rule" aria-hidden="true" />
           <h2 className="font-display text-section text-ink">
             Consultas frecuentes.
@@ -36,20 +36,20 @@ export function FaqSection() {
         </div>
 
         {/* Lista limpia de acordeones — sin contenedor de card */}
-        <div className="mx-auto max-w-2xl">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-border/90 bg-paper/20 p-4 sm:p-6">
           {faqs.map((faq, i) => (
             <details
               key={faq.q}
-              className={`group py-5 ${i === 0 ? 'border-t border-border' : ''} border-b border-border`}
+              className={`group rounded-lg px-3 py-5 transition-colors duration-200 hover:bg-white ${i === 0 ? 'border-t border-border/90' : ''} border-b border-border/90`}
             >
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-[0.9375rem] font-medium text-ink [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-[0.9375rem] font-semibold text-ink [&::-webkit-details-marker]:hidden">
                 <span>{faq.q}</span>
                 <Plus
                   className="mt-0.5 h-4 w-4 shrink-0 text-gold transition-transform duration-300 group-open:rotate-45"
                   aria-hidden="true"
                 />
               </summary>
-              <p className="mt-3.5 text-[0.875rem] leading-relaxed text-slate">{faq.a}</p>
+              <p className="mt-3.5 max-w-[65ch] text-[0.88rem] leading-relaxed text-slate">{faq.a}</p>
             </details>
           ))}
         </div>

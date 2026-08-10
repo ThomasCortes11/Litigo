@@ -67,23 +67,3 @@ export async function updateAffiliateDetails(input: unknown): Promise<AdminActio
 
   return { success: true };
 }
-
-export async function softDeleteAffiliate(id: string): Promise<AdminActionResult> {
-  const user = await requireAdmin();
-
-  await prisma.affiliate.update({
-    where: { id },
-    data: { deletedAt: new Date(), status: 'INACTIVE' },
-  });
-
-  await logAudit({
-    actorId: user.id,
-    action: 'AFFILIATE_DELETED',
-    entityType: 'Affiliate',
-    entityId: id,
-  });
-
-  revalidatePath('/admin/afiliados');
-
-  return { success: true };
-}

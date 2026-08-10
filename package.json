@@ -7,7 +7,7 @@
     "dev": "prisma generate && next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts,.tsx",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
@@ -31,7 +31,6 @@
     "lucide-react": "0.456.0",
     "@radix-ui/react-label": "2.1.0",
     "@radix-ui/react-checkbox": "1.1.2",
-    "@radix-ui/react-separator": "1.1.0",
     "@radix-ui/react-slot": "1.1.0",
     "date-fns": "4.1.0"
   },
