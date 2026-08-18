@@ -16,22 +16,22 @@ const config: Config = {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#080F1A',
-          light: '#0F1C2E',
-          50: '#F0F2F4',
+          DEFAULT: '#0B0D0F',
+          light: '#163A5F',
+          50: '#F5F5F3',
         },
         gold: {
-          DEFAULT: '#2B67C9',
-          light: '#4F87E6',
-          dark: '#1D4FA3',
+          DEFAULT: '#C5A46D',
+          light: '#D7BD8E',
+          dark: '#9A7B4D',
         },
-        paper: '#F5F3EE',
-        charcoal: '#1A1D21',
+        paper: '#F5F5F3',
+        charcoal: '#0B0D0F',
         slate: {
-          DEFAULT: '#52596A',
-          light: '#8A93A6',
+          DEFAULT: '#8A8F98',
+          light: '#B0B4BA',
         },
-        border: '#E0DDD5',
+        border: '#D9D9D4',
         success: '#1F5C3A',
         danger: '#6E2020',
         warning: '#7A5218',
@@ -56,7 +56,7 @@ const config: Config = {
       boxShadow: {
         'card':      '0 1px 1px rgba(8,15,26,0.04), 0 4px 16px rgba(8,15,26,0.04)',
         'elevated':  '0 16px 48px rgba(8,15,26,0.10)',
-        'gold-glow': '0 0 0 1px rgba(43,103,201,0.16), 0 16px 40px -8px rgba(43,103,201,0.28)',
+        'gold-glow': '0 0 0 1px rgba(197,164,109,0.2), 0 16px 40px -8px rgba(197,164,109,0.24)',
       },
     },
   },

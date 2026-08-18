@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { authConfig } from '@/lib/auth.config';
 
 /**
- * Instancia ligera de Auth.js solo para middleware (Edge Runtime).
+ * Instancia ligera de Auth.js solo para proxy (Edge Runtime).
  * No importa Prisma/bcrypt - solo verifica el JWT de sesion ya emitido.
  */
 const { auth } = NextAuth(authConfig);

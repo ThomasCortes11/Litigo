@@ -3,12 +3,12 @@ import { ShieldCheck, Lock } from 'lucide-react';
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-border/90 bg-paper">
+    <footer className="border-t border-white/10 bg-[#0B0D0F] text-white">
       <div className="container grid gap-12 py-16 sm:py-18 lg:grid-cols-[1.75fr,1fr,1fr,1fr] lg:py-20">
 
         <div>
-          <span className="font-display text-xl font-semibold text-ink">LITIGO</span>
-          <p className="mt-3 max-w-[28ch] text-[0.84rem] font-light leading-relaxed text-slate">
+          <span className="font-display text-xl font-semibold text-white">LITIGO</span>
+          <p className="mt-3 max-w-[28ch] text-[0.84rem] font-light leading-relaxed text-white/55">
             Membresía jurídica mensual. Asesoría legal permanente para personas y empresas en Colombia.
           </p>
         </div>
@@ -38,13 +38,13 @@ export function MarketingFooter() {
           },
         ].map((col) => (
           <div key={col.label}>
-            <p className="mb-4 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-slate-light">
+            <p className="mb-4 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-gold-light/80">
               {col.label}
             </p>
             <ul className="space-y-2.5">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-[0.84rem] font-light text-slate transition-colors duration-200 hover:text-ink focus-visible:text-ink">
+                  <Link href={l.href} className="text-[0.84rem] font-light text-white/55 transition-colors duration-200 hover:text-white focus-visible:text-white">
                     {l.label}
                   </Link>
                 </li>
@@ -54,12 +54,12 @@ export function MarketingFooter() {
         ))}
       </div>
 
-      <div className="border-t border-border">
+      <div className="border-t border-white/10">
         <div className="container flex flex-col items-start justify-between gap-3 py-5 sm:flex-row sm:items-center">
-          <p className="text-[0.75rem] font-light text-slate-light">
+          <p className="text-[0.75rem] font-light text-white/40">
             &copy; {new Date().getFullYear()} Litigo. Todos los derechos reservados.
           </p>
-          <div className="flex flex-wrap items-center gap-5 text-[0.75rem] font-light text-slate-light">
+          <div className="flex flex-wrap items-center gap-5 text-[0.75rem] font-light text-white/40">
             <span className="inline-flex items-center gap-1.5">
               <Lock className="h-3 w-3" aria-hidden="true" />
               Pagos por Wompi

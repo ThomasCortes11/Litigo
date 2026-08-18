@@ -20,10 +20,10 @@ function SubmitButton() {
       type="submit"
       variant="default"
       size="lg"
-      className="cta-pulse w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-[0_16px_36px_-16px_rgba(38,109,211,0.65)] hover:from-blue-500 hover:to-blue-400"
+      className="cta-pulse w-full bg-[#163A5F] text-white shadow-[0_16px_36px_-16px_rgba(22,58,95,0.7)] hover:bg-[#2F5D7C]"
       disabled={pending}
     >
-      {pending ? 'Procesando...' : 'Continuar al pago seguro'}
+      {pending ? 'Enviando...' : 'Continuar al perfilamiento'}
     </Button>
   );
 }
@@ -32,8 +32,8 @@ export function AffiliationForm() {
   const [state, formAction] = useActionState(submitAffiliation, initialState);
 
   React.useEffect(() => {
-    if (state.success && state.checkoutUrl) {
-      window.location.href = state.checkoutUrl;
+    if (state.success && state.applicationToken) {
+      window.location.href = `/afiliacion/perfilamiento?token=${state.applicationToken}`;
     }
   }, [state]);
 
@@ -41,38 +41,31 @@ export function AffiliationForm() {
 
   return (
     <form action={formAction} className="space-y-8">
-      {/* Resumen del plan (valores reales) */}
-      <div className="rounded-lg border border-blue-300/25 bg-gradient-to-r from-blue-500/12 to-transparent p-4">
+      {/* La membresía solo se ofrece después de la aprobación administrativa. */}
+      <div className="rounded-md border border-gold/25 bg-gold/5 p-4">
         <div className="flex flex-wrap items-center gap-4">
-          <div className="text-sm text-gray-100">Valor mensual: <span className="font-semibold text-blue-300">$80.000 COP</span></div>
-          <div className="text-sm text-gray-100">Tipo: <span className="font-semibold">Individual</span></div>
-          <div className="text-sm text-gray-100">Pago: <span className="font-semibold">Wompi seguro</span></div>
-          <div className="text-sm text-gray-100">Formulario: <span className="font-semibold">0194</span></div>
+          <div className="text-sm text-paper/85">Primero revisaremos tu situación y te ofreceremos una asesoría inicial gratuita.</div>
         </div>
       </div>
 
-      {/* Campos ocultos para enviar información del contrato */}
-      <input type="hidden" name="planPrice" value="80000" />
-      <input type="hidden" name="planType" value="INDIVIDUAL" />
-      <input type="hidden" name="formNumber" value="0194" />
       {state.error && (
         <p className="rounded border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">{state.error}</p>
       )}
 
       <div className="rounded-lg border border-white/10 bg-black/15 p-5 sm:p-6">
-        <h2 className="font-display text-base font-semibold text-paper">Informacion personal</h2>
-        <p className="mt-1 text-xs text-gray-300">Usaremos estos datos para tu codigo de afiliado, contratos y comunicaciones oficiales.</p>
+        <h2 className="font-display text-xl font-semibold text-paper">Informacion personal</h2>
+          <p className="mt-1 text-xs text-paper/60">Usaremos estos datos para contactarte y revisar si tu perfil puede acceder a la membresía.</p>
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="fullName" className="text-gray-100">Nombre completo</Label>
-            <Input id="fullName" name="fullName" required error={!!fieldError('fullName')} className="border-neutral-700 bg-neutral-900 text-gray-100 placeholder:text-gray-400 hover:border-blue-400/60 focus-visible:border-blue-500" />
+            <Label htmlFor="fullName" className="text-paper/85">Nombre completo</Label>
+            <Input id="fullName" name="fullName" required error={!!fieldError('fullName')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
             {fieldError('fullName') && <p className="mt-1 text-xs text-danger">{fieldError('fullName')}</p>}
           </div>
 
           <div>
-            <Label htmlFor="documentType" className="text-gray-100">Tipo de documento</Label>
-            <Select id="documentType" name="documentType" required defaultValue="CC" className="border-neutral-700 bg-neutral-900 text-gray-100 hover:border-blue-400/60 focus-visible:border-blue-500">
+            <Label htmlFor="documentType" className="text-paper/85">Tipo de documento</Label>
+            <Select id="documentType" name="documentType" required defaultValue="CC" className="border-white/15 bg-black/20 text-paper hover:border-gold/50 focus-visible:border-[#2F5D7C]">
               <option value="CC">Cedula de ciudadania</option>
               <option value="CE">Cedula de extranjeria</option>
               <option value="PASAPORTE">Pasaporte</option>
@@ -80,43 +73,43 @@ export function AffiliationForm() {
           </div>
 
           <div>
-            <Label htmlFor="documentNumber" className="text-gray-100">Numero de documento</Label>
-            <Input id="documentNumber" name="documentNumber" required error={!!fieldError('documentNumber')} className="border-neutral-700 bg-neutral-900 text-gray-100 placeholder:text-gray-400 hover:border-blue-400/60 focus-visible:border-blue-500" />
+            <Label htmlFor="documentNumber" className="text-paper/85">Numero de documento</Label>
+            <Input id="documentNumber" name="documentNumber" required error={!!fieldError('documentNumber')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
             {fieldError('documentNumber') && (
               <p className="mt-1 text-xs text-danger">{fieldError('documentNumber')}</p>
             )}
           </div>
 
           <div>
-            <Label htmlFor="email" className="text-gray-100">Correo electronico</Label>
-            <Input id="email" name="email" type="email" required error={!!fieldError('email')} className="border-neutral-700 bg-neutral-900 text-gray-100 placeholder:text-gray-400 hover:border-blue-400/60 focus-visible:border-blue-500" />
+            <Label htmlFor="email" className="text-paper/85">Correo electronico</Label>
+            <Input id="email" name="email" type="email" required error={!!fieldError('email')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
             {fieldError('email') && <p className="mt-1 text-xs text-danger">{fieldError('email')}</p>}
           </div>
 
           <div>
-            <Label htmlFor="phone" className="text-gray-100">Telefono</Label>
-            <Input id="phone" name="phone" placeholder="3001234567" required error={!!fieldError('phone')} className="border-neutral-700 bg-neutral-900 text-gray-100 placeholder:text-gray-400 hover:border-blue-400/60 focus-visible:border-blue-500" />
+            <Label htmlFor="phone" className="text-paper/85">Telefono</Label>
+            <Input id="phone" name="phone" placeholder="3001234567" required error={!!fieldError('phone')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
             {fieldError('phone') && <p className="mt-1 text-xs text-danger">{fieldError('phone')}</p>}
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor="city" className="text-gray-100">Ciudad</Label>
-            <Input id="city" name="city" required error={!!fieldError('city')} className="border-neutral-700 bg-neutral-900 text-gray-100 placeholder:text-gray-400 hover:border-blue-400/60 focus-visible:border-blue-500" />
+            <Label htmlFor="city" className="text-paper/85">Ciudad</Label>
+            <Input id="city" name="city" required error={!!fieldError('city')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
             {fieldError('city') && <p className="mt-1 text-xs text-danger">{fieldError('city')}</p>}
           </div>
         </div>
       </div>
 
       <div className="rounded-lg border border-white/10 bg-black/15 p-5 pt-6 sm:p-6">
-        <h2 className="font-display text-base font-semibold text-paper">Documentos legales</h2>
-        <p className="mt-1 text-xs text-gray-300">Revisalos con calma; quedan disponibles para ti en todo momento.</p>
+        <h2 className="font-display text-xl font-semibold text-paper">Documentos legales</h2>
+        <p className="mt-1 text-xs text-paper/60">Estos documentos explican el marco general de la relación y la política de datos.</p>
 
-        <div className="mt-5 space-y-3 rounded-lg border border-white/12 bg-white/[0.03] p-5">
+        <div className="mt-5 space-y-3 rounded-md border border-white/10 bg-black/15 p-5">
           <label className="flex items-start gap-3 text-sm text-gray-100">
             <Checkbox name="acceptedContract" value="on" required className="mt-0.5" />
             <span>
               Acepto el{' '}
-              <a href="/contrato-afiliacion" target="_blank" className="font-medium text-blue-300 underline underline-offset-2 transition-colors hover:text-blue-200">
+              <a href="/contrato-afiliacion" target="_blank" className="font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white">
                 contrato de afiliacion
               </a>
               .
@@ -127,7 +120,7 @@ export function AffiliationForm() {
             <Checkbox name="acceptedTerms" value="on" required className="mt-0.5" />
             <span>
               Acepto los{' '}
-              <a href="/terminos-y-condiciones" target="_blank" className="font-medium text-blue-300 underline underline-offset-2 transition-colors hover:text-blue-200">
+              <a href="/terminos-y-condiciones" target="_blank" className="font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white">
                 terminos y condiciones
               </a>
               .
@@ -138,7 +131,7 @@ export function AffiliationForm() {
             <Checkbox name="acceptedDataPolicy" value="on" required className="mt-0.5" />
             <span>
               Acepto la{' '}
-              <a href="/politica-tratamiento-datos" target="_blank" className="font-medium text-blue-300 underline underline-offset-2 transition-colors hover:text-blue-200">
+              <a href="/politica-tratamiento-datos" target="_blank" className="font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white">
                 politica de tratamiento de datos
               </a>
               .
@@ -146,9 +139,9 @@ export function AffiliationForm() {
           </label>
         </div>
 
-        <div className="mt-4 rounded-lg border border-blue-300/20 bg-blue-950/30 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-200">Resumen contractual rapido</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-gray-200">
+        <div className="mt-4 rounded-md border border-gold/20 bg-gold/5 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gold-light">Resumen contractual rapido</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-paper/70">
             <li>Los servicios se prestan con pagos al dia y son exigibles desde la segunda cuota.</li>
             <li>Gastos procesales y expensas judiciales no estan incluidos en la cuota mensual.</li>
             <li>Hechos previos al contrato y actos dolosos tienen exclusiones especificas.</li>
@@ -159,8 +152,8 @@ export function AffiliationForm() {
       <div className="space-y-3">
         <SubmitButton />
         <p className="flex items-center justify-center gap-1.5 text-center text-xs text-gray-300">
-          <Lock className="h-3.5 w-3.5 text-blue-300" />
-          Seras redirigido a Wompi para completar el pago de forma segura.
+          <Lock className="h-3.5 w-3.5 text-gold-light" />
+          Tus datos serán tratados de forma confidencial. La solicitud no garantiza la aceptación.
         </p>
       </div>
     </form>

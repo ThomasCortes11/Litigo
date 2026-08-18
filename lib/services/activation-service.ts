@@ -20,7 +20,7 @@ const MEMBERSHIP_DURATION_DAYS = 30;
 export async function processWompiTransaction(transaction: WompiTransaction) {
   const payment = await prisma.payment.findUnique({
     where: { reference: transaction.reference },
-    include: { affiliate: true },
+    include: { affiliate: true, application: true },
   });
 
   if (!payment) {
@@ -44,7 +44,11 @@ export async function processWompiTransaction(transaction: WompiTransaction) {
   });
 
   if (transaction.status === 'APPROVED') {
-    await activateAffiliate(payment.affiliateId, payment.id);
+    if (payment.application && payment.application.status !== 'PAYMENT_PENDING') {
+      await logAudit({ action: 'PAYMENT_APPROVED_OUT_OF_FLOW', entityType: 'Payment', entityId: payment.id, metadata: { applicationStatus: payment.application.status } });
+      return;
+    }
+    await activateAffiliate(payment.affiliateId, payment.id, payment.applicationId, payment.planId);
   } else if (['DECLINED', 'ERROR', 'VOIDED'].includes(transaction.status)) {
     await logAudit({
       action: 'PAYMENT_FAILED',
@@ -61,7 +65,7 @@ export async function processWompiTransaction(transaction: WompiTransaction) {
   }
 }
 
-async function activateAffiliate(affiliateId: string, paymentId: string) {
+async function activateAffiliate(affiliateId: string, paymentId: string, applicationId?: string | null, planId?: string | null) {
   const affiliate = await prisma.affiliate.findUnique({ where: { id: affiliateId } });
   if (!affiliate) return;
 
@@ -76,30 +80,26 @@ async function activateAffiliate(affiliateId: string, paymentId: string) {
 
   const affiliateCode = affiliate.affiliateCode ?? generateAffiliateCode();
 
-  const membership = await prisma.membership.create({
-    data: {
-      affiliateId: affiliate.id,
-      value: payment?.amount ?? 0,
-      endDate,
-      status: 'ACTIVE',
-    },
+  const result = await prisma.$transaction(async (tx) => {
+    const activeMembership = await tx.membership.findFirst({ where: { affiliateId: affiliate.id, status: 'ACTIVE' } });
+    if (activeMembership) return { membership: activeMembership, activated: false };
+
+    const membership = await tx.membership.create({
+      data: { affiliateId: affiliate.id, planId: planId ?? undefined, value: payment?.amount ?? 0, endDate, status: 'ACTIVE' },
+    });
+    await tx.payment.update({ where: { id: paymentId }, data: { membershipId: membership.id } });
+    await tx.affiliate.update({ where: { id: affiliate.id }, data: { status: 'ACTIVE', affiliateCode } });
+    if (applicationId) await tx.application.update({ where: { id: applicationId }, data: { status: 'ACTIVE' } });
+    return { membership, activated: true };
   });
 
-  await prisma.payment.update({
-    where: { id: paymentId },
-    data: { membershipId: membership.id },
-  });
-
-  await prisma.affiliate.update({
-    where: { id: affiliate.id },
-    data: { status: 'ACTIVE', affiliateCode },
-  });
+  if (!result.activated) return;
 
   await logAudit({
     action: 'AFFILIATE_ACTIVATED',
     entityType: 'Affiliate',
     entityId: affiliate.id,
-    metadata: { affiliateCode, membershipId: membership.id },
+    metadata: { affiliateCode, membershipId: result.membership.id },
   });
 
   await sendAffiliateWelcomeEmail({

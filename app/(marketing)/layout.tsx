@@ -5,7 +5,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <>
       <MarketingHeader />
-      <main className="overflow-hidden bg-[linear-gradient(180deg,#eef4ff_0%,#dce8fb_100%)]">{children}</main>
+      <main className="overflow-hidden bg-[#F5F5F3]">{children}</main>
       <MarketingFooter />
     </>
   );

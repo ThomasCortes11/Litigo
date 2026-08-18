@@ -14,7 +14,7 @@ async function getDashboardStats() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const [total, active, inactive, recent, revenueResult, totalPayments, approvedPayments, latestAffiliates] =
+  const [total, active, inactive, recent, revenueResult, totalPayments, approvedPayments, applicationGroups, latestAffiliates] =
     await Promise.all([
       prisma.affiliate.count({ where: { deletedAt: null } }),
       prisma.affiliate.count({ where: { status: 'ACTIVE', deletedAt: null } }),
@@ -23,6 +23,7 @@ async function getDashboardStats() {
       prisma.payment.aggregate({ where: { status: 'APPROVED' }, _sum: { amount: true } }),
       prisma.payment.count(),
       prisma.payment.count({ where: { status: 'APPROVED' } }),
+      prisma.application.groupBy({ by: ['status'], _count: { _all: true } }),
       prisma.affiliate.findMany({
         where: { deletedAt: null },
         orderBy: { createdAt: 'desc' },
@@ -33,7 +34,8 @@ async function getDashboardStats() {
 
   const conversionRate = totalPayments > 0 ? (approvedPayments / totalPayments) * 100 : 0;
 
-  return { total, active, inactive, recent, revenue: revenueResult._sum.amount ?? 0, conversionRate, latestAffiliates };
+  const applicationCounts = Object.fromEntries(applicationGroups.map((group) => [group.status, group._count._all]));
+  return { total, active, inactive, recent, revenue: revenueResult._sum.amount ?? 0, conversionRate, applicationCounts, latestAffiliates };
 }
 
 const statusVariant: Record<string, 'success' | 'warning' | 'default' | 'danger'> = {
@@ -41,6 +43,12 @@ const statusVariant: Record<string, 'success' | 'warning' | 'default' | 'danger'
   PENDING: 'warning',
   INACTIVE: 'default',
   SUSPENDED: 'danger',
+  SUBMITTED: 'warning',
+  UNDER_REVIEW: 'warning',
+  AWAITING_INFORMATION: 'warning',
+  APPROVED: 'success',
+  REJECTED: 'danger',
+  PAYMENT_PENDING: 'warning',
 };
 
 const statusLabel: Record<string, string> = {
@@ -48,6 +56,12 @@ const statusLabel: Record<string, string> = {
   PENDING: 'Pendiente',
   INACTIVE: 'Inactivo',
   SUSPENDED: 'Suspendido',
+  SUBMITTED: 'Nuevas',
+  UNDER_REVIEW: 'En revisión',
+  AWAITING_INFORMATION: 'Información pendiente',
+  APPROVED: 'Aprobadas',
+  REJECTED: 'No aprobadas',
+  PAYMENT_PENDING: 'Pendientes de pago',
 };
 
 export default async function AdminDashboardPage() {
@@ -57,15 +71,18 @@ export default async function AdminDashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-2xl font-semibold text-ink lg:text-[1.85rem]">Panel general</h1>
-        <p className="mt-1 text-sm text-slate">Resumen en tiempo real de afiliaciones y pagos.</p>
+        <p className="mt-1 text-sm text-slate">Embudo de captación, revisión, aprobación y membresías activas.</p>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <StatsCard label="Afiliados activos" value={stats.active.toLocaleString('es-CO')} icon={UserCheck} accent />
-        <StatsCard label="Total afiliados" value={stats.total.toLocaleString('es-CO')} icon={Users} />
+        <StatsCard label="Solicitudes nuevas" value={(stats.applicationCounts.SUBMITTED ?? 0).toLocaleString('es-CO')} icon={UserPlus} accent />
+        <StatsCard label="En revisión" value={(stats.applicationCounts.UNDER_REVIEW ?? 0).toLocaleString('es-CO')} icon={Users} />
+        <StatsCard label="Pendientes de información" value={(stats.applicationCounts.AWAITING_INFORMATION ?? 0).toLocaleString('es-CO')} icon={UserX} />
+        <StatsCard label="Aprobadas" value={(stats.applicationCounts.APPROVED ?? 0).toLocaleString('es-CO')} icon={UserCheck} accent />
+        <StatsCard label="Membresías activas" value={stats.active.toLocaleString('es-CO')} icon={UserCheck} />
         <StatsCard label="Ingresos totales" value={formatCurrencyCOP(Number(stats.revenue))} icon={Wallet} accent />
-        <StatsCard label="Afiliados inactivos" value={stats.inactive.toLocaleString('es-CO')} icon={UserX} />
-        <StatsCard label="Nuevos (30 dias)" value={stats.recent.toLocaleString('es-CO')} icon={UserPlus} trendPositive />
+        <StatsCard label="No aprobadas" value={(stats.applicationCounts.REJECTED ?? 0).toLocaleString('es-CO')} icon={UserX} />
+        <StatsCard label="Pendientes de pago" value={(stats.applicationCounts.PAYMENT_PENDING ?? 0).toLocaleString('es-CO')} icon={Wallet} />
         <StatsCard label="Tasa de conversion" value={`${stats.conversionRate.toFixed(1)}%`} icon={TrendingUp} trendPositive={stats.conversionRate >= 50} />
       </div>
 

@@ -51,7 +51,7 @@ export function ConfirmationStatus({ reference }: { reference: string }) {
         <div>
           <p className="font-display text-xl font-semibold text-ink">Verificando tu pago</p>
           <p className="mt-2 max-w-xs text-sm text-slate">
-            Wompi esta confirmando la transaccion. Esto puede tardar unos segundos — no cierres esta pagina.
+            Wompi esta confirmando la transaccion. La membresia solo se activa cuando recibimos el webhook firmado.
           </p>
         </div>
         <div className="mt-2 flex items-center gap-2 rounded-full border border-border bg-paper px-4 py-2 font-mono text-xs text-slate">
@@ -73,7 +73,7 @@ export function ConfirmationStatus({ reference }: { reference: string }) {
         <div>
           <p className="font-display text-2xl font-semibold text-ink">Afiliacion activada</p>
           <p className="mt-2 max-w-sm text-sm text-slate">
-            Bienvenido a Litigo. Tu membresia juridica esta activa desde ahora.
+            Tu membresia juridica esta activa.
           </p>
         </div>
 
@@ -84,7 +84,7 @@ export function ConfirmationStatus({ reference }: { reference: string }) {
               {result.affiliateCode}
             </p>
             <p className="mt-2 text-xs text-slate">
-              Guardalo — lo necesitaras para comunicarte con tu abogado asignado.
+              Guardalo para tus comunicaciones con el equipo de Litigo.
             </p>
           </div>
         )}

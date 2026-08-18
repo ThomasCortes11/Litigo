@@ -2,7 +2,7 @@
  * Logo SVG de Litigo S.A.S.
  * Recrea el logo de la marca con los colores oficiales:
  *   Azul marino: #1B3470
- *   Teal:        #2AACB8
+ *   Dorado suave: #C5A46D
  *
  * Props:
  *   variant="dark"   — para fondos oscuros (letras en blanco)
@@ -28,7 +28,7 @@ export function LitigoLogo({ variant = 'dark', size = 'md', className }: LogoPro
   /* En fondos oscuros las letras del logo van en blanco manteniendo
      la G y la O en teal para conservar la identidad de marca */
   const navy = variant === 'dark' ? '#FFFFFF' : '#1B3470';
-  const teal = '#2AACB8';
+  const accent = '#C5A46D';
 
   return (
     <svg
@@ -64,11 +64,11 @@ export function LitigoLogo({ variant = 'dark', size = 'md', className }: LogoPro
       {/* i (palo) */}
       <rect   x="84" y="17" width="8" height="27" rx="1" fill={navy} />
 
-      {/* G — en teal */}
-      <text x="95"  y="44" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="46" fill={teal}>G</text>
+      {/* G — en dorado suave */}
+      <text x="95"  y="44" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="46" fill={accent}>G</text>
 
-      {/* O — en teal */}
-      <text x="130" y="44" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="46" fill={teal}>O</text>
+      {/* O — en dorado suave */}
+      <text x="130" y="44" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="46" fill={accent}>O</text>
 
       {/* S.A.S. */}
       <text x="170" y="38" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="11" fill={navy}>S.A.S.</text>

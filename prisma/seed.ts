@@ -24,6 +24,16 @@ async function main() {
     update: {},
     create: { name: 'ANALYST', description: 'Solo lectura de reportes' },
   });
+  await prisma.role.upsert({
+    where: { name: 'REVIEWER' },
+    update: {},
+    create: { name: 'REVIEWER', description: 'Revisa solicitudes y toma decisiones de afiliación' },
+  });
+  await prisma.role.upsert({
+    where: { name: 'LAWYER' },
+    update: {},
+    create: { name: 'LAWYER', description: 'Responsable jurídico asignable' },
+  });
 
   console.log('🔹 Sembrando usuario administrador inicial...');
   const passwordHash = await bcrypt.hash('CambiarEstaClave123!', 12);
@@ -75,6 +85,19 @@ async function main() {
       where: { key: setting.key },
       update: {},
       create: setting,
+    });
+  }
+
+  const monthlyPlan = await prisma.membershipPlan.findFirst({ where: { name: 'Membresia Litigo Mensual' } });
+  if (!monthlyPlan) {
+    await prisma.membershipPlan.create({
+      data: {
+        name: 'Membresia Litigo Mensual',
+        monthlyPrice: 49900,
+        benefits: ['Asesoria juridica inicial', 'Orientacion juridica segun condiciones aplicables'],
+        conditions: 'Sujeto a aceptacion, condiciones contractuales y pagos al dia.',
+        exclusions: 'Gastos procesales y expensas no incluidos.',
+      },
     });
   }
 

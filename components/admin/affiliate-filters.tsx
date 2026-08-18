@@ -34,7 +34,7 @@ export function AffiliateFilters({ defaultQuery, defaultStatus }: AffiliateFilte
       </Button>
 
       <Button asChild variant="ghost">
-        <Link href="/admin/afiliados/export">Exportar CSV</Link>
+        <Link href="/admin/afiliados/export/">Exportar CSV</Link>
       </Button>
     </form>
   );

@@ -13,7 +13,7 @@ interface StatsCardProps {
 
 export function StatsCard({ label, value, icon: Icon, trend, trendPositive, accent }: StatsCardProps) {
   return (
-    <Card className={cn('overflow-hidden transition-transform duration-200 hover:-translate-y-0.5', accent && 'border-gold/40')}>
+    <Card className={cn('overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-[#2F5D7C]/30', accent && 'border-gold/40')}>
       <div className={cn('h-1 w-full', accent ? 'bg-gold' : 'bg-transparent')} />
       <CardContent className="flex items-start justify-between p-6">
         <div>

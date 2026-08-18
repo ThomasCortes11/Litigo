@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
-        <div className="rounded-lg border border-white/10 bg-white p-8 shadow-elevated">
+        <div className="rounded-lg border border-white/10 bg-white p-8 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.8)]">
           <h1 className="mb-1 font-display text-lg font-semibold text-ink">Iniciar sesion</h1>
           <p className="mb-6 text-xs text-slate">Acceso exclusivo para administradores.</p>
           <LoginForm />

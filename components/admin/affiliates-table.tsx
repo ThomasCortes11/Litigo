@@ -43,7 +43,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: Affiliate[] }) {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
+          <TableRow className="bg-[#F5F3EE]">
           <TableHead>Nombre</TableHead>
           <TableHead>Documento</TableHead>
           <TableHead>Correo</TableHead>
@@ -55,7 +55,7 @@ export function AffiliatesTable({ affiliates }: { affiliates: Affiliate[] }) {
       </TableHeader>
       <TableBody>
         {affiliates.map((affiliate) => (
-          <TableRow key={affiliate.id}>
+          <TableRow key={affiliate.id} className="transition-colors hover:bg-[#F5F3EE]">
             <TableCell className="font-medium">{affiliate.fullName}</TableCell>
             <TableCell className="font-mono text-xs">{affiliate.documentNumber}</TableCell>
             <TableCell>{affiliate.email}</TableCell>

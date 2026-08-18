@@ -4,10 +4,11 @@
   "private": true,
   "description": "Plataforma de afiliacion y gestion de membresias juridicas - Litigo",
   "scripts": {
-    "dev": "prisma generate && next dev",
+    "dev": "prisma generate && next dev --webpack",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx",
+    "test": "tsx scripts/test-application-flow.ts",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",

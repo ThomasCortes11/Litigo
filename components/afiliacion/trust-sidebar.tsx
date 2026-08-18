@@ -30,31 +30,31 @@ const items = [
 export function TrustSidebar() {
   return (
     <aside className="space-y-5">
-      <div className="rounded-xl border border-white/12 bg-gradient-to-b from-[#0a1528]/95 to-[#12243d]/95 p-6 shadow-[0_18px_44px_-26px_rgba(0,0,0,0.75)]">
-        <p className="mb-5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-gray-300">
+      <div className="rounded-lg border border-white/10 bg-[#163A5F]/35 p-6 shadow-[0_18px_44px_-26px_rgba(0,0,0,0.75)]">
+        <p className="mb-5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-paper/60">
           Por qué confiar en Litigo
         </p>
         <ul className="space-y-5">
           {items.map(({ icon: Icon, title, description }) => (
             <li key={title} className="flex gap-3">
-              <Icon className="mt-0.5 h-5 w-5 shrink-0 text-blue-300" strokeWidth={1.5} />
+              <Icon className="mt-0.5 h-5 w-5 shrink-0 text-gold-light" strokeWidth={1.5} />
               <div>
-                <p className="text-[0.9rem] font-semibold text-gray-100">{title}</p>
-                <p className="mt-0.5 text-[0.8rem] leading-relaxed text-gray-300">{description}</p>
+                <p className="text-[0.9rem] font-semibold text-paper/90">{title}</p>
+                <p className="mt-0.5 text-[0.8rem] leading-relaxed text-paper/60">{description}</p>
               </div>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="rounded-xl border border-white/12 bg-[#0c1a2f]/92 p-5 shadow-sm">
-        <p className="flex items-center gap-2 text-[0.8125rem] font-semibold text-gray-100">
-          <Mail className="h-4 w-4 text-blue-300" strokeWidth={1.5} />
+      <div className="rounded-lg border border-white/10 bg-white/[0.05] p-5 shadow-sm">
+        <p className="flex items-center gap-2 text-[0.8125rem] font-semibold text-paper/90">
+          <Mail className="h-4 w-4 text-gold-light" strokeWidth={1.5} />
           ¿Tienes preguntas?
         </p>
-        <p className="mt-2 text-[0.75rem] leading-relaxed text-gray-300">
+        <p className="mt-2 text-[0.75rem] leading-relaxed text-paper/60">
           Escríbenos antes de afiliarte a{' '}
-          <a href="mailto:soporte@litigo.com.co" className="font-medium text-blue-300 underline-offset-2 transition-colors hover:text-blue-200 hover:underline">
+          <a href="mailto:soporte@litigo.com.co" className="font-medium text-gold-light underline-offset-2 transition-colors hover:text-white hover:underline">
             soporte@litigo.com.co
           </a>
         </p>

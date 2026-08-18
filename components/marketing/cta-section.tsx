@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function CtaSection() {
   return (
-    <section className="grain-overlay bg-[radial-gradient(circle_at_15%_15%,#17293f_0%,#0d1b2c_40%,#080f1a_72%)] py-20 sm:py-24 lg:py-28">
+    <section className="grain-overlay bg-[radial-gradient(circle_at_15%_15%,#163A5F_0%,#0B0D0F_42%,#050607_78%)] py-20 sm:py-24 lg:py-28">
       <div className="container max-w-2xl">
         <span className="section-rule" aria-hidden="true" />
         <h2 className="font-display text-section font-light text-paper">
@@ -14,7 +14,7 @@ export function CtaSection() {
         <div className="mt-10 flex flex-wrap items-center gap-5">
           <Link
             href="/afiliacion"
-            className="cta-pulse inline-flex h-12 items-center justify-center rounded-lg bg-gradient-to-r from-gold to-gold-light px-7 text-[0.89rem] font-semibold tracking-wide text-ink shadow-gold-glow transition-all duration-200 hover:-translate-y-0.5 hover:from-gold-light hover:to-[#d8b887] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+            className="cta-pulse inline-flex h-12 items-center justify-center rounded-md bg-[#163A5F] px-7 text-[0.89rem] font-semibold tracking-wide text-white shadow-[0_16px_36px_-16px_rgba(22,58,95,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#2F5D7C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
           >
             Afiliarme ahora
           </Link>

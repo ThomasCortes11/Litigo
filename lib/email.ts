@@ -98,3 +98,37 @@ export async function sendPaymentFailedEmail(params: SendPaymentFailedEmailParam
     console.error('[email] No se pudo enviar el correo de pago fallido:', error);
   }
 }
+
+interface ApplicationDecisionEmailParams {
+  to: string;
+  fullName: string;
+  url?: string;
+  detail?: string;
+}
+
+async function sendApplicationDecisionEmail(params: ApplicationDecisionEmailParams, subject: string, title: string, body: string) {
+  try {
+    const resend = getResendClient();
+    if (!resend) return;
+    await resend.emails.send({
+      from: FROM,
+      to: params.to,
+      subject,
+      html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#172033"><h1>${title}</h1><p>Hola, ${params.fullName}.</p><p>${body}</p>${params.detail ? `<p><strong>Detalle:</strong> ${params.detail}</p>` : ''}${params.url ? `<p><a href="${params.url}" style="background:#2563eb;color:#fff;padding:12px 18px;text-decoration:none">Continuar en Litigo</a></p>` : ''}</div>`,
+    });
+  } catch (error) {
+    console.error('[email] No se pudo enviar correo de decisión:', error);
+  }
+}
+
+export function sendApplicationApprovedEmail(params: ApplicationDecisionEmailParams) {
+  return sendApplicationDecisionEmail(params, 'Tu solicitud fue aprobada - Litigo', 'Solicitud aprobada', 'El equipo revisó tu solicitud. Ya puedes revisar la oferta y activar tu membresía.',);
+}
+
+export function sendApplicationInformationEmail(params: ApplicationDecisionEmailParams) {
+  return sendApplicationDecisionEmail(params, 'Necesitamos información adicional - Litigo', 'Necesitamos más información', 'El equipo necesita algunos datos adicionales para continuar revisando tu solicitud.',);
+}
+
+export function sendApplicationRejectedEmail(params: ApplicationDecisionEmailParams) {
+  return sendApplicationDecisionEmail(params, 'Actualización de tu solicitud - Litigo', 'Solicitud no aprobada', 'Después de revisar la información recibida, en este momento no podemos aprobar la solicitud.',);
+}

@@ -5,21 +5,17 @@ import { prisma } from '@/lib/prisma';
 import { affiliateFormSchema, type AffiliateFormValues } from '@/lib/validations/affiliate';
 import { rateLimit } from '@/lib/rate-limit';
 import { logAudit } from '@/lib/audit';
-import { buildCheckoutUrl } from '@/lib/wompi';
-import { generatePaymentReference } from '@/lib/utils';
 
 export interface AffiliationActionState {
   success: boolean;
   error?: string;
   fieldErrors?: Partial<Record<keyof AffiliateFormValues, string>>;
-  checkoutUrl?: string;
+  applicationToken?: string;
 }
 
-const MEMBERSHIP_PRICE_FALLBACK_COP = 49900;
-
 /**
- * Server Action principal del flujo publico de afiliacion.
- * Registro -> valida -> guarda afiliado PENDING -> crea orden de pago -> retorna URL de checkout Wompi.
+ * Captura inicial del interesado. El pago solo se habilita después de una
+ * evaluación administrativa y una aprobación explícita en backend.
  */
 export async function submitAffiliation(
   _prevState: AffiliationActionState,
@@ -70,35 +66,52 @@ export async function submitAffiliation(
 
   const now = new Date();
 
-  const affiliate = existing
-    ? await prisma.affiliate.update({
-        where: { id: existing.id },
-        data: {
-          fullName: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          city: data.city,
-          documentType: data.documentType,
-          status: 'PENDING',
-          acceptedContractAt: now,
-          acceptedTermsAt: now,
-          acceptedDataPolicyAt: now,
-        },
-      })
-    : await prisma.affiliate.create({
-        data: {
-          fullName: data.fullName,
-          documentType: data.documentType,
-          documentNumber: data.documentNumber,
-          email: data.email,
-          phone: data.phone,
-          city: data.city,
-          status: 'PENDING',
-          acceptedContractAt: now,
-          acceptedTermsAt: now,
-          acceptedDataPolicyAt: now,
-        },
-      });
+  const affiliate = await prisma.$transaction(async (tx) => {
+    const savedAffiliate = existing
+      ? await tx.affiliate.update({
+          where: { id: existing.id },
+          data: {
+            fullName: data.fullName,
+            email: data.email,
+            phone: data.phone,
+            city: data.city,
+            documentType: data.documentType,
+            acceptedContractAt: now,
+            acceptedTermsAt: now,
+            acceptedDataPolicyAt: now,
+          },
+        })
+      : await tx.affiliate.create({
+          data: {
+            fullName: data.fullName,
+            documentType: data.documentType,
+            documentNumber: data.documentNumber,
+            email: data.email,
+            phone: data.phone,
+            city: data.city,
+            status: 'PENDING',
+            acceptedContractAt: now,
+            acceptedTermsAt: now,
+            acceptedDataPolicyAt: now,
+          },
+        });
+
+    await tx.application.upsert({
+      where: { affiliateId: savedAffiliate.id },
+      create: {
+        affiliateId: savedAffiliate.id,
+        status: 'DRAFT',
+      },
+      update: {
+        status: 'DRAFT',
+        submittedAt: null,
+        informationRequested: null,
+        rejectionReason: null,
+      },
+    });
+
+    return savedAffiliate;
+  });
 
   await logAudit({
     action: existing ? 'AFFILIATE_REAPPLIED' : 'AFFILIATE_REGISTERED',
@@ -107,31 +120,8 @@ export async function submitAffiliation(
     ipAddress: ip,
   });
 
-  const priceSetting = await prisma.setting.findUnique({ where: { key: 'membership_price' } });
-  const priceInCop = priceSetting ? parseInt(priceSetting.value, 10) : MEMBERSHIP_PRICE_FALLBACK_COP;
-  const amountInCents = priceInCop * 100;
-  const reference = generatePaymentReference();
-
-  await prisma.payment.create({
-    data: {
-      affiliateId: affiliate.id,
-      reference,
-      amount: priceInCop,
-      currency: 'COP',
-      status: 'PENDING',
-    },
-  });
-
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-  const checkoutUrl = buildCheckoutUrl({
-    reference,
-    amountInCents,
-    currency: 'COP',
-    redirectUrl: `${appUrl}/afiliacion/confirmacion?ref=${reference}`,
-    customerEmail: data.email,
-  });
-
-  return { success: true, checkoutUrl };
+  const application = await prisma.application.findUnique({ where: { affiliateId: affiliate.id } });
+  return { success: true, applicationToken: application?.accessToken };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const errorStack = error instanceof Error ? error.stack : undefined;

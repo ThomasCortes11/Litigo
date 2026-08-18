@@ -1,25 +1,24 @@
 import type { Metadata, Viewport } from 'next';
-import { Merriweather, DM_Sans, IBM_Plex_Mono } from 'next/font/google';
+import { Cormorant_Garamond, Inter, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 
 /**
- * Cormorant Garamond: tipografía con historia editorial y legal —
- * transmite autoridad sin caer en lo corporativo genérico.
- * DM Sans: sin serifas humanista, muy legible en cuerpo de texto.
+ * Cormorant Garamond: serif editorial para autoridad jurídica.
+ * Inter: sans serif limpia para lectura, formularios y acciones.
  * IBM Plex Mono: referencias numéricas, códigos y etiquetas.
  */
-const merriweather = Merriweather({
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   variable: '--font-display',
-  weight: ['300', '400', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   style: ['normal', 'italic'],
   display: 'swap',
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -68,7 +67,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${merriweather.variable} ${dmSans.variable} ${plexMono.variable}`}>
+    <html lang="es" className={`${cormorant.variable} ${inter.variable} ${plexMono.variable}`}>
       <body className="font-sans text-charcoal antialiased selection:bg-gold/20 selection:text-ink">
         {children}
       </body>

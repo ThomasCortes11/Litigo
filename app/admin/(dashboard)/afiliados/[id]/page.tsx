@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { formatCurrencyCOP, formatDateTime } from '@/lib/utils';
+import { ApplicationReviewForm } from '@/components/admin/application-review-form';
 
 export const metadata = {
   title: 'Detalle de afiliado',
@@ -14,6 +15,14 @@ export const metadata = {
 const statusVariant: Record<string, 'success' | 'warning' | 'default' | 'danger'> = {
   ACTIVE: 'success',
   PENDING: 'warning',
+  DRAFT: 'default',
+  SUBMITTED: 'warning',
+  UNDER_REVIEW: 'warning',
+  INITIAL_CONSULTATION: 'warning',
+  AWAITING_INFORMATION: 'warning',
+  APPROVED: 'success',
+  REJECTED: 'danger',
+  PAYMENT_PENDING: 'warning',
   INACTIVE: 'default',
   SUSPENDED: 'danger',
 };
@@ -30,6 +39,7 @@ export default async function AffiliateDetailPage({ params }: PageProps) {
     include: {
       payments: { orderBy: { createdAt: 'desc' } },
       memberships: { orderBy: { createdAt: 'desc' } },
+      application: { include: { answers: true, documents: true, evaluations: { orderBy: { createdAt: 'desc' }, include: { reviewer: true } } } },
     },
   });
 
@@ -56,6 +66,23 @@ export default async function AffiliateDetailPage({ params }: PageProps) {
           <AffiliateDetailForm affiliate={affiliate} />
         </CardContent>
       </Card>
+
+      {affiliate.application && (
+        <>
+          <Card>
+            <CardHeader><CardTitle>Solicitud y perfilamiento jurídico</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate">Estado: <strong>{affiliate.application.status}</strong> · Área: <strong>{affiliate.application.legalArea ?? 'Sin definir'}</strong> · Enviada: {affiliate.application.submittedAt ? formatDateTime(affiliate.application.submittedAt) : 'Borrador'}</p>
+              <div className="space-y-3">{affiliate.application.answers.map((answer) => <div key={answer.id} className="rounded border border-slate-200 p-3"><p className="text-xs font-semibold uppercase text-slate-500">{answer.questionKey}</p><p className="mt-1 whitespace-pre-wrap text-sm text-ink">{typeof answer.answer === 'string' ? answer.answer : JSON.stringify(answer.answer)}</p></div>)}</div>
+              <ApplicationReviewForm applicationId={affiliate.application.id} />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>Historial de evaluaciones</CardTitle></CardHeader>
+            <CardContent>{affiliate.application.evaluations.length === 0 ? <p className="text-sm text-slate">Sin evaluaciones.</p> : <div className="space-y-3">{affiliate.application.evaluations.map((evaluation) => <div key={evaluation.id} className="border-b border-slate-200 pb-3 text-sm"><p className="font-medium text-ink">{evaluation.recommendation} · {evaluation.complexity ?? 'Sin complejidad'}</p><p className="text-slate">{evaluation.internalNotes ?? 'Sin observaciones'} · {evaluation.reviewer.name} · {formatDateTime(evaluation.createdAt)}</p></div>)}</div>}</CardContent>
+          </Card>
+        </>
+      )}
 
       <Card>
         <CardHeader>

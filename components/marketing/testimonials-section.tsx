@@ -32,9 +32,10 @@ export function TestimonialsSection() {
           </h2>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
+        <div className="grid gap-5 lg:grid-cols-3 lg:gap-6">
           {testimonials.map((t) => (
-            <figure key={t.name} className="m-0 rounded-xl border border-border/85 bg-white p-6 shadow-card transition-transform duration-200 hover:-translate-y-0.5">
+            <figure key={t.name} className="relative m-0 rounded-lg border border-border/85 bg-white p-7 shadow-[0_10px_26px_-22px_rgba(11,13,15,0.5)] transition-all duration-300 hover:-translate-y-1 hover:border-gold/35 sm:p-8">
+              <span className="absolute right-7 top-5 font-display text-4xl leading-none text-gold/45" aria-hidden="true">“</span>
               {/* Cita en italica de display — sin comillas decorativas grandes */}
               <blockquote className="font-display text-[1.15rem] font-light italic leading-[1.65] text-ink">
                 &ldquo;{t.quote}&rdquo;
@@ -42,7 +43,7 @@ export function TestimonialsSection() {
 
               <figcaption className="mt-6 flex items-center gap-3 border-t border-border/80 pt-5">
                 {/* Avatar con iniciales */}
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink font-mono text-[10px] font-medium tracking-wider text-paper">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#163A5F] font-mono text-[10px] font-medium tracking-wider text-white ring-2 ring-gold/25">
                   {initials(t.name)}
                 </span>
                 <span>

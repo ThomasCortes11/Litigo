@@ -17,7 +17,7 @@ export function MarketingHeader() {
   
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#060b13]/95 shadow-[0_10px_28px_-18px_rgba(0,0,0,0.85)] backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0D0F]/95 shadow-[0_10px_28px_-18px_rgba(0,0,0,0.85)] backdrop-blur-md">
       <div className="container flex h-[72px] items-center justify-between">
         <Link href="/" className="inline-flex items-center">
           <LitigoLogo variant="dark" size="sm" />
@@ -39,7 +39,7 @@ export function MarketingHeader() {
         <div className="hidden lg:block">
           <Link
             href="/afiliacion"
-            className="cta-pulse inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-gold to-gold-light px-5 text-[0.8125rem] font-semibold tracking-[0.02em] text-ink transition-all duration-200 hover:-translate-y-0.5 hover:from-gold-light hover:to-[#d8b887] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+            className="cta-pulse inline-flex h-10 items-center justify-center rounded-lg bg-[#163A5F] px-5 text-[0.8125rem] font-semibold tracking-[0.02em] text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#2F5D7C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
           >
             Afiliarme
           </Link>
@@ -80,7 +80,7 @@ export function MarketingHeader() {
           <Link
             href="/afiliacion"
             onClick={() => setOpen(false)}
-            className="mt-3 inline-flex h-11 items-center justify-center rounded-lg bg-gradient-to-r from-gold to-gold-light px-5 text-[0.875rem] font-semibold text-ink transition-all duration-200 hover:from-gold-light hover:to-[#d8b887]"
+            className="mt-3 inline-flex h-11 items-center justify-center rounded-lg bg-[#163A5F] px-5 text-[0.875rem] font-semibold text-white transition-all duration-200 hover:bg-[#2F5D7C]"
           >
             Afiliarme
           </Link>

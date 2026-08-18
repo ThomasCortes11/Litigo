@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
   [
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold tracking-wide',
-    'transition-all duration-200 active:translate-y-px',
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-wide',
+    'transition-all duration-300 active:translate-y-px',
     'disabled:pointer-events-none disabled:opacity-50',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
   ].join(' '),
@@ -14,11 +14,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-ink text-paper shadow-[0_10px_22px_-14px_rgba(8,15,26,0.65)] hover:bg-ink-light',
+          'bg-[#163A5F] text-white shadow-[0_12px_24px_-16px_rgba(22,58,95,0.7)] hover:bg-[#2F5D7C] hover:-translate-y-0.5',
         gold:
-          'bg-gradient-to-r from-gold to-gold-light text-ink shadow-gold-glow hover:from-gold-light hover:to-[#d8b887] hover:-translate-y-0.5',
+          'bg-[#163A5F] text-white shadow-[0_12px_24px_-16px_rgba(22,58,95,0.7)] hover:bg-[#2F5D7C] hover:-translate-y-0.5',
         outline:
-          'border border-border bg-white/70 text-charcoal backdrop-blur-[1px] hover:border-gold/45 hover:bg-white',
+          'border border-border bg-white text-charcoal hover:border-[#2F5D7C]/60 hover:bg-[#F5F3EE]',
         ghost:
           'bg-transparent text-charcoal hover:bg-paper/80',
         destructive:

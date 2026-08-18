@@ -20,7 +20,7 @@ export function AdminSidebar() {
   }
 
   return (
-    <aside className="sticky top-0 flex h-screen w-64 flex-col border-r border-white/10 bg-[linear-gradient(180deg,#0f1c2e_0%,#080f1a_100%)]">
+    <aside className="sticky top-0 flex h-screen w-64 flex-col border-r border-white/10 bg-gradient-to-b from-[#163A5F] via-[#0B0D0F] to-[#070809]">
       <div className="flex h-20 items-center border-b border-white/10 px-6">
         <Link href="/" className="font-display text-xl font-semibold tracking-wide text-paper">
           LITIGO
@@ -41,7 +41,7 @@ export function AdminSidebar() {
               className={cn(
                 'group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 active
-                  ? 'bg-gold/18 text-paper shadow-[inset_0_0_0_1px_rgba(184,149,106,0.28)]'
+                  ? 'bg-white/10 text-white shadow-[inset_0_0_0_1px_rgba(197,164,109,0.32)]'
                   : 'text-paper/62 hover:bg-white/5 hover:text-paper/92',
               )}
             >
