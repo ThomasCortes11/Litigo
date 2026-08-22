@@ -3,9 +3,9 @@ import { ShieldCheck, Lock, RotateCcw, Mail } from 'lucide-react';
 const items = [
   {
     icon: Lock,
-    title: 'Pago 100% seguro',
+    title: 'Pago seguro',
     description:
-      'Tu pago se procesa en Wompi. Litigo nunca almacena los datos de tu tarjeta.',
+      'Realiza tu pago por transferencia bancaria, Nequi o Daviplata. Nosotros confirmamos la transaccion.',
   },
   {
     icon: ShieldCheck,

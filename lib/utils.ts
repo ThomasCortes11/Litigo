@@ -45,10 +45,3 @@ export function generateAffiliateCode(): string {
   }
   return `LTG-${code}`;
 }
-
-/**
- * Genera una referencia unica de pago para Wompi.
- */
-export function generatePaymentReference(): string {
-  return `LITIGO-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-}

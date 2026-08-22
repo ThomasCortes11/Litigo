@@ -76,6 +76,8 @@ export async function submitAffiliation(
             phone: data.phone,
             city: data.city,
             documentType: data.documentType,
+            deletedAt: null,
+            status: 'PENDING',
             acceptedContractAt: now,
             acceptedTermsAt: now,
             acceptedDataPolicyAt: now,

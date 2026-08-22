@@ -23,7 +23,7 @@ function JusticeVisual() {
 /* ─────────────────────────────────────────────
    Teléfono desde base de datos (SSR)
 ───────────────────────────────────────────── */
-const PHONE_FALLBACK = '+57 300 000 0000';
+const PHONE_FALLBACK = '+57 3118551771';
 
 async function getSupportPhone(): Promise<string> {
   try {

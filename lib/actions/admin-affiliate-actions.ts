@@ -41,6 +41,26 @@ export async function updateAffiliateStatus(input: unknown): Promise<AdminAction
   return { success: true };
 }
 
+export async function deleteAffiliate(input: { id: string }): Promise<AdminActionResult> {
+  const user = await requireAdmin();
+
+  await prisma.affiliate.update({
+    where: { id: input.id },
+    data: { deletedAt: new Date(), status: 'INACTIVE' },
+  });
+
+  await logAudit({
+    actorId: user.id,
+    action: 'AFFILIATE_DELETED',
+    entityType: 'Affiliate',
+    entityId: input.id,
+  });
+
+  revalidatePath('/admin/afiliados');
+
+  return { success: true };
+}
+
 export async function updateAffiliateDetails(input: unknown): Promise<AdminActionResult> {
   const user = await requireAdmin();
   const parsed = updateAffiliateSchema.safeParse(input);

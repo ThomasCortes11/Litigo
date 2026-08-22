@@ -255,24 +255,23 @@ enum PaymentStatus {
 }
 
 model Payment {
-  id                 String        @id @default(uuid()) @db.Uuid
-  affiliateId        String        @db.Uuid
-  affiliate          Affiliate     @relation(fields: [affiliateId], references: [id])
-  membershipId       String?       @db.Uuid
-  membership         Membership?   @relation(fields: [membershipId], references: [id])
-  applicationId      String?       @db.Uuid
-  application        Application?  @relation(fields: [applicationId], references: [id])
-  planId             String?        @db.Uuid
-  plan               MembershipPlan? @relation(fields: [planId], references: [id])
-  reference          String        @unique
-  wompiTransactionId String?       @unique
-  amount             Decimal       @db.Decimal(12, 2)
-  currency           String        @default("COP")
-  status             PaymentStatus @default(PENDING)
-  paymentMethod      String?
-  rawResponse        Json?
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
+  id            String        @id @default(uuid()) @db.Uuid
+  affiliateId   String        @db.Uuid
+  affiliate     Affiliate     @relation(fields: [affiliateId], references: [id])
+  membershipId  String?       @db.Uuid
+  membership    Membership?   @relation(fields: [membershipId], references: [id])
+  applicationId String?       @db.Uuid
+  application   Application?  @relation(fields: [applicationId], references: [id])
+  planId        String?       @db.Uuid
+  plan          MembershipPlan? @relation(fields: [planId], references: [id])
+  reference     String        @unique
+  amount        Decimal       @db.Decimal(12, 2)
+  currency      String        @default("COP")
+  status        PaymentStatus @default(PENDING)
+  paymentMethod String?
+  rawResponse   Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([affiliateId])
   @@index([status])
