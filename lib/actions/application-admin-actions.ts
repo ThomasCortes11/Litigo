@@ -43,7 +43,14 @@ export async function reviewApplication(input: unknown): Promise<ApplicationAdmi
     const recipient = await prisma.affiliate.findUnique({ where: { id: application.affiliateId }, select: { email: true, fullName: true } });
     if (recipient) {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-      if (data.nextStatus === 'APPROVED') void sendApplicationApprovedEmail({ to: recipient.email, fullName: recipient.fullName, url: `${baseUrl}/afiliacion/oferta?token=${(await prisma.application.findUnique({ where: { id: application.id }, select: { accessToken: true } }))?.accessToken}` });
+      if (data.nextStatus === 'APPROVED') {
+        try {
+          await sendApplicationApprovedEmail({ to: recipient.email, fullName: recipient.fullName });
+          console.log('[admin] Email de aprobacion enviado a:', recipient.email);
+        } catch (e) {
+          console.error('[admin] Error enviando email de aprobacion:', e);
+        }
+      }
       if (data.nextStatus === 'AWAITING_INFORMATION') void sendApplicationInformationEmail({ to: recipient.email, fullName: recipient.fullName, url: `${baseUrl}/afiliacion/perfilamiento?token=${(await prisma.application.findUnique({ where: { id: application.id }, select: { accessToken: true } }))?.accessToken}`, detail: data.informationRequested });
       if (data.nextStatus === 'REJECTED') void sendApplicationRejectedEmail({ to: recipient.email, fullName: recipient.fullName });
     }

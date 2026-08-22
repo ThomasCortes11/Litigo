@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { updateAffiliateStatus } from '@/lib/actions/admin-affiliate-actions';
+import { updateAffiliateStatus, deleteAffiliate } from '@/lib/actions/admin-affiliate-actions';
 import { formatDate } from '@/lib/utils';
 import type { Affiliate } from '@prisma/client';
 
@@ -32,6 +32,14 @@ export function AffiliatesTable({ affiliates }: { affiliates: Affiliate[] }) {
     const nextStatus = affiliate.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
     setPendingId(affiliate.id);
     await updateAffiliateStatus({ id: affiliate.id, status: nextStatus });
+    setPendingId(null);
+    router.refresh();
+  }
+
+  async function handleDelete(affiliate: Affiliate) {
+    if (!confirm(`¿Eliminar a ${affiliate.fullName}? Esta accion no se puede deshacer.`)) return;
+    setPendingId(affiliate.id);
+    await deleteAffiliate({ id: affiliate.id });
     setPendingId(null);
     router.refresh();
   }
@@ -79,6 +87,14 @@ export function AffiliatesTable({ affiliates }: { affiliates: Affiliate[] }) {
                     {affiliate.status === 'ACTIVE' ? 'Desactivar' : 'Activar'}
                   </Button>
                 )}
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  disabled={pendingId === affiliate.id}
+                  onClick={() => handleDelete(affiliate)}
+                >
+                  Eliminar
+                </Button>
               </div>
             </TableCell>
           </TableRow>

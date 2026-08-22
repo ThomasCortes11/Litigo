@@ -2,6 +2,7 @@
 const nextConfig = {
 
   /* ── Configuracion base ── */
+  output:           'standalone',
   reactStrictMode:  true,
   poweredByHeader:  false,
   compress:         true,

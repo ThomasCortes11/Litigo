@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: litigo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d litigo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/litigo?schema=public"
+      AUTH_SECRET: "docker-dev-secret-change-in-production-min-32-chars!!!"
+      AUTH_URL: "http://localhost:3000"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NEXT_PUBLIC_APP_NAME: "Litigo"
+      RESEND_API_KEY: "re_xxxxxxxx"
+      EMAIL_FROM: "Litigo <onboarding@resend.dev>"
+      BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_xxxxxxxxxxxxxxxxxxxx"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

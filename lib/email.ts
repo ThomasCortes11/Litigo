@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 
 const FROM = process.env.EMAIL_FROM ?? 'Litigo <afiliaciones@litigo.com.co>';
+const WHATSAPP_PHONE = '573118551771';
 
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -56,7 +57,6 @@ export async function sendAffiliateWelcomeEmail(params: SendWelcomeEmailParams) 
       html: welcomeEmailHtml(params),
     });
   } catch (error) {
-    // Un fallo de correo no debe revertir la activacion ya confirmada por Wompi.
     console.error('[email] No se pudo enviar el correo de bienvenida:', error);
   }
 }
@@ -121,8 +121,39 @@ async function sendApplicationDecisionEmail(params: ApplicationDecisionEmailPara
   }
 }
 
-export function sendApplicationApprovedEmail(params: ApplicationDecisionEmailParams) {
-  return sendApplicationDecisionEmail(params, 'Tu solicitud fue aprobada - Litigo', 'Solicitud aprobada', 'El equipo revisó tu solicitud. Ya puedes revisar la oferta y activar tu membresía.',);
+export async function sendApplicationApprovedEmail(params: ApplicationDecisionEmailParams) {
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(`Hola, soy ${params.fullName}. Mi solicitud de afiliacion fue aprobada. Quiero conocer los medios de pago para activar mi membresia.`)}`;
+
+  try {
+    const resend = getResendClient();
+    if (!resend) return;
+    await resend.emails.send({
+      from: FROM,
+      to: params.to,
+      subject: 'Tu solicitud fue aprobada - Litigo',
+      html: `
+      <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#172033">
+        <div style="background:#0E1A2B;padding:32px;text-align:center">
+          <span style="color:#F7F5F0;font-size:22px;letter-spacing:2px;text-transform:uppercase">Litigo</span>
+        </div>
+        <div style="padding:32px;background:#ffffff">
+          <h1 style="font-size:20px;color:#0E1A2B">Solicitud aprobada</h1>
+          <p>Hola, ${params.fullName}.</p>
+          <p>El equipo reviso tu solicitud y fue <strong>aprobada</strong>.</p>
+          <p>Para activar tu membresia y conocer los medios de pago, contacta a nuestro equipo de cobranza por WhatsApp:</p>
+          <div style="text-align:center;margin:30px 0">
+            <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;padding:14px 28px;text-decoration:none;border-radius:8px;font-size:16px;font-weight:bold">
+              Abrir WhatsApp
+            </a>
+          </div>
+          <p style="color:#5B6472;font-size:13px;margin-top:24px">Medios de pago: Transferencia bancaria, Nequi, Daviplata</p>
+          <p style="color:#5B6472;font-size:13px">Si no realizaste esta solicitud, contacta a soporte@litigo.com.co inmediatamente.</p>
+        </div>
+      </div>`,
+    });
+  } catch (error) {
+    console.error('[email] No se pudo enviar correo de aprobacion:', error);
+  }
 }
 
 export function sendApplicationInformationEmail(params: ApplicationDecisionEmailParams) {

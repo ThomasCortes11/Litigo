@@ -1,9 +1,9 @@
-import { Users, UserCheck, UserX, UserPlus, Wallet, TrendingUp } from 'lucide-react';
+import { Users, UserCheck, UserX, UserPlus, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { StatsCard } from '@/components/admin/stats-card';
 import { Badge } from '@/components/ui/badge';
-import { formatCurrencyCOP, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 
 export const metadata = {
   title: 'Panel',
@@ -14,15 +14,12 @@ async function getDashboardStats() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const [total, active, inactive, recent, revenueResult, totalPayments, approvedPayments, applicationGroups, latestAffiliates] =
+  const [total, active, inactive, recent, applicationGroups, latestAffiliates] =
     await Promise.all([
       prisma.affiliate.count({ where: { deletedAt: null } }),
       prisma.affiliate.count({ where: { status: 'ACTIVE', deletedAt: null } }),
       prisma.affiliate.count({ where: { status: { in: ['INACTIVE', 'SUSPENDED'] }, deletedAt: null } }),
       prisma.affiliate.count({ where: { createdAt: { gte: thirtyDaysAgo }, deletedAt: null } }),
-      prisma.payment.aggregate({ where: { status: 'APPROVED' }, _sum: { amount: true } }),
-      prisma.payment.count(),
-      prisma.payment.count({ where: { status: 'APPROVED' } }),
       prisma.application.groupBy({ by: ['status'], _count: { _all: true } }),
       prisma.affiliate.findMany({
         where: { deletedAt: null },
@@ -32,10 +29,8 @@ async function getDashboardStats() {
       }),
     ]);
 
-  const conversionRate = totalPayments > 0 ? (approvedPayments / totalPayments) * 100 : 0;
-
   const applicationCounts = Object.fromEntries(applicationGroups.map((group) => [group.status, group._count._all]));
-  return { total, active, inactive, recent, revenue: revenueResult._sum.amount ?? 0, conversionRate, applicationCounts, latestAffiliates };
+  return { total, active, inactive, recent, applicationCounts, latestAffiliates };
 }
 
 const statusVariant: Record<string, 'success' | 'warning' | 'default' | 'danger'> = {
@@ -80,10 +75,8 @@ export default async function AdminDashboardPage() {
         <StatsCard label="Pendientes de información" value={(stats.applicationCounts.AWAITING_INFORMATION ?? 0).toLocaleString('es-CO')} icon={UserX} />
         <StatsCard label="Aprobadas" value={(stats.applicationCounts.APPROVED ?? 0).toLocaleString('es-CO')} icon={UserCheck} accent />
         <StatsCard label="Membresías activas" value={stats.active.toLocaleString('es-CO')} icon={UserCheck} />
-        <StatsCard label="Ingresos totales" value={formatCurrencyCOP(Number(stats.revenue))} icon={Wallet} accent />
         <StatsCard label="No aprobadas" value={(stats.applicationCounts.REJECTED ?? 0).toLocaleString('es-CO')} icon={UserX} />
-        <StatsCard label="Pendientes de pago" value={(stats.applicationCounts.PAYMENT_PENDING ?? 0).toLocaleString('es-CO')} icon={Wallet} />
-        <StatsCard label="Tasa de conversion" value={`${stats.conversionRate.toFixed(1)}%`} icon={TrendingUp} trendPositive={stats.conversionRate >= 50} />
+        <StatsCard label="Pendientes de pago" value={(stats.applicationCounts.PAYMENT_PENDING ?? 0).toLocaleString('es-CO')} icon={UserX} />
       </div>
 
       <div>
