@@ -54,8 +54,8 @@ export function TrustSidebar() {
         </p>
         <p className="mt-2 text-[0.75rem] leading-relaxed text-paper/60">
           Escríbenos antes de afiliarte a{' '}
-          <a href="mailto:soporte@litigo.com.co" className="font-medium text-gold-light underline-offset-2 transition-colors hover:text-white hover:underline">
-            soporte@litigo.com.co
+          <a href="mailto:litigojarvis@gmail.com" className="font-medium text-gold-light underline-offset-2 transition-colors hover:text-white hover:underline">
+            litigojarvis@gmail.com
           </a>
         </p>
       </div>

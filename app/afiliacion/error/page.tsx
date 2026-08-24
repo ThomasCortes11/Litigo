@@ -13,7 +13,7 @@ export default function AfiliacionErrorPage() {
       <div>
         <p className="font-display text-2xl font-semibold text-ink">Algo salio mal</p>
         <p className="mt-2 max-w-sm text-sm text-slate">
-          No pudimos completar tu solicitud. Intenta nuevamente o escribe a soporte@litigo.com.co si el problema persiste.
+          No pudimos completar tu solicitud. Intenta nuevamente o escribe a litigojarvis@gmail.com si el problema persiste.
         </p>
       </div>
       <div className="flex gap-3">

@@ -1,54 +1,91 @@
-import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
-import { prisma } from '@/lib/prisma';
-import { formatDate } from '@/lib/utils';
+import type { Metadata } from 'next';
+import { LegalDocumentShell } from '@/components/marketing/legal-document-shell';
 
-export const metadata = { title: 'Terminos y Condiciones' };
+export const metadata: Metadata = {
+  title: 'Terminos y Condiciones | LITIGO S.A.S.',
+  description:
+    'Consulta los Terminos y Condiciones de uso de la plataforma digital de LITIGO S.A.S.',
+};
 
-export default async function TerminosPage() {
-  const doc = await prisma.legalDocument.findFirst({
-    where: { type: 'TERMS', isActive: true },
-    orderBy: { version: 'desc' },
-  });
-
+export default function TerminosPage() {
   return (
-    <div className="min-h-screen bg-[#F5F3EE]">
-      <header className="border-b border-white/10 bg-[#0B0D0F]">
-        <div className="container flex h-20 items-center justify-between">
-          <Link href="/" className="font-display text-2xl font-semibold text-paper">LITIGO</Link>
-          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-paper/70 hover:text-paper">
-            <ChevronLeft className="h-4 w-4" /> Inicio
-          </Link>
-        </div>
-      </header>
+    <LegalDocumentShell title="TERMINOS Y CONDICIONES DE USO - PLATAFORMA LITIGO S.A.S.">
+      <section aria-labelledby="termino-aceptacion" className="space-y-2">
+        <h2 id="termino-aceptacion" className="text-lg font-semibold text-white sm:text-xl">1. Aceptacion.</h2>
+        <p>
+          El acceso y uso de esta plataforma implica la aceptacion plena de los presentes terminos y condiciones. Si no esta de acuerdo, no debe continuar con el proceso de afiliacion.
+        </p>
+      </section>
 
-      <main className="container max-w-4xl py-14 sm:py-20">
-        <div className="mb-8">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold-dark">Documento legal</p>
-          <h1 className="mt-2 max-w-2xl font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
-            {doc?.title ?? 'Terminos y Condiciones'}
-          </h1>
-          {doc && (
-            <p className="mt-2 text-xs text-slate">
-              Version {doc.version} — Ultima actualizacion: {formatDate(doc.updatedAt)}
-            </p>
-          )}
-        </div>
+      <section aria-labelledby="termino-capacidad" className="space-y-2">
+        <h2 id="termino-capacidad" className="text-lg font-semibold text-white sm:text-xl">1. Capacidad legal.</h2>
+        <p>
+          El usuario declara ser mayor de edad y contar con capacidad legal para contratar, y que la informacion suministrada en el proceso de afiliacion es veraz, exacta y actualizada.
+        </p>
+      </section>
 
-        <div className="rounded-lg border border-border bg-white px-6 py-8 shadow-[0_16px_40px_-28px_rgba(11,13,15,0.35)] sm:px-12 sm:py-12">
-          <div className="prose max-w-none space-y-4 text-sm leading-relaxed text-charcoal">
-            {(doc?.content ?? 'Este documento aun no ha sido publicado.').split('\n').map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
-        </div>
+      <section aria-labelledby="termino-veracidad" className="space-y-2">
+        <h2 id="termino-veracidad" className="text-lg font-semibold text-white sm:text-xl">1. Veracidad de la informacion.</h2>
+        <p>
+          LITIGO S.A.S. no se hace responsable por las consecuencias derivadas de informacion falsa, incompleta o desactualizada suministrada por el usuario durante el registro o perfilamiento.
+        </p>
+      </section>
 
-        <div className="mt-8 flex justify-center">
-          <Link href="/afiliacion" className="inline-flex items-center gap-2 rounded-md bg-[#163A5F] px-6 py-3 text-sm font-medium text-white shadow-[0_12px_24px_-16px_rgba(22,58,95,0.7)] hover:bg-[#2F5D7C]">
-            Ir al formulario de afiliacion
-          </Link>
-        </div>
-      </main>
-    </div>
+      <section aria-labelledby="termino-uso" className="space-y-2">
+        <h2 id="termino-uso" className="text-lg font-semibold text-white sm:text-xl">1. Uso adecuado de la plataforma.</h2>
+        <p>
+          El usuario se compromete a utilizar la plataforma unicamente para los fines para los que fue dispuesta, absteniendose de realizar cualquier uso fraudulento, ilegal o que afecte el funcionamiento del servicio o los derechos de terceros.
+        </p>
+      </section>
+
+      <section aria-labelledby="termino-propiedad" className="space-y-2">
+        <h2 id="termino-propiedad" className="text-lg font-semibold text-white sm:text-xl">1. Propiedad intelectual.</h2>
+        <p>
+          Todos los contenidos, marcas, logotipos, textos y desarrollos tecnologicos de la plataforma son propiedad de LITIGO S.A.S. o de sus licenciantes, y estan protegidos por la normatividad vigente en materia de propiedad intelectual.
+        </p>
+      </section>
+
+      <section aria-labelledby="termino-disponibilidad" className="space-y-2">
+        <h2 id="termino-disponibilidad" className="text-lg font-semibold text-white sm:text-xl">1. Disponibilidad del servicio.</h2>
+        <p>
+          LITIGO S.A.S. procurara mantener la plataforma disponible de forma continua, pero no garantiza la ausencia de interrupciones por mantenimiento, fallas tecnicas o causas de fuerza mayor.
+        </p>
+      </section>
+
+      <section aria-labelledby="termino-relacion" className="space-y-2">
+        <h2 id="termino-relacion" className="text-lg font-semibold text-white sm:text-xl">1. Relacion con el contrato de afiliacion.</h2>
+        <p>
+          Estos terminos regulan el uso de la plataforma digital y son independientes, pero complementarios, al Contrato de Afiliacion, el cual regula la prestacion de los servicios juridicos propiamente dichos.
+        </p>
+      </section>
+
+      <section aria-labelledby="termino-modificaciones" className="space-y-2">
+        <h2 id="termino-modificaciones" className="text-lg font-semibold text-white sm:text-xl">1. Modificaciones.</h2>
+        <p>
+          LITIGO S.A.S. podra actualizar estos terminos en cualquier momento. Los cambios se entenderan aceptados por el uso continuado de la plataforma despues de su publicacion.
+        </p>
+      </section>
+
+      <section aria-labelledby="termino-ley" className="space-y-2">
+        <h2 id="termino-ley" className="text-lg font-semibold text-white sm:text-xl">1. Ley aplicable y jurisdiccion.</h2>
+        <p>
+          Los presentes terminos se rigen por las leyes de la Republica de Colombia. Cualquier controversia sera resuelta ante los jueces competentes, sin perjuicio de mecanismos alternativos de solucion de conflictos que las partes puedan acordar.
+        </p>
+      </section>
+
+      <section aria-labelledby="termino-contacto" className="space-y-2">
+        <h2 id="termino-contacto" className="text-lg font-semibold text-white sm:text-xl">1. Contacto.</h2>
+        <p>
+          Para consultas relacionadas con estos terminos, el usuario puede comunicarse a traves de{' '}
+          <a
+            href="mailto:litigojarvis@gmail.com"
+            className="font-medium text-gold-light underline underline-offset-2 hover:text-white focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090B]"
+          >
+            litigojarvis@gmail.com
+          </a>
+          .
+        </p>
+      </section>
+    </LegalDocumentShell>
   );
 }

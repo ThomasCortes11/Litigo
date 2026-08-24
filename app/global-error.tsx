@@ -31,7 +31,7 @@ export default function GlobalError({
         <h1 className="mt-6 text-2xl font-semibold text-paper">Algo salio mal</h1>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-paper/55">
           Ocurrio un error inesperado. Nuestro equipo ya fue notificado. Puedes intentar de nuevo
-          o escribir a soporte@litigo.com.co si el problema persiste.
+          o escribir a litigojarvis@gmail.com si el problema persiste.
         </p>
         <button
           onClick={reset}

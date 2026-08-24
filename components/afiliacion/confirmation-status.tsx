@@ -124,8 +124,8 @@ export function ConfirmationStatus({ reference }: { reference: string }) {
         </Button>
       )}
 
-      <a href="mailto:soporte@litigo.com.co" className="text-xs text-slate underline underline-offset-2 hover:text-ink">
-        Necesitas ayuda? Escribe a soporte@litigo.com.co
+      <a href="mailto:litigojarvis@gmail.com" className="text-xs text-slate underline underline-offset-2 hover:text-ink">
+        Necesitas ayuda? Escribe a litigojarvis@gmail.com
       </a>
     </div>
   );
