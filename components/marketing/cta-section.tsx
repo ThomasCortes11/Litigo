@@ -19,7 +19,7 @@ export function CtaSection() {
             Afiliarme ahora
           </Link>
           <a
-            href="mailto:soporte@litigo.com.co"
+            href="mailto:litigojarvis@gmail.com"
             className="text-[0.84rem] font-medium text-paper/55 underline underline-offset-4 transition-colors hover:text-paper/82"
           >
             Tengo preguntas

@@ -33,7 +33,7 @@ export function MarketingFooter() {
           {
             label: 'Contacto',
             links: [
-              { href: 'mailto:soporte@litigo.com.co', label: 'soporte@litigo.com.co' },
+              { href: 'mailto:litigojarvis@gmail.com', label: 'litigojarvis@gmail.com' },
             ],
           },
         ].map((col) => (

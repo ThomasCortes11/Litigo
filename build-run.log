@@ -1,0 +1,60 @@
+
+> litigo-platform@1.0.0 build
+> prisma generate && next build
+
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 239ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+▲ Next.js 16.2.9 (Turbopack)
+- Experiments (use with caution):
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 25.4s
+  Running TypeScript ...
+  Finished TypeScript in 11.7s ...
+  Collecting page data using 11 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 11 workers (0/5) ...
+  Generating static pages using 11 workers (1/5) 
+  Generating static pages using 11 workers (2/5) 
+  Generating static pages using 11 workers (3/5) 
+✓ Generating static pages using 11 workers (5/5) in 404ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin
+├ ƒ /admin/afiliados
+├ ƒ /admin/afiliados/[id]
+├ ƒ /admin/afiliados/export
+├ ƒ /admin/configuracion
+├ ƒ /admin/login
+├ ƒ /afiliacion
+├ ƒ /afiliacion/confirmacion
+├ ƒ /afiliacion/error
+├ ƒ /afiliacion/oferta
+├ ƒ /afiliacion/perfilamiento
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/webhooks/wompi
+├ ƒ /apple-icon
+├ ƒ /contrato-afiliacion
+├ ƒ /icon
+├ ƒ /opengraph-image
+├ ƒ /politica-tratamiento-datos
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+└ ƒ /terminos-y-condiciones
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
