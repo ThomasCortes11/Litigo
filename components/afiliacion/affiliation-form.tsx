@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
+import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { submitAffiliation, type AffiliationActionState } from '@/lib/actions/affiliate-actions';
 import { Input } from '@/components/ui/input';
@@ -25,6 +26,22 @@ function SubmitButton() {
     >
       {pending ? 'Enviando...' : 'Continuar al perfilamiento'}
     </Button>
+  );
+}
+
+type LegalLinkProps = {
+  href: '/contrato-afiliacion' | '/terminos-y-condiciones' | '/politica-tratamiento-datos';
+  children: React.ReactNode;
+};
+
+function LegalLink({ href, children }: LegalLinkProps) {
+  return (
+    <Link
+      href={href}
+      className="cursor-pointer font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07090B]"
+    >
+      {children}
+    </Link>
   );
 }
 
@@ -88,7 +105,7 @@ export function AffiliationForm() {
 
           <div>
             <Label htmlFor="phone" className="text-paper/85">Telefono</Label>
-            <Input id="phone" name="phone" placeholder="3001234567" required error={!!fieldError('phone')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
+            <Input id="phone" name="phone" placeholder="Ingresa tu numero" required error={!!fieldError('phone')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
             {fieldError('phone') && <p className="mt-1 text-xs text-danger">{fieldError('phone')}</p>}
           </div>
 
@@ -104,39 +121,33 @@ export function AffiliationForm() {
         <h2 className="font-display text-xl font-semibold text-paper">Documentos legales</h2>
         <p className="mt-1 text-xs text-paper/60">Estos documentos explican el marco general de la relación y la política de datos.</p>
 
-        <div className="mt-5 space-y-3 rounded-md border border-white/10 bg-black/15 p-5">
-          <label className="flex items-start gap-3 text-sm text-gray-100">
-            <Checkbox name="acceptedContract" value="on" required className="mt-0.5" />
-            <span>
-              Acepto el{' '}
-              <a href="/contrato-afiliacion" target="_blank" className="font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white">
-                contrato de afiliacion
-              </a>
-              .
-            </span>
-          </label>
+        <div className="mt-5 space-y-4 rounded-md border border-white/10 bg-black/15 p-5">
+          <div className="flex items-start gap-3 text-sm text-gray-100">
+            <Checkbox id="acceptedContract" name="acceptedContract" value="on" required className="mt-0.5" />
+            <div>
+              <label htmlFor="acceptedContract" className="cursor-pointer">Acepto el </label>
+              <LegalLink href="/contrato-afiliacion">contrato de afiliacion</LegalLink>
+              <span>.</span>
+            </div>
+          </div>
 
-          <label className="flex items-start gap-3 text-sm text-gray-100">
-            <Checkbox name="acceptedTerms" value="on" required className="mt-0.5" />
-            <span>
-              Acepto los{' '}
-              <a href="/terminos-y-condiciones" target="_blank" className="font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white">
-                terminos y condiciones
-              </a>
-              .
-            </span>
-          </label>
+          <div className="flex items-start gap-3 text-sm text-gray-100">
+            <Checkbox id="acceptedTerms" name="acceptedTerms" value="on" required className="mt-0.5" />
+            <div>
+              <label htmlFor="acceptedTerms" className="cursor-pointer">Acepto los </label>
+              <LegalLink href="/terminos-y-condiciones">terminos y condiciones</LegalLink>
+              <span>.</span>
+            </div>
+          </div>
 
-          <label className="flex items-start gap-3 text-sm text-gray-100">
-            <Checkbox name="acceptedDataPolicy" value="on" required className="mt-0.5" />
-            <span>
-              Acepto la{' '}
-              <a href="/politica-tratamiento-datos" target="_blank" className="font-medium text-gold-light underline underline-offset-2 transition-colors hover:text-white">
-                politica de tratamiento de datos
-              </a>
-              .
-            </span>
-          </label>
+          <div className="flex items-start gap-3 text-sm text-gray-100">
+            <Checkbox id="acceptedDataPolicy" name="acceptedDataPolicy" value="on" required className="mt-0.5" />
+            <div>
+              <label htmlFor="acceptedDataPolicy" className="cursor-pointer">Acepto la </label>
+              <LegalLink href="/politica-tratamiento-datos">politica de tratamiento de datos</LegalLink>
+              <span>.</span>
+            </div>
+          </div>
         </div>
 
         <div className="mt-4 rounded-md border border-gold/20 bg-gold/5 p-4">

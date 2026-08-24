@@ -7,7 +7,7 @@ export const contentType = 'image/png';
 
 /**
  * Imagen Open Graph generada en codigo: se muestra cuando el link de
- * Litigo se comparte en WhatsApp, redes sociales o gestores de correo.
+ * Litigo se comparte en redes sociales o gestores de correo.
  * Reutiliza la paleta y tipografia del hero para consistencia de marca.
  */
 export default function OgImage() {

@@ -19,7 +19,7 @@ export default function NotFound() {
           <Link href="/">Volver al inicio</Link>
         </Button>
         <a
-          href="mailto:soporte@litigo.com.co"
+          href="mailto:litigojarvis@gmail.com"
           className="text-sm text-paper/45 underline underline-offset-4 hover:text-paper/70"
         >
           Contactar soporte

@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Phone, MessageCircle } from 'lucide-react';
-import { prisma } from '@/lib/prisma';
 import justiciaImage from '@/components/img/Justicia.png';
 
 function JusticeVisual() {
@@ -21,31 +19,9 @@ function JusticeVisual() {
 }
 
 /* ─────────────────────────────────────────────
-   Teléfono desde base de datos (SSR)
-───────────────────────────────────────────── */
-const PHONE_FALLBACK = '+57 3118551771';
-
-async function getSupportPhone(): Promise<string> {
-  try {
-    const s = await prisma.setting.findUnique({ where: { key: 'support_phone' } });
-    return s?.value?.trim() || PHONE_FALLBACK;
-  } catch {
-    return PHONE_FALLBACK;
-  }
-}
-
-function toWaDigits(phone: string) {
-  return phone.replace(/[^\d]/g, '');
-}
-
-/* ─────────────────────────────────────────────
    Hero Section
 ───────────────────────────────────────────── */
 export async function HeroSection() {
-  const phone        = await getSupportPhone();
-  const phoneHref    = `tel:${phone.replace(/\s/g, '')}`;
-  const waHref       = `https://wa.me/${toWaDigits(phone)}?text=${encodeURIComponent('Hola, quiero información sobre la membresía jurídica de Litigo.')}`;
-
   return (
     <section aria-labelledby="hero-heading" className="grain-overlay overflow-hidden bg-[radial-gradient(circle_at_20%_20%,#163A5F_0%,#0B0D0F_52%,#050607_100%)]">
       <div className="container grid min-h-[90vh] items-center gap-10 rounded-[32px] border border-white/10 bg-black/15 px-6 py-12 shadow-[0_30px_80px_-35px_rgba(0,0,0,0.7)] backdrop-blur-sm sm:px-8 sm:py-16 lg:grid-cols-[1.02fr,0.98fr] lg:gap-12 lg:px-10 lg:py-14">
@@ -75,30 +51,6 @@ export async function HeroSection() {
             >
               Afiliarme ahora
             </Link>
-
-            {/* CTAs secundarios de contacto */}
-            <div className="flex items-center gap-2.5" role="group" aria-label="Contacto directo">
-              <a
-                href={phoneHref}
-                aria-label={`Llamar a Litigo — ${phone}`}
-                title={`Llamar: ${phone}`}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.02] px-5 text-[0.825rem] font-medium text-paper/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white/[0.06] hover:text-paper focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/35"
-              >
-                <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: '#B8956A' }} strokeWidth={1.5} />
-                Llamar
-              </a>
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Escribir a Litigo por WhatsApp"
-                title="WhatsApp de Litigo"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.02] px-5 text-[0.825rem] font-medium text-paper/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white/[0.06] hover:text-paper focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/35"
-              >
-                <MessageCircle className="h-3.5 w-3.5 shrink-0" style={{ color: '#B8956A' }} strokeWidth={1.5} />
-                WhatsApp
-              </a>
-            </div>
           </div>
 
           {/* Señales de confianza */}
