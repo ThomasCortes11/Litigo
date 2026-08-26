@@ -23,7 +23,7 @@ export function MembershipOffer({ token, price, planName }: { token: string; pri
     <h2 className="mt-2 text-2xl font-semibold text-white">{planName}</h2>
     <p className="mt-3 text-3xl font-semibold text-white">{formatCurrencyCOP(price)} <span className="text-sm font-normal text-slate-300">/ mes</span></p>
     <p className="mt-3 text-sm leading-6 text-slate-300">La membresía se activa únicamente cuando Wompi confirme el pago mediante su webhook firmado.</p>
-    {error && <p className="mt-4 rounded border border-red-300/30 bg-red-950/20 px-3 py-2 text-sm text-red-100">{error}</p>}
+    {error && <p className="mt-4 rounded border border-red-400/40 bg-red-950/40 px-3 py-2 text-sm font-medium text-red-200">{error}</p>}
     <Button type="button" onClick={startCheckout} disabled={pending} className="mt-6 w-full bg-[#163A5F] text-white hover:bg-[#2F5D7C]">{pending ? 'Preparando checkout...' : 'Activar membresía'}</Button>
   </div>;
 }

@@ -3,6 +3,8 @@
 import { put } from '@vercel/blob';
 import { headers } from 'next/headers';
 import { Prisma } from '@prisma/client';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { prisma } from '@/lib/prisma';
 import { logAudit } from '@/lib/audit';
 import { rateLimit } from '@/lib/rate-limit';
@@ -10,6 +12,24 @@ import { applicationProfileSchema, type ApplicationProfileValues } from '@/lib/v
 
 const allowedDocumentTypes = new Set(['application/pdf', 'image/jpeg', 'image/png']);
 const maxDocumentSize = 10 * 1024 * 1024;
+
+async function uploadDocumentLocally(file: File, applicationId: string) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const fileName = `${crypto.randomUUID()}-${safeName}`;
+  const targetDir = path.join(process.cwd(), 'public', 'uploads', 'applications', applicationId);
+  await mkdir(targetDir, { recursive: true });
+
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const targetPath = path.join(targetDir, fileName);
+  await writeFile(targetPath, bytes);
+
+  return {
+    fileName: safeName,
+    blobPath: `/uploads/applications/${applicationId}/${fileName}`,
+    contentType: file.type,
+    size: file.size,
+  };
+}
 
 export interface ApplicationActionState {
   success: boolean;
@@ -76,15 +96,17 @@ export async function submitApplicationProfile(
     if (!allowedDocumentTypes.has(file.type) || file.size > maxDocumentSize) {
       return { success: false, error: 'El documento debe ser PDF, JPG o PNG y no superar 10 MB.' };
     }
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      return { success: false, error: 'La carga de documentos no está disponible temporalmente.' };
+
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const blob = await put(`applications/${application.id}/${crypto.randomUUID()}-${safeName}`, file, {
+        access: 'public',
+        addRandomSuffix: false,
+      });
+      uploadedDocument = { fileName: safeName, blobPath: blob.pathname, contentType: file.type, size: file.size };
+    } else {
+      uploadedDocument = await uploadDocumentLocally(file, application.id);
     }
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const blob = await put(`applications/${application.id}/${crypto.randomUUID()}-${safeName}`, file, {
-      access: 'public',
-      addRandomSuffix: false,
-    });
-    uploadedDocument = { fileName: safeName, blobPath: blob.pathname, contentType: file.type, size: file.size };
   }
 
   await prisma.$transaction(async (tx) => {

@@ -33,7 +33,7 @@ export function SettingsForm({ defaults }: SettingsFormProps) {
         </p>
       )}
       {state.error && (
-        <p className="rounded border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">{state.error}</p>
+        <p className="rounded border border-red-400/40 bg-red-950/40 px-4 py-3 text-sm font-medium text-red-200">{state.error}</p>
       )}
 
       <div className="grid gap-5 sm:grid-cols-2">

@@ -56,13 +56,29 @@ export async function submitAffiliation(
 
   const data = parsed.data;
 
-  const existing = await prisma.affiliate.findUnique({ where: { documentNumber: data.documentNumber } });
-  if (existing && existing.status === 'ACTIVE') {
+  const activeExisting = await prisma.affiliate.findFirst({
+    where: {
+      deletedAt: null,
+      OR: [
+        { documentNumber: data.documentNumber },
+        { email: { equals: data.email, mode: 'insensitive' } },
+      ],
+    },
+  });
+
+  if (activeExisting) {
     return {
       success: false,
-      error: 'Este documento ya tiene una afiliacion activa. Si crees que es un error, contacta a soporte.',
+      error: 'Este documento o correo ya está asociado a una afiliación activa o pendiente.',
     };
   }
+
+  const existing = await prisma.affiliate.findFirst({
+    where: {
+      documentNumber: data.documentNumber,
+      OR: [{ deletedAt: { not: null } }, { email: { equals: data.email, mode: 'insensitive' } }],
+    },
+  });
 
   const now = new Date();
 
@@ -76,6 +92,8 @@ export async function submitAffiliation(
             phone: data.phone,
             city: data.city,
             documentType: data.documentType,
+            deletedAt: null,
+            status: 'PENDING',
             acceptedContractAt: now,
             acceptedTermsAt: now,
             acceptedDataPolicyAt: now,

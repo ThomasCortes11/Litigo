@@ -33,7 +33,7 @@ const config: Config = {
         },
         border: '#D9D9D4',
         success: '#1F5C3A',
-        danger: '#6E2020',
+        danger: '#F87171',
         warning: '#7A5218',
       },
       fontFamily: {

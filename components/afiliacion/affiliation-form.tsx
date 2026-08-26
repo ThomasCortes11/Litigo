@@ -47,17 +47,76 @@ function LegalLink({ href, children }: LegalLinkProps) {
 
 export function AffiliationForm() {
   const [state, formAction] = useActionState(submitAffiliation, initialState);
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   React.useEffect(() => {
     if (state.success && state.applicationToken) {
+      window.localStorage.removeItem('litigo-affiliation-draft');
       window.location.href = `/afiliacion/perfilamiento?token=${state.applicationToken}`;
     }
   }, [state]);
 
+  React.useEffect(() => {
+    const savedDraft = window.localStorage.getItem('litigo-affiliation-draft');
+    if (!savedDraft || !formRef.current) return;
+
+    try {
+      const values = JSON.parse(savedDraft) as Record<string, string | boolean>;
+      const form = formRef.current;
+
+      Object.entries(values).forEach(([key, value]) => {
+        const field = form.elements.namedItem(key) as HTMLInputElement | HTMLSelectElement | null;
+        if (!field) return;
+
+        if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+          field.checked = Boolean(value);
+        } else if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement) {
+          field.value = String(value ?? '');
+        }
+      });
+    } catch {
+      window.localStorage.removeItem('litigo-affiliation-draft');
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const persistDraft = () => {
+      const formData = new FormData(form);
+      const values: Record<string, string | boolean> = {};
+
+      formData.forEach((value, key) => {
+        if (typeof value === 'string') {
+          values[key] = value;
+        } else if (value instanceof File) {
+          values[key] = value.name;
+        }
+      });
+
+      const checks = form.querySelectorAll('input[type="checkbox"]');
+      checks.forEach((checkbox) => {
+        const input = checkbox as HTMLInputElement;
+        values[input.name] = input.checked;
+      });
+
+      window.localStorage.setItem('litigo-affiliation-draft', JSON.stringify(values));
+    };
+
+    form.addEventListener('input', persistDraft);
+    form.addEventListener('change', persistDraft);
+
+    return () => {
+      form.removeEventListener('input', persistDraft);
+      form.removeEventListener('change', persistDraft);
+    };
+  }, []);
+
   const fieldError = (field: string) => state.fieldErrors?.[field as keyof typeof state.fieldErrors];
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form ref={formRef} action={formAction} className="space-y-8">
       {/* La membresía solo se ofrece después de la aprobación administrativa. */}
       <div className="rounded-md border border-gold/25 bg-gold/5 p-4">
         <div className="flex flex-wrap items-center gap-4">
@@ -66,7 +125,7 @@ export function AffiliationForm() {
       </div>
 
       {state.error && (
-        <p className="rounded border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">{state.error}</p>
+        <p className="rounded border border-red-400/40 bg-red-950/40 px-4 py-3 text-sm font-medium text-red-200">{state.error}</p>
       )}
 
       <div className="rounded-lg border border-white/10 bg-black/15 p-5 sm:p-6">
@@ -75,14 +134,14 @@ export function AffiliationForm() {
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="fullName" className="text-paper/85">Nombre completo</Label>
-            <Input id="fullName" name="fullName" required error={!!fieldError('fullName')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
-            {fieldError('fullName') && <p className="mt-1 text-xs text-danger">{fieldError('fullName')}</p>}
+            <Label htmlFor="fullName" className="text-slate-100">Nombre completo</Label>
+            <Input id="fullName" name="fullName" required error={!!fieldError('fullName')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            {fieldError('fullName') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('fullName')}</p>}
           </div>
 
           <div>
-            <Label htmlFor="documentType" className="text-paper/85">Tipo de documento</Label>
-            <Select id="documentType" name="documentType" required defaultValue="CC" className="border-white/15 bg-black/20 text-paper hover:border-gold/50 focus-visible:border-[#2F5D7C]">
+            <Label htmlFor="documentType" className="text-slate-100">Tipo de documento</Label>
+            <Select id="documentType" name="documentType" required defaultValue="CC" className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]">
               <option value="CC">Cedula de ciudadania</option>
               <option value="CE">Cedula de extranjeria</option>
               <option value="PASAPORTE">Pasaporte</option>
@@ -90,29 +149,29 @@ export function AffiliationForm() {
           </div>
 
           <div>
-            <Label htmlFor="documentNumber" className="text-paper/85">Numero de documento</Label>
-            <Input id="documentNumber" name="documentNumber" required error={!!fieldError('documentNumber')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
+            <Label htmlFor="documentNumber" className="text-slate-100">Numero de documento</Label>
+            <Input id="documentNumber" name="documentNumber" required error={!!fieldError('documentNumber')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
             {fieldError('documentNumber') && (
-              <p className="mt-1 text-xs text-danger">{fieldError('documentNumber')}</p>
+              <p className="mt-1 text-xs font-medium text-red-300">{fieldError('documentNumber')}</p>
             )}
           </div>
 
           <div>
-            <Label htmlFor="email" className="text-paper/85">Correo electronico</Label>
-            <Input id="email" name="email" type="email" required error={!!fieldError('email')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
-            {fieldError('email') && <p className="mt-1 text-xs text-danger">{fieldError('email')}</p>}
+            <Label htmlFor="email" className="text-slate-100">Correo electronico</Label>
+            <Input id="email" name="email" type="email" required error={!!fieldError('email')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            {fieldError('email') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('email')}</p>}
           </div>
 
           <div>
-            <Label htmlFor="phone" className="text-paper/85">Telefono</Label>
-            <Input id="phone" name="phone" placeholder="Ingresa tu numero" required error={!!fieldError('phone')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
-            {fieldError('phone') && <p className="mt-1 text-xs text-danger">{fieldError('phone')}</p>}
+            <Label htmlFor="phone" className="text-slate-100">Telefono</Label>
+            <Input id="phone" name="phone" placeholder="Ingresa tu numero" required error={!!fieldError('phone')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            {fieldError('phone') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('phone')}</p>}
           </div>
 
           <div className="sm:col-span-2">
-            <Label htmlFor="city" className="text-paper/85">Ciudad</Label>
-            <Input id="city" name="city" required error={!!fieldError('city')} className="border-white/15 bg-black/20 text-paper placeholder:text-paper/35 hover:border-gold/50 focus-visible:border-[#2F5D7C]" />
-            {fieldError('city') && <p className="mt-1 text-xs text-danger">{fieldError('city')}</p>}
+            <Label htmlFor="city" className="text-slate-100">Ciudad</Label>
+            <Input id="city" name="city" required error={!!fieldError('city')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            {fieldError('city') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('city')}</p>}
           </div>
         </div>
       </div>

@@ -97,7 +97,7 @@ model Affiliate {
   id             String          @id @default(uuid()) @db.Uuid
   fullName       String
   documentType   String // CC | CE | PASAPORTE
-  documentNumber String          @unique
+  documentNumber String
   email          String
   phone          String
   city           String
@@ -112,7 +112,7 @@ model Affiliate {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  responsibleUserId String?
+  responsibleUserId String? @db.Uuid
   responsibleUser   User? @relation("AffiliateResponsible", fields: [responsibleUserId], references: [id])
 
   memberships Membership[]
@@ -120,6 +120,7 @@ model Affiliate {
   application Application?
 
   @@index([status])
+  @@index([documentNumber])
   @@index([email])
   @@index([createdAt])
   @@map("affiliates")
