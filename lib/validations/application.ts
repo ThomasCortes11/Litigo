@@ -23,7 +23,7 @@ export const applicationProfileSchema = z.object({
   peopleInvolved: z.coerce.number().int().min(1).max(100),
   availableDocuments: z.enum(['YES', 'NO', 'UNKNOWN']),
   requestedHelp: z.string().trim().min(2).max(500),
-  description: z.string().trim().min(20).max(5000),
+  description: z.string().trim().min(1, 'Escribe al menos una palabra sobre tu caso.').max(5000),
   criminalSituation: z.string().trim().max(120).optional(),
   criminalRole: z.string().trim().max(80).optional(),
 });

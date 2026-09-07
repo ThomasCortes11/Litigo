@@ -16,6 +16,7 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -24,6 +25,7 @@
 
   body {
     min-height: 100vh;
+    overflow-x: hidden;
     background-color: #F5F5F3;
     background-image: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 52%, rgba(22,58,95,0.04) 100%);
     color: var(--text);
@@ -133,6 +135,18 @@
   .cta-pulse {
     box-shadow: 0 0 0 0 rgba(22, 58, 95, 0.34);
     animation: ctaPulse 2.6s ease-in-out infinite;
+  }
+
+  @media (max-width: 639px) {
+    .grain-overlay::before {
+      opacity: 0.018;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grain-overlay::before {
+      display: none;
+    }
   }
 
   /* Seleccion de texto en tono azul */

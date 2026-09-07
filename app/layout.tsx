@@ -36,28 +36,40 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: 'Litigo — Membresia juridica mensual',
+    default: 'Litigo | Asesoría jurídica para personas y empresas',
     template: '%s | Litigo',
   },
   description:
-    'Acceso permanente a asesoria legal para personas y empresas. Afiliate en linea en menos de tres minutos.',
-  keywords: ['asesoria legal', 'membresia juridica', 'abogados Colombia', 'afiliacion juridica'],
+    'Asesoría jurídica inicial y membresía legal mensual para personas y empresas en Colombia. Conoce tu situación, recibe orientación y afíliate en línea.',
+  keywords: [
+    'asesoría jurídica en Colombia',
+    'membresía jurídica',
+    'abogados para personas y empresas',
+    'asesoría legal mensual',
+    'afiliación jurídica',
+  ],
   authors: [{ name: 'Litigo' }],
+  creator: 'Litigo S.A.S.',
+  publisher: 'Litigo S.A.S.',
+  category: 'Legal services',
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'Litigo — Membresia juridica mensual',
-    description: 'Acceso permanente a asesoria legal para personas y empresas.',
+    title: 'Litigo | Asesoría jurídica para personas y empresas',
+    description: 'Asesoría jurídica inicial y membresía legal mensual en Colombia.',
     url: APP_URL,
     siteName: 'Litigo',
     locale: 'es_CO',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Litigo, asesoría jurídica para personas y empresas' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Litigo — Membresia juridica mensual',
-    description: 'Acceso permanente a asesoria legal para personas y empresas.',
+    title: 'Litigo | Asesoría jurídica para personas y empresas',
+    description: 'Asesoría jurídica inicial y membresía legal mensual en Colombia.',
+    images: ['/opengraph-image'],
   },
   robots: { index: true, follow: true },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {

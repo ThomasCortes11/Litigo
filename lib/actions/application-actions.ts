@@ -34,8 +34,25 @@ async function uploadDocumentLocally(file: File, applicationId: string) {
 export interface ApplicationActionState {
   success: boolean;
   error?: string;
+  errorDetails?: string[];
   fieldErrors?: Partial<Record<keyof ApplicationProfileValues, string>>;
 }
+
+const fieldLabels: Partial<Record<keyof ApplicationProfileValues, string>> = {
+  token: 'Enlace de la solicitud',
+  legalArea: 'Área jurídica',
+  situationType: 'Tipo de situación',
+  hasProcess: 'Proceso actual',
+  hasDeadline: 'Fecha límite o audiencia',
+  nearestDate: 'Fecha más cercana',
+  hasLawyer: 'Abogado actual',
+  peopleInvolved: 'Personas o entidades involucradas',
+  availableDocuments: 'Documentos disponibles',
+  requestedHelp: 'Necesidad de asesoría',
+  description: 'Descripción del caso',
+  criminalSituation: 'Situación penal',
+  criminalRole: 'Rol en la situación penal',
+};
 
 export async function submitApplicationProfile(
   _prevState: ApplicationActionState,
@@ -63,7 +80,11 @@ export async function submitApplicationProfile(
       const key = issue.path[0] as keyof ApplicationProfileValues;
       if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
     }
-    return { success: false, error: 'Revisa las respuestas del perfilamiento.', fieldErrors };
+    const errorDetails = parsed.error.issues.map((issue) => {
+      const key = issue.path[0] as keyof ApplicationProfileValues;
+      return `${fieldLabels[key] ?? 'Campo del formulario'}: ${issue.message}`;
+    });
+    return { success: false, error: 'No se pudo enviar el perfilamiento porque hay respuestas incompletas o inválidas.', errorDetails, fieldErrors };
   }
 
   const headersList = await headers();
@@ -72,9 +93,16 @@ export async function submitApplicationProfile(
   if (!limited.success) return { success: false, error: 'Demasiados intentos. Intenta de nuevo en unos minutos.' };
 
   const data = parsed.data;
-  const application = await prisma.application.findUnique({ where: { accessToken: data.token } });
+  let application;
+  try {
+    application = await prisma.application.findUnique({ where: { accessToken: data.token } });
+  } catch (error) {
+    console.error('[submitApplicationProfile] Error consultando la solicitud:', error);
+    return { success: false, error: 'No se pudo consultar tu solicitud.', errorDetails: ['La base de datos no está disponible. Verifica que PostgreSQL/Docker esté iniciado y vuelve a intentarlo.'] };
+  }
+
   if (!application || !['DRAFT', 'AWAITING_INFORMATION'].includes(application.status)) {
-    return { success: false, error: 'Esta solicitud no está disponible para edición.' };
+    return { success: false, error: 'No se pudo enviar el perfilamiento.', errorDetails: ['La solicitud no existe, ya fue enviada o ya no está disponible para edición.'] };
   }
 
   const answers = {
@@ -94,7 +122,7 @@ export async function submitApplicationProfile(
   let uploadedDocument: { fileName: string; blobPath: string; contentType: string; size: number } | undefined;
   if (file instanceof File && file.size > 0) {
     if (!allowedDocumentTypes.has(file.type) || file.size > maxDocumentSize) {
-      return { success: false, error: 'El documento debe ser PDF, JPG o PNG y no superar 10 MB.' };
+      return { success: false, error: 'No se pudo adjuntar el documento.', errorDetails: ['El archivo debe ser PDF, JPG o PNG y no superar 10 MB.'] };
     }
 
     if (process.env.BLOB_READ_WRITE_TOKEN) {
@@ -109,24 +137,37 @@ export async function submitApplicationProfile(
     }
   }
 
-  await prisma.$transaction(async (tx) => {
-    for (const [questionKey, answer] of Object.entries(answers)) {
-      await tx.applicationAnswer.upsert({
-        where: { applicationId_questionKey: { applicationId: application.id, questionKey } },
-        create: { applicationId: application.id, questionKey, answer: answer === null ? Prisma.JsonNull : answer },
-        update: { answer: answer === null ? Prisma.JsonNull : answer },
+  try {
+    await prisma.$transaction(async (tx) => {
+      for (const [questionKey, answer] of Object.entries(answers)) {
+        await tx.applicationAnswer.upsert({
+          where: { applicationId_questionKey: { applicationId: application.id, questionKey } },
+          create: { applicationId: application.id, questionKey, answer: answer === null ? Prisma.JsonNull : answer },
+          update: { answer: answer === null ? Prisma.JsonNull : answer },
+        });
+      }
+
+      if (uploadedDocument) {
+        await tx.applicationDocument.create({ data: { applicationId: application.id, ...uploadedDocument } });
+      }
+
+      await tx.application.update({
+        where: { id: application.id },
+        data: { status: 'SUBMITTED', legalArea: data.legalArea, urgency: data.hasDeadline === 'YES' ? 'HIGH' : 'NORMAL', submittedAt: new Date(), informationRequested: null },
       });
-    }
-
-    if (uploadedDocument) {
-      await tx.applicationDocument.create({ data: { applicationId: application.id, ...uploadedDocument } });
-    }
-
-    await tx.application.update({
-      where: { id: application.id },
-      data: { status: 'SUBMITTED', legalArea: data.legalArea, urgency: data.hasDeadline === 'YES' ? 'HIGH' : 'NORMAL', submittedAt: new Date(), informationRequested: null },
     });
-  });
+  } catch (error) {
+    console.error('[submitApplicationProfile] Error guardando el perfilamiento:', error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        return { success: false, error: 'No se pudo guardar el perfilamiento.', errorDetails: ['La solicitud ya no existe. Regresa al inicio y solicita un nuevo enlace.'] };
+      }
+      if (error.code === 'P2002') {
+        return { success: false, error: 'No se pudo guardar el perfilamiento.', errorDetails: ['Ya existe una respuesta o documento con estos datos. Recarga la página e inténtalo nuevamente.'] };
+      }
+    }
+    return { success: false, error: 'No se pudo guardar el perfilamiento.', errorDetails: ['La base de datos rechazó el registro. Revisa que Docker/PostgreSQL esté activo y vuelve a intentarlo.'] };
+  }
 
   await logAudit({ action: 'APPLICATION_SUBMITTED', entityType: 'Application', entityId: application.id, ipAddress: ip });
   return { success: true };

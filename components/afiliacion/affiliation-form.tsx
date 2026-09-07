@@ -49,14 +49,7 @@ export function AffiliationForm() {
   const [state, formAction] = useActionState(submitAffiliation, initialState);
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  React.useEffect(() => {
-    if (state.success && state.applicationToken) {
-      window.localStorage.removeItem('litigo-affiliation-draft');
-      window.location.href = `/afiliacion/perfilamiento?token=${state.applicationToken}`;
-    }
-  }, [state]);
-
-  React.useEffect(() => {
+  const restoreDraft = () => {
     const savedDraft = window.localStorage.getItem('litigo-affiliation-draft');
     if (!savedDraft || !formRef.current) return;
 
@@ -77,7 +70,22 @@ export function AffiliationForm() {
     } catch {
       window.localStorage.removeItem('litigo-affiliation-draft');
     }
+  };
+
+  React.useEffect(() => {
+    if (state.success && state.applicationToken) {
+      window.localStorage.removeItem('litigo-affiliation-draft');
+      window.location.href = `/afiliacion/perfilamiento?token=${state.applicationToken}`;
+    }
+  }, [state]);
+
+  React.useEffect(() => {
+    restoreDraft();
   }, []);
+
+  React.useEffect(() => {
+    if (state.error) restoreDraft();
+  }, [state.error]);
 
   React.useEffect(() => {
     const form = formRef.current;
@@ -135,7 +143,7 @@ export function AffiliationForm() {
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <Label htmlFor="fullName" className="text-slate-100">Nombre completo</Label>
-            <Input id="fullName" name="fullName" required error={!!fieldError('fullName')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            <Input id="fullName" name="fullName" autoComplete="name" required error={!!fieldError('fullName')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
             {fieldError('fullName') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('fullName')}</p>}
           </div>
 
@@ -150,7 +158,7 @@ export function AffiliationForm() {
 
           <div>
             <Label htmlFor="documentNumber" className="text-slate-100">Numero de documento</Label>
-            <Input id="documentNumber" name="documentNumber" required error={!!fieldError('documentNumber')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            <Input id="documentNumber" name="documentNumber" inputMode="numeric" autoComplete="off" required error={!!fieldError('documentNumber')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
             {fieldError('documentNumber') && (
               <p className="mt-1 text-xs font-medium text-red-300">{fieldError('documentNumber')}</p>
             )}
@@ -158,19 +166,19 @@ export function AffiliationForm() {
 
           <div>
             <Label htmlFor="email" className="text-slate-100">Correo electronico</Label>
-            <Input id="email" name="email" type="email" required error={!!fieldError('email')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            <Input id="email" name="email" type="email" autoComplete="email" required error={!!fieldError('email')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
             {fieldError('email') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('email')}</p>}
           </div>
 
           <div>
             <Label htmlFor="phone" className="text-slate-100">Telefono</Label>
-            <Input id="phone" name="phone" placeholder="Ingresa tu numero" required error={!!fieldError('phone')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            <Input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="Ingresa tu numero" required error={!!fieldError('phone')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
             {fieldError('phone') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('phone')}</p>}
           </div>
 
           <div className="sm:col-span-2">
             <Label htmlFor="city" className="text-slate-100">Ciudad</Label>
-            <Input id="city" name="city" required error={!!fieldError('city')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
+            <Input id="city" name="city" autoComplete="address-level2" required error={!!fieldError('city')} className="rounded-xl border border-white/10 bg-[#0b1727]/90 text-slate-50 placeholder:text-slate-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#7db7e8]/70 focus-visible:border-[#7db7e8]" />
             {fieldError('city') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('city')}</p>}
           </div>
         </div>
@@ -182,29 +190,32 @@ export function AffiliationForm() {
 
         <div className="mt-5 space-y-4 rounded-md border border-white/10 bg-black/15 p-5">
           <div className="flex items-start gap-3 text-sm text-gray-100">
-            <Checkbox id="acceptedContract" name="acceptedContract" value="on" required className="mt-0.5" />
+            <Checkbox id="acceptedContract" name="acceptedContract" value="on" required aria-invalid={!!fieldError('acceptedContract')} className={`mt-0.5 ${fieldError('acceptedContract') ? 'border-red-400 ring-1 ring-red-400/40' : ''}`} />
             <div>
               <label htmlFor="acceptedContract" className="cursor-pointer">Acepto el </label>
               <LegalLink href="/contrato-afiliacion">contrato de afiliacion</LegalLink>
               <span>.</span>
+              {fieldError('acceptedContract') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('acceptedContract')}</p>}
             </div>
           </div>
 
           <div className="flex items-start gap-3 text-sm text-gray-100">
-            <Checkbox id="acceptedTerms" name="acceptedTerms" value="on" required className="mt-0.5" />
+            <Checkbox id="acceptedTerms" name="acceptedTerms" value="on" required aria-invalid={!!fieldError('acceptedTerms')} className={`mt-0.5 ${fieldError('acceptedTerms') ? 'border-red-400 ring-1 ring-red-400/40' : ''}`} />
             <div>
               <label htmlFor="acceptedTerms" className="cursor-pointer">Acepto los </label>
               <LegalLink href="/terminos-y-condiciones">terminos y condiciones</LegalLink>
               <span>.</span>
+              {fieldError('acceptedTerms') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('acceptedTerms')}</p>}
             </div>
           </div>
 
           <div className="flex items-start gap-3 text-sm text-gray-100">
-            <Checkbox id="acceptedDataPolicy" name="acceptedDataPolicy" value="on" required className="mt-0.5" />
+            <Checkbox id="acceptedDataPolicy" name="acceptedDataPolicy" value="on" required aria-invalid={!!fieldError('acceptedDataPolicy')} className={`mt-0.5 ${fieldError('acceptedDataPolicy') ? 'border-red-400 ring-1 ring-red-400/40' : ''}`} />
             <div>
               <label htmlFor="acceptedDataPolicy" className="cursor-pointer">Acepto la </label>
               <LegalLink href="/politica-tratamiento-datos">politica de tratamiento de datos</LegalLink>
               <span>.</span>
+              {fieldError('acceptedDataPolicy') && <p className="mt-1 text-xs font-medium text-red-300">{fieldError('acceptedDataPolicy')}</p>}
             </div>
           </div>
         </div>

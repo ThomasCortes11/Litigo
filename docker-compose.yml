@@ -1,0 +1,21 @@
+services:
+  litigo-postgres:
+    image: postgres:16-alpine
+    container_name: litigo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-litigo}
+      POSTGRES_USER: ${POSTGRES_USER:-litigo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - ${POSTGRES_VOLUME:-litigo_postgres_data}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  litigo_postgres_data:

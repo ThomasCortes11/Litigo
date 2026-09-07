@@ -24,20 +24,34 @@ export function ProfileForm({ token }: { token: string }) {
   }
 
   const error = (field: string) => state.fieldErrors?.[field as keyof typeof state.fieldErrors];
+  const fieldClass = (field: string) => `premium-input w-full rounded-xl border bg-[#0c1726]/80 px-3 py-3 text-base text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-[#6ea8d5]/70 focus:border-[#7db7e8] focus:outline-none focus:ring-2 focus:ring-[#7db7e8]/30 ${error(field) ? 'border-red-400/80 ring-1 ring-red-400/30' : 'border-white/10'}`;
+  const fieldProps = (field: string) => ({ 'aria-invalid': Boolean(error(field)), 'aria-describedby': error(field) ? `${field}-error` : undefined });
+  const fieldMessage = (field: string) => error(field) && <span id={`${field}-error`} className="block text-xs font-medium text-red-300">{error(field)}</span>;
+
   return (
     <form action={formAction} encType="multipart/form-data" className="profile-form space-y-7">
       <input type="hidden" name="token" value={token} />
-      {state.error && <p className="rounded border border-red-400/40 bg-red-950/40 px-4 py-3 text-sm font-medium text-red-200">{state.error}</p>}
+      {state.error && (
+        <div role="alert" className="rounded border border-red-400/40 bg-red-950/40 px-4 py-3 text-sm text-red-100">
+          <p className="font-semibold">{state.error}</p>
+          {state.errorDetails && state.errorDetails.length > 0 && (
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-red-200">
+              {state.errorDetails.map((detail) => <li key={detail}>{detail}</li>)}
+            </ul>
+          )}
+        </div>
+      )}
 
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="space-y-2 text-sm text-slate-100 sm:col-span-2">Área jurídica
-          <select name="legalArea" value={legalArea} onChange={(event) => setLegalArea(event.target.value)} required className="premium-input w-full rounded-xl border border-white/10 bg-[#0c1726]/80 px-3 py-3 text-base text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-[#6ea8d5]/70 focus:border-[#7db7e8] focus:outline-none focus:ring-2 focus:ring-[#7db7e8]/30">
+          <select name="legalArea" value={legalArea} onChange={(event) => setLegalArea(event.target.value)} required className={fieldClass('legalArea')} {...fieldProps('legalArea')}>
             <option value="">Selecciona un área</option>{legalAreas.map((area) => <option key={area} value={area}>{area === 'PENAL' ? 'Derecho penal' : area.charAt(0) + area.slice(1).toLowerCase()}</option>)}
           </select>
-          {error('legalArea') && <span className="block text-xs font-medium text-red-300">{error('legalArea')}</span>}
+          {fieldMessage('legalArea')}
         </label>
         <label className="space-y-2 text-sm text-slate-100 sm:col-span-2">¿Qué tipo de situación necesitas resolver?
-          <input name="situationType" required className="premium-input w-full rounded-xl border border-white/10 bg-[#0c1726]/80 px-3 py-3 text-base text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-[#6ea8d5]/70 focus:border-[#7db7e8] focus:outline-none focus:ring-2 focus:ring-[#7db7e8]/30" />
+          <input name="situationType" required className={fieldClass('situationType')} {...fieldProps('situationType')} />
+          {fieldMessage('situationType')}
         </label>
         <label className="space-y-2 text-sm text-slate-100">¿Existe actualmente un proceso?
           <select name="hasProcess" required className="premium-input w-full rounded-xl border border-white/10 bg-[#0c1726]/80 px-3 py-2.5 text-base text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-[#6ea8d5]/70 focus:border-[#7db7e8] focus:outline-none focus:ring-2 focus:ring-[#7db7e8]/30"><option value="">Selecciona</option><option value="YES">Sí</option><option value="NO">No</option><option value="UNKNOWN">No estoy seguro</option></select>
@@ -69,7 +83,8 @@ export function ProfileForm({ token }: { token: string }) {
           <input name="requestedHelp" required className="premium-input w-full rounded-xl border border-white/10 bg-[#0c1726]/80 px-3 py-2.5 text-base text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-[#6ea8d5]/70 focus:border-[#7db7e8] focus:outline-none focus:ring-2 focus:ring-[#7db7e8]/30" />
         </label>
         <label className="space-y-2 text-sm text-slate-100 sm:col-span-2">Cuéntanos brevemente qué ocurrió
-          <textarea name="description" required rows={5} className="premium-input w-full rounded-xl border border-white/10 bg-[#0c1726]/80 px-3 py-2.5 text-base text-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200 hover:border-[#6ea8d5]/70 focus:border-[#7db7e8] focus:outline-none focus:ring-2 focus:ring-[#7db7e8]/30" />
+          <textarea name="description" required rows={5} className={fieldClass('description')} {...fieldProps('description')} />
+          {fieldMessage('description')}
         </label>
         <div className="space-y-2 text-sm text-slate-100 sm:col-span-2">
           <span className="block">Documento opcional (PDF, JPG o PNG; máximo 10 MB)</span>
